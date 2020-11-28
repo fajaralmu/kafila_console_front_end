@@ -16,7 +16,6 @@ class Dashboard extends Component {
         this.orderBy = 'id';
         this.orderType = 'asc';
         this.fieldsFilter = {};
-        this.firstLoad = true;
         
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true || this.props.loggedUser == null) 
@@ -31,6 +30,8 @@ class Dashboard extends Component {
         }
 
         this.getMeetingNotes = () => {
+            this.readInputForm();
+
             const request = {
                 page: this.page,
                 limit: this.limit,
@@ -48,9 +49,13 @@ class Dashboard extends Component {
             this.page = hasFilter ? filter.page:1;
             this.limit = hasFilter ? filter.limit:5;
             this.count = hasFilter ? filter.count:0;
+            this.orderBy = hasFilter ? filter.orderBy: null;
+            this.orderType = hasFilter ? filter.orderType: null;
         }
 
-        this.filter = (form) => {
+        this.readInputForm = () => {
+            const form = document.getElementById('list-form');
+            if (form == null) return;
             const inputs = form.getElementsByClassName("form-filter");
              
             this.fieldsFilter = {};
@@ -60,17 +65,29 @@ class Dashboard extends Component {
                     this.fieldsFilter[element.name] = element.value;
                 }
             }
+        }
+
+        this.filter = (form) => {
+            const inputs = form.getElementsByClassName("form-filter");
              
             this.page = 1;
             this.getMeetingNotes();
         }
+
+        this.onButtonOrderClick = (e) => {
+            e.preventDefault();
+            this. orderBy = e.target.getAttribute("data")
+            this. orderType = e.target.getAttribute("sort");
+            this.getMeetingNotes();
+        }
+
         this.onSubmitClick = (e) => {
             e.preventDefault();
             this.filter(document.getElementById("list-form"));
         }
 
         this.populateDefaultInputs = () => {
-            if (!this.firstLoad || null == this.props.meetingNoteData || null == this.props.meetingNoteData.filter) {
+            if (null == this.props.meetingNoteData || null == this.props.meetingNoteData.filter) {
                 return;
             }
             const fieldsFilter = this.props.meetingNoteData.filter.fieldsFilter;
@@ -92,14 +109,12 @@ class Dashboard extends Component {
         if (null == this.props.meetingNoteData) {
             this.getMeetingNotes();
         }
-        document.title = "Dashboard";
-        
+        document.title = "Dashboard";        
         this.populateDefaultInputs();
-        this.firstLoad = false;
     }
 
     createNavButton(){
-        console.log("this.props.meetingNoteData: ", this.props.meetingNoteData);
+       
         if (null == this.props.meetingNoteData) {
             
             return <></>
@@ -107,24 +122,32 @@ class Dashboard extends Component {
         return <NavButtons onClick={this.getMeetingNotesByPage} limit={this.limit} 
             totalData={this.props.meetingNoteData.count} activeIndex={this.page} />
     }
+
     render(){
         if (null == this.props.loggedUser) {
             return null;
         }
         
         const meetingNoteData = this.props.meetingNoteData;
-        const meetingNoteList = meetingNoteData ? meetingNoteData.result_list : [];
+        const meetingNoteList = meetingNoteData && meetingNoteData.result_list ? meetingNoteData.result_list : [];
         const navButtons = this.createNavButton();
-        console.debug("meetingNoteList: ", meetingNoteList);
+        
         return (
             <div>
                 <h2 style={{textAlign: 'center'}}>Dashboard {this.page}</h2>
-                <p>Hello {this.firstLoad?'true':'false'} {this.props.loggedUser.display_name}</p>
+                <p>{this.props.loggedUser.display_name}</p>
                 <p>Departement {this.props.loggedUser.departement.name}</p>
                 <h3>Daftar Notulen Rapat</h3>
+               
+                {/* record list */}
                 {navButtons}
-                <form id="list-form" onsubmit={(e)=> {e.preventDefault(); this.filter(e.target)}}>
-                <input type="reset" className="button is-warning" value="Reset" />
+                <form id="list-form" onSubmit={(e)=> {e.preventDefault(); this.filter(e.target)}}>
+                <button type="reset" className="button is-danger">
+                    <span className="icon">
+                        <i className="fas fa-sync"></i>
+                    </span>
+                    <span>Reset Filter</span>                        
+                </button>
                 <button type="submit" onClick={this.onSubmitClick} className="button is-info">
                     <span className="icon">
                         <i className="fas fa-search"></i>
@@ -132,7 +155,9 @@ class Dashboard extends Component {
                     <span>Submit</span>
                     </button>
                 <table style={{tableLayout: 'fixed'}} className="table">
-                    <TableHeadWithFilter headers = {[
+                    <TableHeadWithFilter
+                    onButtonOrderClick={this.onButtonOrderClick}
+                    headers = {[
                         {text:'No'},
                         {text:'id', withFilter: true},
                         {text:'date', withFilter: true},
@@ -148,8 +173,8 @@ class Dashboard extends Component {
                             <td>{indexBegin+i+1}</td>
                             <td>{item.id}</td>
                             <td>{item.date}</td>
-                            <td>{item.content}</td>
-                            <td>{item.decision}</td>
+                            <td>{item.content.substring(0,5)} ...</td>
+                            <td>{item.decision.substring(0,5)} ...</td>
                             <td>{item.deadline_date}</td>
                             <td>{item.departement.name}</td>
                             <td>-</td>
@@ -164,6 +189,7 @@ class Dashboard extends Component {
 
 const TableHeadWithFilter = (props) => {
     const headers = props.headers;
+    const onButtonOrderClick = props.onButtonOrderClick;
     return (<thead>
         <tr>
             {headers.map(header=>{
@@ -171,6 +197,12 @@ const TableHeadWithFilter = (props) => {
                     <Input type="text" name={header.text}   /> : null;
                 return <th>{header.alias == null ? header.text.toUpperCase() : header.alias}
                     {input}
+                    {header.withFilter?
+                    <>
+                    <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small">asc</button>
+                    <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small">desc</button>
+                    </>
+                    : null}
                 </th>
             })}
         </tr>
@@ -186,7 +218,7 @@ const Input = (props) => {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
+    
     return {
         loggedUser: state.userState.loggedUser,
         loginStatus: state.userState.loginStatus,
