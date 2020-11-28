@@ -9,12 +9,15 @@ class Dashboard extends Component {
 
     constructor(props){
         super(props);
+
         this.page = 1;
         this.limit = 5;
         this.count = 0;
         this.orderBy = 'id';
         this.orderType = 'asc';
         this.fieldsFilter = {};
+        this.firstLoad = true;
+        
         this.validateLoginStatus = () => {
             if (this.props.loginStatus != true || this.props.loggedUser == null) 
             {
@@ -39,6 +42,14 @@ class Dashboard extends Component {
             this.props.getMeetingNotes(request, this.props.app);
         }
 
+        this.initialize = () => {
+            const hasFilter = this.props.meetingNoteData != null && this.props.meetingNoteData.filter != null;
+            const filter = hasFilter ? this.props.meetingNoteData.filter : null;
+            this.page = hasFilter ? filter.page:1;
+            this.limit = hasFilter ? filter.limit:5;
+            this.count = hasFilter ? filter.count:0;
+        }
+
         this.filter = (form) => {
             const inputs = form.getElementsByClassName("form-filter");
              
@@ -50,16 +61,31 @@ class Dashboard extends Component {
                 }
             }
              
+            this.page = 1;
             this.getMeetingNotes();
         }
         this.onSubmitClick = (e) => {
             e.preventDefault();
             this.filter(document.getElementById("list-form"));
         }
+
+        this.populateDefaultInputs = () => {
+            if (!this.firstLoad || null == this.props.meetingNoteData || null == this.props.meetingNoteData.filter) {
+                return;
+            }
+            const fieldsFilter = this.props.meetingNoteData.filter.fieldsFilter;
+            for (const key in fieldsFilter) {
+                if (fieldsFilter.hasOwnProperty(key)) {
+                    const element = fieldsFilter[key];
+                    document.getElementById("input-form-"+key).value = element; 
+                }
+            }
+        }
     }
     componentWillMount(){
-        this.validateLoginStatus();
         
+        this.validateLoginStatus();
+        this.initialize();
     }
     componentDidMount()
     {
@@ -67,6 +93,9 @@ class Dashboard extends Component {
             this.getMeetingNotes();
         }
         document.title = "Dashboard";
+        
+        this.populateDefaultInputs();
+        this.firstLoad = false;
     }
 
     createNavButton(){
@@ -82,14 +111,15 @@ class Dashboard extends Component {
         if (null == this.props.loggedUser) {
             return null;
         }
+        
         const meetingNoteData = this.props.meetingNoteData;
         const meetingNoteList = meetingNoteData ? meetingNoteData.result_list : [];
         const navButtons = this.createNavButton();
         console.debug("meetingNoteList: ", meetingNoteList);
         return (
             <div>
-                <h2 style={{textAlign: 'center'}}>Dashboard</h2>
-                <p>Hello {this.props.loggedUser.display_name}</p>
+                <h2 style={{textAlign: 'center'}}>Dashboard {this.page}</h2>
+                <p>Hello {this.firstLoad?'true':'false'} {this.props.loggedUser.display_name}</p>
                 <p>Departement {this.props.loggedUser.departement.name}</p>
                 <h3>Daftar Notulen Rapat</h3>
                 {navButtons}
@@ -102,16 +132,16 @@ class Dashboard extends Component {
                     <span>Submit</span>
                     </button>
                 <table style={{tableLayout: 'fixed'}} className="table">
-                    <tr>
-                        <th>No</th>
-                        <th>Id <Input name='id' /></th>
-                        <th>Waktu <Input name='time' /></th>
-                        <th>Pembahasan <Input name='content' /></th>
-                        <th>Keputusan <Input name='decision' /></th>
-                        <th>Deadline <Input name='deadline_date' /></th>
-                        <th>Departemen <Input name='departement' /></th>
-                        <th>Status <Input name='status' /></th>
-                    </tr>
+                    <TableHeadWithFilter headers = {[
+                        {text:'No'},
+                        {text:'id', withFilter: true},
+                        {text:'date', withFilter: true},
+                        {text:'content', withFilter: true},
+                        {text:'decision', withFilter: true},
+                        {text:'deadline_date', withFilter: true},
+                        {text:'departement', withFilter: true},
+                        {text:'status',},
+                    ]} />
                     {meetingNoteList.map((item, i)=>{
                         const indexBegin = (this.page-1) * this.limit;
                         return (<tr>
@@ -127,14 +157,32 @@ class Dashboard extends Component {
                     })}
                </table>
                </form>
-               <button className="button is-dark" onClick={this.getMeetingNotes} >Reload</button>
             </div>
         )
     }
 }
 
+const TableHeadWithFilter = (props) => {
+    const headers = props.headers;
+    return (<thead>
+        <tr>
+            {headers.map(header=>{
+                const input = header.withFilter == true ?
+                    <Input type="text" name={header.text}   /> : null;
+                return <th>{header.alias == null ? header.text.toUpperCase() : header.alias}
+                    {input}
+                </th>
+            })}
+        </tr>
+    </thead>)
+}
+
 const Input = (props) => {
-    return <input className="input form-filter" type={props.type? props.type : 'text'} name={props.name} id={'input-'+props.name} />
+    const className = "input form-filter";
+    const type = props.type? props.type : 'text';
+    
+    return <input className={className} type={type} name={props.name} 
+        id={'input-form-'+props.name} />
 }
 
 const mapStateToProps = state => {
