@@ -1,24 +1,22 @@
-import * as shopReducer from "./shopReducer"
-import * as userReducer from "./userReducer"
-import * as transactionReducer from "./transactionReducer"
+
+import * as userReducer from "./userReducer" 
 import * as managementReducer from "./managementReducer"
+import * as meetingNotesReducer from "./meetingNotesReducer"
 
 import { combineReducers } from "redux";
 
 export const rootReducer = combineReducers(
-    {
-        shopState: shopReducer.reducer,
-        userState: userReducer.reducer,
-        transactionState: transactionReducer.reducer,
-        managementState: managementReducer.reducer
+    { 
+        userState: userReducer.reducer, 
+        managementState: managementReducer.reducer,
+        meetingNoteState: meetingNotesReducer.reducer
     }
 );
 
-export const initialState = {
-    shopState: shopReducer.initState,
-    userState: userReducer.initState,
-    transactionState: transactionReducer.initState,
-    managementState: managementReducer.initState
+export const initialState = { 
+    userState: userReducer.initState, 
+    managementState: managementReducer.initState,
+    meetingNoteState: meetingNotesReducer.initState
 }
 
 export default rootReducer;

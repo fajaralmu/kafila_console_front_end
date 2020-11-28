@@ -24,3 +24,7 @@ export const GET_ENTITY_WITH_CALLBACK = "GET_ENTITY_WITH_CALLBACK";
 export const REMOVE_MANAGED_ENTITY = "rm_mng_entity";
 export const REFRESH_LOGIN = "refresh_login";
 export const GET_LOGGED_USER = "get_logged_user";
+
+//meeting notes
+export const GET_MEETING_NOTES = "GET_MEETING_NOTES";
+export const STORE_MEETING_NOTES = "GET_MEETING_NOTES";

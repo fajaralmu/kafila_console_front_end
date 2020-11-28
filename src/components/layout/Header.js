@@ -34,6 +34,13 @@ class Header extends Component{
         this.toggleNavBurger = () => {
             this.setState({showBurger:!this.state.showBurger})
         }
+
+        this.performLogout = () => {
+            if (window.confirm("logout?")) {
+                this.props.performLogout(this.props.app);
+            }
+            
+        }
     }
     render(){
 
@@ -73,13 +80,20 @@ class Header extends Component{
 								</p> */}
 								<p className="control">
                                     {this.props.loginStatus? 
-                                    <a className="button is-small is-info is-outlined">
+                                    <><a className="button is-small is-info">
                                         <span className="icon">
                                             <i className="fas fa-user"></i>
                                         </span>
                                         <span>{this.props.loggedUser.display_name}</span>
-                                    </a>:
-                                    <Link className="button is-small is-info is-outlined" to="login">
+                                    </a>
+                                    <a onClick={this.performLogout} className="button is-danger is-small">
+                                        <span className="icon">
+                                            <i className="fas fa-sign-out-alt"></i>
+                                        </span>
+                                        <span>Logout</span>
+                                    </a>
+                                    </>:
+                                    <Link className="button is-small is-info" to="login">
 										<span className="icon">
 											<i className="fas fa-user"></i>
 										</span>
@@ -123,9 +137,7 @@ const mapStateToProps = state => {
   }
   
   const mapDispatchToProps = dispatch => ({
-    performLogout: (app) => dispatch(actions.performLogout(app)),
-    requestAppId: (app) => dispatch(actions.requestAppId(app)),
-    refreshLogin: () => dispatch(actions.refreshLoginStatus()),
+    performLogout: (app) => dispatch(actions.accountAction.performLogout(app)),
   })
   
   export default withRouter(connect(

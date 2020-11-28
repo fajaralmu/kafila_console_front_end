@@ -26,7 +26,11 @@ export const performLoginMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => { console.log(err) })
+        .catch(err => {
+            let newAction = Object.assign({}, action, { payload: {loginStatus: false }});
+            delete newAction.meta;
+            store.dispatch(newAction);
+        })
         .finally(param => {
             app.endLoading();  
         });
@@ -47,43 +51,20 @@ export const requestAppIdMiddleware = store => next => action => {
             console.debug("Request App Id Middleware Response:", responseJson);
             let loginKey = "";
             let requestId = responseJson.message;
+            let loginStatus = false;
             if (responseJson.user) {
                 loginKey = responseJson.user.api_token;
+                loginStatus = true;
             }
 
-            let newAction = Object.assign({}, action, { payload: {loginStatus: responseJson.loggedIn, loginKey:loginKey, requestId:requestId, ...responseJson }});
+            let newAction = Object.assign({}, action, { payload: {loginStatus: loginStatus, loginKey:loginKey, requestId:requestId, ...responseJson }});
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => console.log(err)).finally(param => action.meta.app.endLoading());
+        .catch(err => { console.error("ERROR Get Request ID: ", err); })
+        .finally(param => action.meta.app.endLoading());
 }
 
-export const getLoggedUserMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.GET_LOGGED_USER) { return next(action); }
-
-    let headers = common.commonAuthorizedHeader(); 
-
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: headers
-    }).then(response => response.json())
-        .then(data => {
-            console.debug("getLoggedUserMiddleware Response:", data);
-            
-            if (!data) {
-                alert("Error performing request");
-                return;
-            }
-
-            let newAction = Object.assign({}, action, { payload: { data }});
-            delete newAction.meta;
-            store.dispatch(newAction);
-        })
-        .catch(err => console.log(err)).finally(param =>{ 
-            action.meta.app.endLoading();
-            action.meta.app.refresh();
-        });
-}
 
 export const refreshLoginStatusMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.REFRESH_LOGIN) {
@@ -100,7 +81,7 @@ export const performLogoutMiddleware = store => next => action => {
 
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
-        headers: { 'Content-Type': 'application/json', 'requestId': localStorage.getItem("requestId"), 'loginKey': localStorage.getItem("loginKey") }
+        headers: common.commonAuthorizedHeader()
     })
         .then(response => { return Promise.all([response.json(), response]); })
         .then(([responseJson, response]) => {

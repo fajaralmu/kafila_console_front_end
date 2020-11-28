@@ -153,8 +153,8 @@ class App extends Component {
     }
     return (
       <div className="App">
-        {this.state.loading ? <p>Please wait</p> : null}
-        <Header />
+        {this.state.loading ? <Loading /> : null}
+        <Header app={this} />
         <section className="container">
           <div className="columns">
             <div className="column">
@@ -170,6 +170,20 @@ class App extends Component {
 }
 
 
+const Loading = () => {
+  return (
+    <div style={{
+      width: '100%',
+      zIndex: 1000,
+      backgroundColor: 'wheat',
+      position: 'fixed',
+      textAlign: 'center'
+    }}>
+      Loading
+    </div>
+  )
+}
+
 
 const mapStateToProps = state => {
   //console.log(state);
@@ -179,16 +193,13 @@ const mapStateToProps = state => {
     loginStatus: state.userState.loginStatus,
     menus: state.userState.menus,
     requestId: state.userState.requestId,
-    applicationProfile: state.userState.applicationProfile,
-
-    //
-    cart: state.shopState.cart
+    applicationProfile: state.userState.applicationProfile, 
   }
 }
 
 const mapDispatchToProps = dispatch => ({
-  performLogout: (app) => dispatch(actions.performLogout(app)),
-  requestAppId: (app) => dispatch(actions.requestAppId(app)),
+  performLogout: (app) => dispatch(actions.accountAction.performLogout(app)),
+  requestAppId: (app) => dispatch(actions.accountAction.requestAppId(app)),
   refreshLogin: () => dispatch(actions.refreshLoginStatus()),
 })
 
