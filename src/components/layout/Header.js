@@ -15,12 +15,13 @@ const menus = [
         authenticated: true,
     }, {
         name:'Tambah Notulensi',
-        link:'create',
+        link:'createnote',
         authenticated: true,
     }, {
         name:'Management',
         link:'management',
         authenticated: true,
+        role:'admin'
     }
 ]
 
@@ -61,30 +62,20 @@ class Header extends Component{
 					<div className="navbar-start">
                         {
                             menus.map(linkProperty=>{
-                                return <AppLink loginStatus={this.props.loginStatus} linkProperty={linkProperty} />
+                                return <AppLink loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
                             })
                         }
 					</div>
 					<div className="navbar-end">
 						<div className="navbar-item">
 							<div className="field is-grouped">
-								{/* <p className="control">
-									<a className="button is-small">
-										<span className="icon">
-											<i className="fas fa-user-plus"></i>
-										</span>
-										<span>
-											Register
-										</span>
-									</a>
-								</p> */}
 								<p className="control">
                                     {this.props.loginStatus? 
                                     <><a className="button is-small is-info">
                                         <span className="icon">
                                             <i className="fas fa-user"></i>
                                         </span>
-                                        <span>{this.props.loggedUser.display_name}</span>
+                                        <span>{this.props.loggedUser.display_name} - {this.props.loggedUser.role}</span>
                                     </a>
                                     <a onClick={this.performLogout} className="button is-danger is-small">
                                         <span className="icon">
@@ -114,7 +105,11 @@ class Header extends Component{
 const AppLink = (props) => {
     const linkProperty = props.linkProperty;
     const loginStatus = props.loginStatus;
+    const loggedUser = props.loggedUser
     if (!loginStatus && linkProperty.authenticated) {
+        return null;
+    }
+    if(linkProperty.role != null && loggedUser != null && loggedUser.role != linkProperty.role ) {
         return null;
     }
     return (

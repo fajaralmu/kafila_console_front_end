@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
+import MeetingNoteForm from '../pages/MeetingNoteForm';
 
 class Content extends Component {
 
@@ -17,6 +18,10 @@ class Content extends Component {
          <Route path="/dashboard" render={
           (props) =>
             <Dashboard app={this.props.app} />
+        } />
+         <Route path="/createnote" render={
+          (props) =>
+            <MeetingNoteForm app={this.props.app} />
         } />
         <Route path="/login" render={
           (props) => <Login app={this.props.app} />

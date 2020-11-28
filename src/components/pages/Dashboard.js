@@ -68,8 +68,7 @@ class Dashboard extends Component {
         }
 
         this.filter = (form) => {
-            const inputs = form.getElementsByClassName("form-filter");
-             
+            
             this.page = 1;
             this.getMeetingNotes();
         }
@@ -94,7 +93,11 @@ class Dashboard extends Component {
             for (const key in fieldsFilter) {
                 if (fieldsFilter.hasOwnProperty(key)) {
                     const element = fieldsFilter[key];
-                    document.getElementById("input-form-"+key).value = element; 
+                    try {
+                        document.getElementById("input-form-"+key).value = element;      
+                    } catch (error) {
+                        //
+                    }                   
                 }
             }
         }
@@ -134,7 +137,7 @@ class Dashboard extends Component {
         
         return (
             <div>
-                <h2 style={{textAlign: 'center'}}>Dashboard {this.page}</h2>
+                <h2 style={{textAlign: 'center'}}>Dashboard</h2>
                 <p>{this.props.loggedUser.display_name}</p>
                 <p>Departement {this.props.loggedUser.departement.name}</p>
                 <h3>Daftar Notulen Rapat</h3>
