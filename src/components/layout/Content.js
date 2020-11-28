@@ -10,7 +10,13 @@ class Content extends Component {
 
   render() {
     return (
-      <div className="content"><Switch>
+      <div className="content">
+        <div style={{height: '20px'}}></div>
+        <Switch>
+        <Route exact={true} path="/" render={
+          (props) =>
+            <Home />
+        } />
         <Route path="/home" render={
           (props) =>
             <Home />
@@ -19,7 +25,11 @@ class Content extends Component {
           (props) =>
             <Dashboard app={this.props.app} />
         } />
-         <Route path="/createnote" render={
+         <Route exact path="/meetingnote/create" render={
+          (props) =>
+            <MeetingNoteForm app={this.props.app} />
+        } />
+         <Route exact path="/meetingnote/:id" render={
           (props) =>
             <MeetingNoteForm app={this.props.app} />
         } />

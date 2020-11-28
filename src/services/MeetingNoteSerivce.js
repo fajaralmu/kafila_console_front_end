@@ -19,7 +19,31 @@ export default class MeetingNoteSerivce {
             })
             .then(response => response.json())
             .then(function (response) {
-                if (response.message == "success") 
+                if (response.code == "00") 
+                { resolve(response); }
+                else 
+                { reject(response); }
+            })
+            .catch((e) => { console.error(e); reject(e); });
+        })
+    }
+
+    view = (id) => {
+
+        const request = {
+            code: 'meeting_note'
+        }
+
+        const endpoint = url.contextPath().concat("api/notes/view/"+id);
+        return new Promise(function (resolve, reject) {
+            fetch(endpoint, {
+                method: url.POST,
+                body: JSON.stringify(request),
+                headers: commonAuthorizedHeader()
+            })
+            .then(response => response.json())
+            .then(function (response) {
+                if (response.code == "00") 
                 { resolve(response); }
                 else 
                 { reject(response); }

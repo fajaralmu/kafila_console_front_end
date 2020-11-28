@@ -8,18 +8,18 @@ import { connect } from 'react-redux'
 const menus = [
     {
         name:'Home',
-        link:'home'
+        link:'/home'
     }, {
         name:'Dashboard',
-        link:'dashboard',
+        link:'/dashboard',
         authenticated: true,
     }, {
         name:'Tambah Notulensi',
-        link:'createnote',
+        link:'/meetingnote/create',
         authenticated: true,
     }, {
         name:'Management',
-        link:'management',
+        link:'/management',
         authenticated: true,
         role:'admin'
     }

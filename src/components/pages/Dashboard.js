@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { Route, Switch, withRouter, Link} from 'react-router-dom'
 import * as actions from '../../redux/actionCreators'
 import { connect } from 'react-redux'
 import NavButtons from './../buttons/NavButtons';
@@ -169,6 +169,7 @@ class Dashboard extends Component {
                         {text:'deadline_date', withFilter: true},
                         {text:'departement', withFilter: true},
                         {text:'status',},
+                        {text:'action',},
                     ]} />
                     {meetingNoteList.map((item, i)=>{
                         const indexBegin = (this.page-1) * this.limit;
@@ -181,6 +182,11 @@ class Dashboard extends Component {
                             <td>{item.deadline_date}</td>
                             <td>{item.departement.name}</td>
                             <td>-</td>
+                            <td>
+                                <Link to={"/meetingnote/"+item.id} className="button is-link" >
+                                    view
+                                </Link>
+                            </td>
                         </tr>)
                     })}
                </table>

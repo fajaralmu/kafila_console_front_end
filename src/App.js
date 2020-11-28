@@ -149,7 +149,7 @@ class App extends Component {
   render() {
 
     if (!this.props.requestId) {
-      return (<h2>LOADING</h2>)
+      return (<h2 style={{ textAlign: 'center' }}>Please Wait</h2>)
     }
     return (
       <div className="App">
@@ -172,14 +172,17 @@ class App extends Component {
 
 const Loading = () => {
   return (
-    <div style={{
+    <div className="has-background-dark" style={{
       width: '100%',
-      zIndex: 1000,
-      backgroundColor: 'wheat',
+      zIndex: 500,
+      // backgroundColor: 'wheat',
       position: 'fixed',
-      textAlign: 'center'
+      textAlign: 'center',
+      padding: '5px',
+      color: '#ffffff'
     }}>
-      Loading
+      <span className="button is-loading is-dark"></span>
+      &nbsp;Loading
     </div>
   )
 }
@@ -193,7 +196,7 @@ const mapStateToProps = state => {
     loginStatus: state.userState.loginStatus,
     menus: state.userState.menus,
     requestId: state.userState.requestId,
-    applicationProfile: state.userState.applicationProfile, 
+    applicationProfile: state.userState.applicationProfile,
   }
 }
 
