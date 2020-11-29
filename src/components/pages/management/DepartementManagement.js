@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import BaseAdminPage from './../BaseAdminPage';
+import BaseAdminPage from '../BaseAdminPage';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
-import Card from './../../container/Card';
+import Card from '../../container/Card';
 import * as formComponent from '../../forms/commons';
-import MasterManagementService from './../../../services/MasterDataService';
+import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
-import NavButtons from './../../buttons/NavButtons';
+import NavButtons from '../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
-class UsersManahement extends BaseManagementPage {
+class DeparementManagement extends BaseManagementPage {
     constructor(props) {
         super(props);
         this.state = {};
@@ -32,7 +32,7 @@ class UsersManahement extends BaseManagementPage {
         // }
 
         this.getRecordDataStored = () => {
-            return this.masterDataService.usersData;
+            return this.masterDataService.deparementData;
         }
 
         this.populateDefaultInputs = () => {
@@ -64,7 +64,7 @@ class UsersManahement extends BaseManagementPage {
             orderType: this.orderType,
             fieldsFilter: this.fieldsFilter
         };
-        this.commonAjax(this.masterDataService.userList, request, this.successLoaded, this.errorLoaded);
+        this.commonAjax(this.masterDataService.departementList, request, this.successLoaded, this.errorLoaded);
     }
     createNavButton() {
         const recordData = this.recordData != null ? this.recordData  : null;
@@ -76,7 +76,7 @@ class UsersManahement extends BaseManagementPage {
             totalData={recordData.count} activeIndex={this.page} />
     }
     componentDidMount() {
-        document.title = "Users Management";
+        document.title = "Deparement Management";
         // this.initialize();
         this.loadRecords();
     }
@@ -89,8 +89,8 @@ class UsersManahement extends BaseManagementPage {
                 recordData.result_list;
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Users Management</h2>
-                <Card title="Users">
+                <h2 style={{ textAlign: 'center' }}>Departement Management</h2>
+                <Card title="Departement">
                     {navButtons}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <button type="reset" className="button is-danger">
@@ -111,21 +111,17 @@ class UsersManahement extends BaseManagementPage {
                                 headers={[
                                     { text: 'No' },
                                     { text: 'id', withFilter: true },
-                                    { text: 'email', withFilter: true },
-                                    { text: 'display_name', withFilter: true },
-                                    { text: 'role', withFilter: true },
-                                    { text: 'departement', withFilter: true },
-                                    { text: 'action', },
+                                    { text: 'name', withFilter: true },
+                                    { text: 'description', withFilter: true },
+                                    { text: 'action'}
                                 ]} />
                             {recordList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
                                 return (<tr>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
-                                    <td>{item.email}</td>
-                                    <td>{item.display_name}</td>
-                                    <td>{item.role}</td>
-                                    <td>{item.departement?item.departement.name : '-'}</td>
+                                    <td>{item.name}</td>
+                                    <td>{item.description}</td>
                                     <td> - </td>
                                 </tr>)
                             })}
@@ -147,4 +143,4 @@ const mapStateToProps = state => {
     }
 }
 export default withRouter(
-    connect(mapStateToProps)(UsersManahement));
+    connect(mapStateToProps)(DeparementManagement));

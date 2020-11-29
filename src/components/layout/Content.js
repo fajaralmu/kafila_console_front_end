@@ -7,6 +7,7 @@ import Dashboard from '../pages/Dashboard';
 import MeetingNoteForm from '../pages/MeetingNoteForm';
 import ManagementMenu from './../pages/management/ManagementMenu';
 import UsersManagement from '../pages/management/UsersManagement';
+import DepartementManagement from '../pages/management/DepartementManagement';
 
 class Content extends Component {
 
@@ -45,7 +46,10 @@ class Content extends Component {
             (props) =>
               <UsersManagement app={this.props.app} />
           } />
-
+        <Route exact path="/management/departements" render={
+            (props) =>
+              <DepartementManagement app={this.props.app} />
+          } />
           <Route path="/login" render={
             (props) => <Login app={this.props.app} />
           } />

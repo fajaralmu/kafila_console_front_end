@@ -25,6 +25,12 @@ export default class MasterManagementService
             filter: filter
         });
     }
+    departementList = (filter) => {
+        return this.list({
+            code: 'departement',
+            filter: filter
+        });
+    }
 
     list = (payload) => {
         const request = {
