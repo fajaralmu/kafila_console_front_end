@@ -68,23 +68,23 @@ class Header extends Component{
 					</div>
 					<div className="navbar-end">
 						<div className="navbar-item">
-							<div className="field is-grouped">
+							<div className="field has-addons">
 								<p className="control">
                                     {this.props.loginStatus? 
-                                    <><a className="button is-small is-info">
+                                    <><a className="button is-info">
                                         <span className="icon">
                                             <i className="fas fa-user"></i>
                                         </span>
                                         <span>{this.props.loggedUser.display_name} - {this.props.loggedUser.role}</span>
                                     </a>
-                                    <a onClick={this.performLogout} className="button is-danger is-small">
+                                    <a onClick={this.performLogout} className="button is-danger">
                                         <span className="icon">
                                             <i className="fas fa-sign-out-alt"></i>
                                         </span>
                                         <span>Logout</span>
                                     </a>
                                     </>:
-                                    <Link className="button is-small is-info" to="login">
+                                    <Link className="button is-info" to="login">
 										<span className="icon">
 											<i className="fas fa-user"></i>
 										</span>

@@ -6,99 +6,42 @@ import * as formComponent from '../../forms/commons';
 import MasterManagementService from './../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import NavButtons from './../../buttons/NavButtons';
-class UsersManahement extends BaseAdminPage {
+import BaseManagementPage from './BaseManagementPage';
+class UsersManahement extends BaseManagementPage {
     constructor(props) {
         super(props);
         this.state = {};
 
         this.masterDataService = MasterManagementService.instance;
-        this.page = 1;
-        this.limit = 5;
-        this.count = 0;
-        this.orderBy = 'id';
-        this.orderType = 'asc';
-        this.fieldsFilter = {};
-        this.recordData = null;
+       
 
         this.initialize = () => {
-            const hasFilter = this.getUsersDataStored() != null && this.getUsersDataStored().filter != null;
-            const filter = hasFilter ? this.getUsersDataStored().filter : null;
+            const hasFilter = this.getRecordDataStored() != null && this.getRecordDataStored().filter != null;
+            const filter = hasFilter ? this.getRecordDataStored().filter : null;
             this.page = hasFilter ? filter.page : 1;
             this.limit = hasFilter ? filter.limit : 5;
             this.count = hasFilter ? filter.count : 0;
             this.orderBy = hasFilter ? filter.orderBy : null;
             this.orderType = hasFilter ? filter.orderType : null;
 
-            if (null == this.getUsersDataStored()) {
+            if (null == this.getRecordDataStored()) {
                 this.loadRecords();
             } else {
                 this.recordData = this.masterDataService.usersData;
             }
         }
 
-        this.successLoaded = (response) => {
-            this.masterDataService.setUsersData(response);
-            this.recordData = response;
-        }
-
-        this.errorLoaded = (e) => {
-
-        }
-
-        this.getUsersDataStored = () => {
+        this.getRecordDataStored = () => {
             return this.masterDataService.usersData;
         }
 
-        this.loadRecords = () => {
-            this.readInputForm();
-            const request = {
-                page: this.page,
-                limit: this.limit,
-                orderBy: this.orderBy,
-                orderType: this.orderType,
-                fieldsFilter: this.fieldsFilter
-            };
-            this.commonAjax(this.masterDataService.userList, request, this.successLoaded, this.errorLoaded);
-        }
-
-        this.loadRecordByPage = (page) => {
-            this.page = page;
-            this.loadRecords();
-        }
-
-        this.onButtonOrderClick = (e) => {
-            e.preventDefault();
-            this.orderBy = e.target.getAttribute("data")
-            this.orderType = e.target.getAttribute("sort");
-            this.loadRecords();
-        }
-
-        this.readInputForm = () => {
-            const form = document.getElementById('list-form');
-            if (form == null) return;
-            const inputs = form.getElementsByClassName("form-filter");
-
-            this.fieldsFilter = {};
-            for (let i = 0; i < inputs.length; i++) {
-                const element = inputs[i];
-                if (null != element.value && "" != element.value) {
-                    this.fieldsFilter[element.name] = element.value;
-                }
-            }
-        }
-
-        this.filter = (e) => {
-            this.page = 1;
-            this.loadRecords();
-        }
-
         this.populateDefaultInputs = () => {
-            const recordData = this.recordData != null ? this.recordData : this.getUsersDataStored() != null ?
-        this.getUsersDataStored() : null;
-        
-        if(null ==recordData) {
-            return;
-        }
+            const recordData = this.recordData != null ? this.recordData : this.getRecordDataStored() != null ?
+                this.getRecordDataStored() : null;
+
+            if (null == recordData) {
+                return;
+            }
             const fieldsFilter = recordData.filter.fieldsFilter;
             for (const key in fieldsFilter) {
                 if (fieldsFilter.hasOwnProperty(key)) {
@@ -112,10 +55,22 @@ class UsersManahement extends BaseAdminPage {
             }
         }
     }
+
+    loadRecords = () => {
+        this.readInputForm();
+        const request = {
+            page: this.page,
+            limit: this.limit,
+            orderBy: this.orderBy,
+            orderType: this.orderType,
+            fieldsFilter: this.fieldsFilter
+        };
+        this.commonAjax(this.masterDataService.userList, request, this.successLoaded, this.errorLoaded);
+    }
     createNavButton() {
-        const recordData = this.recordData != null ? this.recordData : this.getUsersDataStored() != null ?
-        this.getUsersDataStored() : null;
-        
+        const recordData = this.recordData != null ? this.recordData : this.getRecordDataStored() != null ?
+            this.getRecordDataStored() : null;
+
         if (null == recordData) {
             return <></>
         }
@@ -129,8 +84,8 @@ class UsersManahement extends BaseAdminPage {
     }
     render() {
         const navButtons = this.createNavButton();
-        const recordData = this.recordData != null ? this.recordData : this.getUsersDataStored() != null ?
-        this.getUsersDataStored() : null;
+        const recordData = this.recordData != null ? this.recordData : this.getRecordDataStored() != null ?
+            this.getRecordDataStored() : null;
         const recordList =
             recordData == null ||
                 recordData.result_list == null ? [] :
