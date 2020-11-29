@@ -60,7 +60,7 @@ export default class BaseManagementPage extends BaseAdminPage {
         }
 
         this.onErrorDelete = (e) => {
-            this.showInfo("Error Delete Record");
+            this.showError("Error Delete Record");
         }
 
         this.deleteRecord = (id) => {

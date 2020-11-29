@@ -27,6 +27,9 @@ export default class BaseComponent extends Component {
         this.showInfo = (body) => {
             this.parentApp.showAlert("Info", body, true, function(){});
         }
+        this.showError = (body) => {
+            this.parentApp.showAlertError("Error", body, true, function(){});
+        }
 
         this.backToLogin = () => {
             this.props.history.push("/login");

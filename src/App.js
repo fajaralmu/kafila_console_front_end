@@ -29,6 +29,7 @@ class App extends Component {
     this.alertTitle = null;
     this.alertBody = null;
     this.alertIsYesOnly = true;
+    this.alertIsError = false;
     this.alertOnYesCallback = null;
     this.alertOnCancelCallback = null;
 
@@ -71,7 +72,10 @@ class App extends Component {
       }
     }
 
-
+    this.showAlertError = (title, body, yesOnly, yesCallback, noCallback) => {
+      this.alertIsError = true;
+      this.showAlert(title, body, yesOnly, yesCallback, noCallback)
+    }
     this.showAlert = (title, body, yesOnly, yesCallback, noCallback) => {
       this.alertTitle = title;
       this.alertBody = body;
@@ -92,6 +96,7 @@ class App extends Component {
       this.setState({ showAlert: true })
     }
     this.dismissAlert = () => {
+      this.alertIsError = false;
       this.setState({ showAlert: false })
     }
 
@@ -157,7 +162,9 @@ class App extends Component {
     return (
       <div className="App">
         {this.state.showAlert ?
-          <Alert yesOnly={this.alertIsYesOnly}
+          <Alert 
+            isError={this.alertIsError}
+            yesOnly={this.alertIsYesOnly}
             title={this.alertTitle}
             onYes={this.alertOnYesCallback} onNo={this.alertOnCancelCallback}
           >{this.alertBody}</Alert> :

@@ -24,14 +24,28 @@ class Alert extends Component {
         }
     }
 
+    componentDidMount() {
+        try {
+            document.getElementById("button-alert-yes").focus();
+        } catch (error) {
+            
+        }
+    }
+
     render() {
         const title = this.props.title ? this.props.title : "Info";
         const yesOnly = this.props.yesOnly == true;
+        const isError = this.props.isError == true;
+        let headerClassName = 'modal-card-head has-background-link';
+        if (isError) {
+            headerClassName = 'modal-card-head has-background-danger';
+        }
         return (
             <>
                 <Backdrop>
+                    <form onSubmit="return false;">
                     <div className='modal-card'>
-                        <header className='modal-card-head has-background-link'>
+                        <header className={headerClassName}>
                             <p className='modal-card-title has-text-white'>{title}</p>
                         </header>
                         <section  className= 'modal-card-body'>
@@ -39,13 +53,15 @@ class Alert extends Component {
                         </section>
                         <footer className='modal-card-foot'>
                             <div style={{margin:'auto'}}>
-                                <button onClick={this.onYes} className="button is-link">
+                                <button id="button-alert-yes" type="submit" 
+                                onClick={this.onYes} className={this.props.yesOnly?"button":"button is-link"}>
                                     Yes
                                 </button>
                                 {this.props.yesOnly?null:<button onClick={this.onNo} className="button">No</button>}
                             </div>
                         </footer>
                     </div>
+                    </form>
 
                 </Backdrop>
             </>
