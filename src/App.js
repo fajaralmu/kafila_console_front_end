@@ -8,6 +8,7 @@ import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Loader from './components/widget/Loader';
+import Alert from './components/messages/Alert';
 const blankFunc = function (e) { };
 
 class App extends Component {
@@ -21,17 +22,18 @@ class App extends Component {
       loadingPercentage: 0,
       requestId: null,
       mainAppUpdated: new Date(),
+      showAlert: false,
+
     };
+
+    this.alertTitle = null;
+    this.alertBody = null;
+    this.alertIsYesOnly = true;
+    this.alertOnYesCallback = null;
+    this.alertOnCancelCallback = null;
 
     this.loadings = 0;
 
-    this.alertCallback = {
-      title: "Info",
-      message: "Info",
-      yesOnly: false,
-      onOk: () => { },
-      onNo: () => { }
-    }
 
 
     this.setMenuCode = (code) => {
@@ -40,10 +42,6 @@ class App extends Component {
 
     this.refresh = () => {
       this.setState({ mainAppUpdated: new Date() });
-    }
-
-    this.setEnableShopping = (val) => {
-      this.setState({ enableShopping: val })
     }
 
     this.incrementLoadings = function () {
@@ -74,6 +72,28 @@ class App extends Component {
     }
 
 
+    this.showAlert = (title, body, yesOnly, yesCallback, noCallback) => {
+      this.alertTitle = title;
+      this.alertBody = body;
+      this.alertIsYesOnly = yesOnly;
+      const app = this;
+      this.alertOnYesCallback = function (e) {
+        app.dismissAlert();
+        yesCallback(e);
+      }
+      if (!yesOnly) {
+        this.alertOnCancelCallback = function (e) {
+          app.dismissAlert();
+          if (noCallback != null) {
+            noCallback(e);
+          }
+        };
+      }
+      this.setState({ showAlert: true })
+    }
+    this.dismissAlert = () => {
+      this.setState({ showAlert: false })
+    }
 
     this.routedContent = () => {
       return (<>
@@ -93,24 +113,6 @@ class App extends Component {
       </>);
     }
 
-    this.alertDialog = (message, title, yesOnly, onOk, onNo) => {
-
-      this.alertCallback.yesOnly = yesOnly;
-      this.alertCallback.onOk = onOk;
-      this.alertCallback.onNo = onNo;
-      this.alertCallback.message = message;
-      this.alertCallback.title = title;
-      this.setState({ showInfo: true })
-
-    }
-
-    this.infoDialog = (message) => {
-      this.alertDialog(message, "Info", true, blankFunc, blankFunc);
-    }
-
-    this.confirmDialog = (message, onOk, onNo) => {
-      this.alertDialog(message, "Confirmation", false, onOk, onNo);
-    }
 
   }
 
@@ -154,7 +156,12 @@ class App extends Component {
     }
     return (
       <div className="App">
-
+        {this.state.showAlert ?
+          <Alert yesOnly={this.alertIsYesOnly}
+            title={this.alertTitle}
+            onYes={this.alertOnYesCallback} onNo={this.alertOnCancelCallback}
+          >{this.alertBody}</Alert> :
+          null}
         <Header app={this} />
         <section className="container">
           <Loader show={this.state.loading} />

@@ -33,17 +33,18 @@ const InputFormFilter = (props) => {
 export const ButtonApplyResetFilter = (props) => {
     return (
         <>
-            <button type="reset" className="button is-danger">
-                <span className="icon">
-                    <i className="fas fa-sync"></i>
-                </span>
-                <span>Reset Filter</span>
-            </button>
+            
             <button type="submit" className="button is-info">
                 <span className="icon">
                     <i className="fas fa-search"></i>
                 </span>
                 <span>Apply Filter</span>
+            </button>
+            <button type="reset" className="button is-danger">
+                <span className="icon">
+                    <i className="fas fa-sync"></i>
+                </span>
+                <span>Reset Filter</span>
             </button>
         </>
     )

@@ -7,9 +7,10 @@ import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import NavButtons from '../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
+import Columns from './../../container/Columns';
 class DeparementManagement extends BaseManagementPage {
     constructor(props) {
-        super(props, "Departement");
+        super(props, "Departement", "departement");
         this.state = {};
 
         this.masterDataService = MasterManagementService.instance;
@@ -65,10 +66,11 @@ class DeparementManagement extends BaseManagementPage {
             <div>
                 <h2 style={{ textAlign: 'center' }}>Departement Management</h2>
                 <Card title="Departement">
-                    {this.linkToFormCreate("/management/departements/create", "Tambah Departement")}
-                    {navButtons}
+                    {this.linkToFormCreate("/management/departements/create", "Tambah Data")}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
-                       {formComponent.ButtonApplyResetFilter()}
+                        <Columns cells={[
+                            formComponent.ButtonApplyResetFilter(), navButtons
+                        ]} />
                         <table style={{ tableLayout: 'fixed' }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
@@ -86,7 +88,10 @@ class DeparementManagement extends BaseManagementPage {
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.description}</td>
-                                    <td>{this.linkToFormEdit("/management/departements/"+item.id)}</td>
+                                    <td>
+                                        {this.linkToFormEdit("/management/departements/"+item.id)}
+                                        {this.buttonDeleteRecord(item.id)}    
+                                    </td>
                                 </tr>)
                             })}
                         </table>

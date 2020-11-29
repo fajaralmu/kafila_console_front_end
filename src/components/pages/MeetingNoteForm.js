@@ -25,11 +25,19 @@ class MeetingNoteForm extends BaseComponent {
         }
         this.onSubmit = (e) => {
             e.preventDefault();
-            const cofirm = window.confirm("Submit Data?");
-            if (!cofirm) {
-                return;
-            }
+            
             const form = e.target;
+            const app = this;
+            this.showConfirmation("Submit Data?").then(function(accepted) {
+                if (accepted) {
+                    app.fillDataAndStore(form);
+                }
+            });
+
+            
+        }
+
+        this.fillDataAndStore = (form) => {
             const inputs = form.getElementsByClassName("input-form-field");
 
             this.meetingNote = {};
@@ -50,13 +58,15 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.handleSuccessSubmit = (response) => {
-            alert("SUCCESS");
+            this.showInfo("SUCCESS");
             try {
-                document.getElementById(FORM_ID).reset();
+                if (this.getRecordId() == null) {
+                    document.getElementById(FORM_ID).reset();
+                }
             } catch (error) { }
         }
         this.handleErrorSubmit = (error) => {
-            alert("handleErrorSubmit: " + error);
+            this.showInfo("handleErrorSubmit: " + error);
         }
         this.handleErrorGetRecord = (error) => {
             this.setState({ recordNotFound: true })

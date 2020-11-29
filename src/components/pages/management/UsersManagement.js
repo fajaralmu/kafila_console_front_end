@@ -7,16 +7,17 @@ import MasterManagementService from './../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import NavButtons from './../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
+import Columns from './../../container/Columns';
 
 class UsersManahement extends BaseManagementPage {
     constructor(props) {
-        super(props, "User");
+        super(props, "User", "user");
         this.state = {
             showForm: false,
         };
         this.departementList = [];
         this.masterDataService = MasterManagementService.instance;
-        
+
         this.populateDefaultInputs = () => {
             const recordData = this.recordData != null ? this.recordData : null;
 
@@ -49,7 +50,7 @@ class UsersManahement extends BaseManagementPage {
         this.commonAjax(this.masterDataService.userList, request, this.successLoaded, this.errorLoaded);
     }
     createNavButton() {
-        const recordData = this.recordData != null ? this.recordData  : null;
+        const recordData = this.recordData != null ? this.recordData : null;
 
         if (null == recordData) {
             return <></>
@@ -69,11 +70,14 @@ class UsersManahement extends BaseManagementPage {
         return (
             <div>
                 <h2 style={{ textAlign: 'center' }}>Users Management</h2>
+                
                 <Card title="Users">
-                    {this.linkToFormCreate("/management/users/create", "Tambah User")}
-                    {navButtons}
+                    {this.linkToFormCreate("/management/users/create", "Tambah Data")}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
-                        {formComponent.ButtonApplyResetFilter()}
+                        <Columns cells={[
+                            formComponent.ButtonApplyResetFilter(),
+                            navButtons
+                        ]} />
                         <table style={{ tableLayout: 'fixed' }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
@@ -94,8 +98,11 @@ class UsersManahement extends BaseManagementPage {
                                     <td>{item.email}</td>
                                     <td>{item.display_name}</td>
                                     <td>{item.role}</td>
-                                    <td>{item.departement?item.departement.name : '-'}</td>
-                                    <td>{this.linkToFormEdit("/management/users/"+item.id)}</td>
+                                    <td>{item.departement ? item.departement.name : '-'}</td>
+                                    <td>
+                                        {this.linkToFormEdit("/management/users/" + item.id)}
+                                        {this.buttonDeleteRecord(item.id)}    
+                                    </td>
                                 </tr>)
                             })}
                         </table>

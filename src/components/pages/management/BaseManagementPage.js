@@ -1,11 +1,13 @@
 import React from 'react';
 import BaseAdminPage from './../BaseAdminPage';
 import { Link } from 'react-router-dom';
+import MasterManagementService from './../../../services/MasterDataService';
 
 export default class BaseManagementPage extends BaseAdminPage {
-    constructor(props, name) {
+    constructor(props, name, code) {
         super(props);
-
+        this.masterDataServce = MasterManagementService.instance;
+        this.code = code;
         this.name = name;
         this.page = 1;
         this.limit = 5;
@@ -43,9 +45,36 @@ export default class BaseManagementPage extends BaseAdminPage {
             this.loadRecords();
         }
 
+        this.delete = (id) => {
+            const app = this;
+            this.showConfirmation("Delete "+this.name+"?")
+            .then(function(accepted) {
+                if(accepted) {
+                    app.deleteRecord(id);
+                }
+            });
+        }
+
+        this.onSuccessDelete = (response) => {
+            this.showConfirmation("Record has been deleted").then(this.loadRecords);
+        }
+
+        this.onErrorDelete = (e) => {
+            this.showInfo("Error Delete Record");
+        }
+
+        this.deleteRecord = (id) => {
+            this.commonAjax(
+                this.masterDataServce.deleteRecord,
+                {code: this.code, id: id},
+                this.onSuccessDelete,
+                this.onErrorDelete
+            )
+        }
+
         this.linkToFormCreate = (link, label) => {
             return (
-                <Link to={link} className="button is-primary">
+                <Link to={link} className="button is-primary" style={{marginBottom:'10px'}}>
                         <span className="icon">
                             <i className="fas fa-plus"></i>
                         </span>
@@ -55,12 +84,23 @@ export default class BaseManagementPage extends BaseAdminPage {
         }
         this.linkToFormEdit = (link) => {
             return (
-                <Link to={link} className="button is-warning">
+                <Link to={link} className="button is-warning is-small">
                         <span className="icon">
                             <i className="fas fa-edit"></i>
                         </span>
                         <span>Edit</span>
                     </Link>
+            )
+        }
+
+        this.buttonDeleteRecord = (id) => {
+            return (
+                <a onClick={()=>this.delete(id)} className="button is-danger is-small">
+                    <span className="icon">
+                        <i className="fas fa-trash"></i>
+                    </span>
+                    <span>Delete</span>
+                </a>
             )
         }
 

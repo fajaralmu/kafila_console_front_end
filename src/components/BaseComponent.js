@@ -12,6 +12,22 @@ export default class BaseComponent extends Component {
             }
         }
 
+        this.showConfirmation = (body) => {
+            return new Promise((resolve, reject) =>{
+                const onYes = function(e) {
+                    resolve(true);
+                }
+                const onNo = function(e) {
+                    resolve(false);
+                }
+                this.parentApp.showAlert("Confirmation", body, false, onYes, onNo);
+            });
+            
+        }
+        this.showInfo = (body) => {
+            this.parentApp.showAlert("Info", body, true, function(){});
+        }
+
         this.backToLogin = () => {
             this.props.history.push("/login");
         }
@@ -37,6 +53,7 @@ export default class BaseComponent extends Component {
         this.doAjax = (method, params, withProgress, successCallback, errorCallback) => {
             if(!method) {console.warn("Method Not Found! ");return}
             this.startLoading(withProgress);
+            const app = this;
 
             method(params).then(function(response){
                 if(successCallback){ 
@@ -47,9 +64,9 @@ export default class BaseComponent extends Component {
                     errorCallback(e);
                 } else {
                     if (typeof(e) == 'string'){
-                        alert("Operation Failed: "+e);
+                        app.showInfo("Operation Failed: "+e);
                     }
-                    alert("resource not found");
+                    app.showInfo("resource not found");
                 }
             }).finally((e)=>{
                 this.endLoading();

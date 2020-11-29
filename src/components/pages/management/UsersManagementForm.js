@@ -20,11 +20,16 @@ class UserManagementForm extends BaseComponent {
 
         this.onSubmit = (e) => {
             e.preventDefault();
-            if (!window.confirm("Save User?")) {
-                return;
-            }
-
             const form = e.target;
+            const app = this;
+            this.showConfirmation("Save User?").then(function(accepted) {
+                if (accepted) {
+                    app.storeRecord(form);
+                }
+            });            
+        }
+
+        this.storeRecord = (form) => {
             const inputs = form.getElementsByClassName("input-form-field");
             const user = {};
             for (let i = 0; i < inputs.length; i++) {
@@ -59,10 +64,10 @@ class UserManagementForm extends BaseComponent {
         }
 
         this.recordSaved = (response) => {
-            alert("SUCCESS SAVING RECORD");
+            this.showInfo("SUCCESS SAVING RECORD");
         }
         this.recordFailedToSave = (e) => {
-            alert("FAILED SAVING RECORD");
+            this.showInfo("FAILED SAVING RECORD");
         }
 
         this.store = (user) => {

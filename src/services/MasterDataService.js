@@ -56,6 +56,10 @@ export default class MasterManagementService
         const endpoint = url.contextPath().concat("api/masterdata/view/"+id);
         return commonAjaxPostCalls(endpoint, {code:"departement"});
     }
+    deleteRecord = (payload) => {
+        const endpoint = url.contextPath().concat("api/masterdata/delete/"+payload.id);
+        return commonAjaxPostCalls(endpoint, {code: payload.code});
+    }
 
     departementList = (filter) => {
         return this.list({
