@@ -1,9 +1,12 @@
 import React from 'react';
 import BaseAdminPage from './../BaseAdminPage';
+import { Link } from 'react-router-dom';
 
 export default class BaseManagementPage extends BaseAdminPage {
-    constructor(props) {
+    constructor(props, name) {
         super(props);
+
+        this.name = name;
         this.page = 1;
         this.limit = 5;
         this.count = 0;
@@ -19,6 +22,7 @@ export default class BaseManagementPage extends BaseAdminPage {
         this.errorLoaded = (e) => {
 
         }
+
         this.getRecordDataStored = () => {
             return null;
         }
@@ -39,11 +43,38 @@ export default class BaseManagementPage extends BaseAdminPage {
             this.loadRecords();
         }
 
+        this.linkToFormCreate = (link, label) => {
+            return (
+                <Link to={link} className="button is-primary">
+                        <span className="icon">
+                            <i className="fas fa-plus"></i>
+                        </span>
+                        <span>{label}</span>
+                    </Link>
+            )
+        }
+        this.linkToFormEdit = (link) => {
+            return (
+                <Link to={link} className="button is-warning">
+                        <span className="icon">
+                            <i className="fas fa-edit"></i>
+                        </span>
+                        <span>Edit</span>
+                    </Link>
+            )
+        }
+
     }
-    
+
+    componentDidMount() {
+        document.title = this.name + " Management";
+        this.loadRecords();
+    }
+
     loadRecords = () => {
 
     }
+
     
     readInputForm = () => {
         const form = document.getElementById('list-form');

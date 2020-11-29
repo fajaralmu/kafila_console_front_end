@@ -1,6 +1,6 @@
 import * as url from '../constant/Url'
 import { commonAuthorizedHeader } from '../middlewares/Common';
-import { rejectedPromise } from './Promises';
+import { rejectedPromise, commonAjaxPostCalls } from './Promises';
 export default class MasterManagementService
 {
     static instance = MasterManagementService.instance || new MasterManagementService();
@@ -19,6 +19,22 @@ export default class MasterManagementService
     setUsersData = (usersData) => {
         this.usersData = usersData;
     }
+
+    storeUser = (user) => {
+        const request = {
+            code: 'user',
+            userModel:user
+        }
+
+        const endpoint = url.contextPath().concat("api/masterdata/store");
+        return commonAjaxPostCalls(endpoint, request);
+    }
+
+    viewUser = (id) => {
+        const endpoint = url.contextPath().concat("api/masterdata/view/"+id);
+        return commonAjaxPostCalls(endpoint, {code:"user"});
+    }
+
     userList = (filter) => {
         return this.list({
             code: 'user',
@@ -39,20 +55,6 @@ export default class MasterManagementService
         }
 
         const endpoint = url.contextPath().concat("api/masterdata/list");
-        return new Promise(function (resolve, reject) {
-            fetch(endpoint, {
-                method: url.POST,
-                body: JSON.stringify(request),
-                headers: commonAuthorizedHeader()
-            })
-            .then(response => response.json())
-            .then(function (response) {
-                if (response.code == "00") 
-                { resolve(response); }
-                else 
-                { reject(response); }
-            })
-            .catch((e) => { console.error(e); reject(e); });
-        })
+        return commonAjaxPostCalls(endpoint, request);
     }
 }

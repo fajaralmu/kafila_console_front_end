@@ -8,6 +8,7 @@ import MeetingNoteSerivce from './../../services/MeetingNoteSerivce';
 import Message from '../messages/Message';
 import * as formComponent from '../forms/commons';
 import Card from './../container/Card';
+import { SubmitResetButton } from './../forms/commons';
 
 const FORM_ID = "form-input-meeting-note";
 class MeetingNoteForm extends BaseComponent {
@@ -15,7 +16,7 @@ class MeetingNoteForm extends BaseComponent {
         super(props);
         this.state = {
             recordNotFound: false,
-            recordFound: false
+            isLoadingRecord: true
         }
         this.meetingNote = {};
         this.meetingNoteService = MeetingNoteSerivce.instance;
@@ -29,7 +30,7 @@ class MeetingNoteForm extends BaseComponent {
                 return;
             }
             const form = e.target;
-            const inputs = form.getElementsByClassName("input-meeting-note");
+            const inputs = form.getElementsByClassName("input-form-field");
 
             this.meetingNote = {};
             for (let i = 0; i < inputs.length; i++) {
@@ -62,10 +63,10 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.handleSuccessGetRecord = (response) => {
-            console.log("RESPONSE: ", response);
-            this.setState({ recordFound: true });
+
+            this.setState({ isLoadingRecord: false });
             const form = document.getElementById(FORM_ID);
-            const inputs = form.getElementsByClassName("input-meeting-note");
+            const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
                 element.value = response.meeting_note[element.name];
@@ -75,6 +76,16 @@ class MeetingNoteForm extends BaseComponent {
                 }
             }
 
+        }
+        this.enableInputs = () => {
+            const form = document.getElementById(FORM_ID);
+            const inputs = form.getElementsByClassName("input-form-field");
+            for (let i = 0; i < inputs.length; i++) {
+                const element = inputs[i];
+                element.removeAttribute("disabled");
+
+            }
+            form.reset();
         }
 
         // ajax calls
@@ -100,6 +111,11 @@ class MeetingNoteForm extends BaseComponent {
         }
     }
 
+    componentDidUpdate() {
+        if (this.getRecordId() == null) {
+            this.enableInputs();
+        }
+    }
 
     render() {
 
@@ -107,7 +123,7 @@ class MeetingNoteForm extends BaseComponent {
             return <Message className="is-danger" body="Record Not Found" />
         }
 
-        if (this.getRecordId() != null && this.state.recordFound == false) {
+        if (this.getRecordId() != null && this.state.isLoadingRecord) {
             return <h3>Please Wait...</h3>
         }
 
@@ -126,18 +142,9 @@ class MeetingNoteForm extends BaseComponent {
                         <InputField required={true} label="Keputusan" name="decision" type="textarea" />
                         <InputField required={true} label="Deadline" name="deadline_date" type="date" />
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
-                        <div className="field is-horizontal">
-                            <div className="field-label is-normal" />
-                            <div className="field-body">
-                                <div className="field">
-                                    <input className="button is-link" type="submit" value="Submit" />
-                                    {this.getRecordId() != null ?
-                                        null
-                                        : <input className="button is-danger" type="reset" value="Reset" />
-                                    }
-                                </div>
-                            </div>
-                        </div>
+
+                        <SubmitResetButton submitText={
+                            this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
                     </form>
                 </Card>
             </div>

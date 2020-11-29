@@ -24,7 +24,7 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div class="card" style={{ margin: '10px' }}>
+            <div class="card" style={{ margin: '10px', ...this.props.style}}>
                 <header class="card-header">
                     <p class="card-header-title">
                         {this.props.title ? this.props.title : "Card Title"}

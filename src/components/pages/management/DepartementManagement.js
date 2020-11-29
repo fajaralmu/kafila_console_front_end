@@ -9,32 +9,11 @@ import NavButtons from '../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
 class DeparementManagement extends BaseManagementPage {
     constructor(props) {
-        super(props);
+        super(props, "Departement");
         this.state = {};
 
         this.masterDataService = MasterManagementService.instance;
-       
-
-        // this.initialize = () => {
-        //     const hasFilter = this.getRecordDataStored() != null && this.getRecordDataStored().filter != null;
-        //     const filter = hasFilter ? this.getRecordDataStored().filter : null;
-        //     this.page = hasFilter ? filter.page : 1;
-        //     this.limit = hasFilter ? filter.limit : 5;
-        //     this.count = hasFilter ? filter.count : 0;
-        //     this.orderBy = hasFilter ? filter.orderBy : null;
-        //     this.orderType = hasFilter ? filter.orderType : null;
-
-        //     if (null == this.getRecordDataStored()) {
-        //         this.loadRecords();
-        //     } else {
-        //         this.recordData = this.masterDataService.usersData;
-        //     }
-        // }
-
-        this.getRecordDataStored = () => {
-            return this.masterDataService.deparementData;
-        }
-
+        
         this.populateDefaultInputs = () => {
             const recordData = this.recordData != null ? this.recordData : null;
 
@@ -75,16 +54,11 @@ class DeparementManagement extends BaseManagementPage {
         return <NavButtons onClick={this.loadRecordByPage} limit={this.limit}
             totalData={recordData.count} activeIndex={this.page} />
     }
-    componentDidMount() {
-        document.title = "Deparement Management";
-        // this.initialize();
-        this.loadRecords();
-    }
+
     render() {
         const navButtons = this.createNavButton();
         const recordData = this.recordData != null ? this.recordData : null;
-        const recordList =
-            recordData == null ||
+        const recordList = recordData == null ||
                 recordData.result_list == null ? [] :
                 recordData.result_list;
         return (
@@ -93,18 +67,7 @@ class DeparementManagement extends BaseManagementPage {
                 <Card title="Departement">
                     {navButtons}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
-                        <button type="reset" className="button is-danger">
-                            <span className="icon">
-                                <i className="fas fa-sync"></i>
-                            </span>
-                            <span>Reset Filter</span>
-                        </button>
-                        <button type="submit" className="button is-info">
-                            <span className="icon">
-                                <i className="fas fa-search"></i>
-                            </span>
-                            <span>Submit</span>
-                        </button>
+                       {formComponent.ButtonApplyResetFilter()}
                         <table style={{ tableLayout: 'fixed' }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}

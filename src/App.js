@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
+import Loader from './components/widget/Loader';
 const blankFunc = function (e) { };
 
 class App extends Component {
@@ -153,9 +154,10 @@ class App extends Component {
     }
     return (
       <div className="App">
-        {this.state.loading ? <Loading /> : null}
+
         <Header app={this} />
         <section className="container">
+          <Loader show={this.state.loading} />
           <div className="columns">
             <div className="column">
               <Content app={this} />
@@ -163,6 +165,7 @@ class App extends Component {
           </div>
         </section>
         <Footer />
+
       </div>
     )
   }
@@ -170,22 +173,6 @@ class App extends Component {
 }
 
 
-const Loading = () => {
-  return (
-    <div className="has-background-dark" style={{
-      width: '100%',
-      zIndex: 500,
-      // backgroundColor: 'wheat',
-      position: 'fixed',
-      textAlign: 'center',
-      padding: '5px',
-      color: '#ffffff'
-    }}>
-      <span className="button is-loading is-dark"></span>
-      &nbsp;Loading
-    </div>
-  )
-}
 
 
 const mapStateToProps = state => {

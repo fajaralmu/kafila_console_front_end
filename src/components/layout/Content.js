@@ -8,6 +8,7 @@ import MeetingNoteForm from '../pages/MeetingNoteForm';
 import ManagementMenu from './../pages/management/ManagementMenu';
 import UsersManagement from '../pages/management/UsersManagement';
 import DepartementManagement from '../pages/management/DepartementManagement';
+import UsersManagementForm from '../pages/management/UsersManagementForm';
 
 class Content extends Component {
 
@@ -42,11 +43,22 @@ class Content extends Component {
             (props) =>
               <ManagementMenu app={this.props.app} />
           } />
+
+          {/* users */}
           <Route exact path="/management/users" render={
             (props) =>
               <UsersManagement app={this.props.app} />
           } />
-        <Route exact path="/management/departements" render={
+          <Route exact path="/management/users/create" render={
+            (props) =>
+              <UsersManagementForm app={this.props.app} />
+          } />
+          <Route exact path="/management/users/:id" render={
+            (props) =>
+              <UsersManagementForm app={this.props.app} />
+          } />
+          {/* departements */}
+          <Route exact path="/management/departements" render={
             (props) =>
               <DepartementManagement app={this.props.app} />
           } />

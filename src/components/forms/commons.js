@@ -1,21 +1,21 @@
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export const TableHeadWithFilter = (props) => {
     const headers = props.headers;
     const onButtonOrderClick = props.onButtonOrderClick;
     return (<thead>
         <tr>
-            {headers.map(header=>{
+            {headers.map(header => {
                 return <th>{header.alias == null ? header.text.toUpperCase().replaceAll("_", " ") : header.alias}
-                    
-                    {header.withFilter?
-                    <>
-                    <InputFormFilter type="text" name={header.text}   />
-                    <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small">asc</button>
-                    <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small">desc</button>
-                    </>
-                    : null}
+
+                    {header.withFilter ?
+                        <>
+                            <InputFormFilter type="text" name={header.text} />
+                            <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small"><i className="fas fa-angle-up"></i></button>
+                            <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small"><i className="fas fa-angle-down"></i></button>
+                        </>
+                        : null}
                 </th>
             })}
         </tr>
@@ -24,31 +24,52 @@ export const TableHeadWithFilter = (props) => {
 //not exported
 const InputFormFilter = (props) => {
     const className = "input form-filter";
-    const type = props.type? props.type : 'text';
-    
-    return <input className={className} type={type} name={props.name} 
-        id={'input-form-'+props.name} />
+    const type = props.type ? props.type : 'text';
+
+    return <input className={className} type={type} name={props.name}
+        id={'input-form-' + props.name} />
 }
+
+export const ButtonApplyResetFilter = (props) => {
+    return (
+        <>
+            <button type="reset" className="button is-danger">
+                <span className="icon">
+                    <i className="fas fa-sync"></i>
+                </span>
+                <span>Reset Filter</span>
+            </button>
+            <button type="submit" className="button is-info">
+                <span className="icon">
+                    <i className="fas fa-search"></i>
+                </span>
+                <span>Apply Filter</span>
+            </button>
+        </>
+    )
+}
+
 
 
 export const InputField = (props) => {
 
+    const className = "input input-form-field";
     return (
         <div className="field is-horizontal">
-            <div className="field-label is-normal"><label className="label">{props.label}</label></div>
+            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Input"}</label></div>
             <div className="field-body">
                 <div className="field">
                     <div className="control">
                         {props.required == true ?
                             props.type == 'textarea' ?
-                                <textarea required className="input textarea input-meeting-note" id={'input-meeting-note-' + props.name} name={props.name}></textarea>
+                                <textarea required className={className + " textarea"} id={'input-form-field-' + props.name} name={props.name}></textarea>
                                 :
-                                <input required type={props.type ? props.type : 'text'} id={'input-meeting-note-' + props.name} name={props.name} className="input input-meeting-note" />
+                                <input required type={props.type ? props.type : 'text'} id={'input-form-field-' + props.name} name={props.name} className={className} />
                             :
                             props.type == 'textarea' ?
-                                <textarea className="input textarea input-meeting-note" id={'input-meeting-note-' + props.name} name={props.name}></textarea>
+                                <textarea className={className + " textarea"} id={'input-form-field-' + props.name} name={props.name}></textarea>
                                 :
-                                <input type={props.type ? props.type : 'text'} id={'input-meeting-note-' + props.name} name={props.name} className="input input-meeting-note" />
+                                <input type={props.type ? props.type : 'text'} id={'input-form-field-' + props.name} name={props.name} className={className} />
                         }
                     </div>
                 </div>
@@ -57,3 +78,56 @@ export const InputField = (props) => {
     );
 }
 
+export const SelectField = (props) => {
+    const optionValues = props.options == null ? [] : props.options;
+    const options = optionValues.map((option) => {
+        return <option value={option.value} >{option.text}</option>
+    })
+    return (
+        <div className="field is-horizontal">
+            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Select"}</label></div>
+            <div className="field-body">
+                <div className="field">
+                    <div className="control">
+                        {props.required == true ?
+                            <select required id={'input-form-field-' + props.name} name={props.name}
+                                className="input input-form-field">
+                                {options}
+                            </select>
+                            :
+                            <select id={'input-form-field-' + props.name} name={props.name}
+                                className="input input-form-field">
+                                {options}
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export const SubmitResetButton = (props) => {
+    const submitValue = props.submitText ? props.submitText : "Submit";
+    return (
+        <div className="field is-horizontal">
+            <div className="field-label is-normal" />
+            <div className="field-body">
+                <div className="field">
+                    <button className="button is-link" type="submit" >
+                        <span className="icon"><i className="fas fa-save"></i></span>
+                        <span>{submitValue}</span>
+                    </button>
+                    {props.withReset == true ?
+                        <button className="button is-danger" type="reset" >
+                            <span className="icon">
+                                <i className="fas fa-sync"></i>
+                            </span>
+                            <span>Reset</span>
+                        </button> : null
+                    }
+                </div>
+            </div>
+        </div>
+    )
+}

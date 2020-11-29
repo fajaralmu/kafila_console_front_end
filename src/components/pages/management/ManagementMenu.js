@@ -21,8 +21,8 @@ class ManagementMenu extends BaseAdminPage {
                     <aside className="menu">
                         <p className="menu-label">General</p>
                         <ul className="menu-list">
-                            <li><Link to="/management/departements">Departements</Link></li>
-                            <li><Link to="/management/users">Users</Link></li>
+                            <li style={{listStyle:'none'}}><Link to="/management/departements">Departements</Link></li>
+                            <li style={{listStyle:'none'}}><Link to="/management/users">Users</Link></li>
                         </ul>
                     </aside>
                 </Card>

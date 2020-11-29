@@ -143,18 +143,7 @@ class Dashboard extends BaseComponent {
                     {/* record list */}
                     {navButtons}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
-                        <button type="reset" className="button is-danger">
-                            <span className="icon">
-                                <i className="fas fa-sync"></i>
-                            </span>
-                            <span>Reset Filter</span>
-                        </button>
-                        <button type="submit" onClick={this.onSubmitClick} className="button is-info">
-                            <span className="icon">
-                                <i className="fas fa-search"></i>
-                            </span>
-                            <span>Submit</span>
-                        </button>
+                        {formComponent.ButtonApplyResetFilter()}
                         <table style={{ tableLayout: 'fixed' }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
@@ -181,7 +170,7 @@ class Dashboard extends BaseComponent {
                                     <td>{item.departement.name}</td>
                                     <td>-</td>
                                     <td>
-                                        <Link to={"/meetingnote/" + item.id} className="button is-link" >
+                                        <Link to={"/meetingnote/" + item.id} className="button" >
                                             view
                                     </Link>
                                     </td>

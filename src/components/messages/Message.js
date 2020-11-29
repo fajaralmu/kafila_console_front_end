@@ -22,7 +22,7 @@ class Message extends Component {
         }
         const className = this.props.className?'message '+this.props.className:'message is-info';
         return (
-            <article id="my-message" className={className}>
+            <article style={{marginBottom:'10px'}} id="my-message" className={className}>
                 <div className="message-header">
                     <p>{this.props.header?this.props.header:"Info"}</p>
                     <button onClick={this.hide} className="delete" aria-label="delete"></button>
