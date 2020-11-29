@@ -1,12 +1,20 @@
 import { React , Component} from 'react';
-
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 
 export default class BaseComponent extends Component {
     constructor(props){
         super(props);
         this.parentApp = props.app; 
     
+        this.validateLoginStatus = () => {
+            if (this.props.loginStatus != true || this.props.loggedUser == null) {
+                this.backToLogin();
+            }
+        }
 
+        this.backToLogin = () => {
+            this.props.history.push("/login");
+        }
         /**
          * 
          * @param {boolean} withProgress 
@@ -67,6 +75,12 @@ export default class BaseComponent extends Component {
          */
         this.commonAjaxWithProgress = (method, params, successCallback, errorCallback) => {
             this.doAjax(method, params, true, successCallback, errorCallback);
+        }
+    }
+
+    componentDidUpdate() {
+        if (null == this.props.loggedUser) {
+            this.backToLogin();
         }
     }
 }

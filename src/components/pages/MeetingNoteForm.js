@@ -2,11 +2,13 @@
 import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
-import * as actions from '../../redux/actionCreators'
 import { connect } from 'react-redux'
 import BaseComponent from './../BaseComponent';
 import MeetingNoteSerivce from './../../services/MeetingNoteSerivce';
 import Message from '../messages/Message';
+import * as formComponent from '../forms/commons';
+import Card from './../container/Card';
+
 const FORM_ID = "form-input-meeting-note";
 class MeetingNoteForm extends BaseComponent {
     constructor(props) {
@@ -45,11 +47,7 @@ class MeetingNoteForm extends BaseComponent {
             this.storeMeetingNote();
 
         }
-        this.validateLoginStatus = () => {
-            if (this.props.loginStatus != true || this.props.loggedUser == null) {
-                this.props.history.push("/login");
-            }
-        }
+
         this.handleSuccessSubmit = (response) => {
             alert("SUCCESS");
             try {
@@ -102,6 +100,7 @@ class MeetingNoteForm extends BaseComponent {
         }
     }
 
+
     render() {
 
         if (this.state.recordNotFound) {
@@ -112,24 +111,35 @@ class MeetingNoteForm extends BaseComponent {
             return <h3>Please Wait...</h3>
         }
 
+        const loggedUser = this.props.loggedUser;
+        if (null == loggedUser) {
+            return <></>
+        }
         return (
             <div>
                 <h2 style={{ textAlign: 'center' }}>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</h2>
-                <form id={FORM_ID} onSubmit={this.onSubmit}>
-                    <InputField required={true} label="Tanggal" name="date" type="date" />
-                    <InputField required={true} label="Tempat" name="place" />
-                    <InputField required={true} label="Pembahasan" name="content" type="textarea" />
-                    <InputField required={true} label="Keputusan" name="decision" type="textarea" />
-                    <InputField required={true} label="Deadline" name="deadline_date" type="date" />
-                    <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
-                    <div className="field is-horizontal">
-                        <input className="button is-link" type="submit" value="Submit" />
-                        {this.getRecordId() != null ?
-                            null
-                            : <input className="button is-danger" type="reset" value="Reset" />
-                        }
-                    </div>
-                </form>
+                <Card title="Formulir">
+                    <form id={FORM_ID} onSubmit={this.onSubmit}>
+                        <InputField required={true} label="Tanggal" name="date" type="date" />
+                        <InputField required={true} label="Tempat" name="place" />
+                        <InputField required={true} label="Pembahasan" name="content" type="textarea" />
+                        <InputField required={true} label="Keputusan" name="decision" type="textarea" />
+                        <InputField required={true} label="Deadline" name="deadline_date" type="date" />
+                        <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
+                        <div className="field is-horizontal">
+                            <div className="field-label is-normal" />
+                            <div className="field-body">
+                                <div className="field">
+                                    <input className="button is-link" type="submit" value="Submit" />
+                                    {this.getRecordId() != null ?
+                                        null
+                                        : <input className="button is-danger" type="reset" value="Reset" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </Card>
             </div>
         )
     }
@@ -137,28 +147,7 @@ class MeetingNoteForm extends BaseComponent {
 
 const InputField = (props) => {
 
-    return (
-        <div className="field is-horizontal">
-            <div className="field-label is-normal"><label className="label">{props.label}</label></div>
-            <div className="field-body">
-                <div className="field">
-                    <div className="control">
-                        {props.required == true ?
-                            props.type == 'textarea' ?
-                                <textarea required className="input textarea input-meeting-note" id={'input-meeting-note-' + props.name} name={props.name}></textarea>
-                                :
-                                <input required type={props.type ? props.type : 'text'} id={'input-meeting-note-' + props.name} name={props.name} className="input input-meeting-note" />
-                            :
-                            props.type == 'textarea' ?
-                                <textarea className="input textarea input-meeting-note" id={'input-meeting-note-' + props.name} name={props.name}></textarea>
-                                :
-                                <input type={props.type ? props.type : 'text'} id={'input-meeting-note-' + props.name} name={props.name} className="input input-meeting-note" />
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+    return formComponent.InputField(props);
 }
 
 
