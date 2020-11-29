@@ -65,6 +65,7 @@ class DeparementManagement extends BaseManagementPage {
             <div>
                 <h2 style={{ textAlign: 'center' }}>Departement Management</h2>
                 <Card title="Departement">
+                    {this.linkToFormCreate("/management/departements/create", "Tambah Departement")}
                     {navButtons}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                        {formComponent.ButtonApplyResetFilter()}
@@ -85,7 +86,7 @@ class DeparementManagement extends BaseManagementPage {
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
                                     <td>{item.description}</td>
-                                    <td> - </td>
+                                    <td>{this.linkToFormEdit("/management/departements/"+item.id)}</td>
                                 </tr>)
                             })}
                         </table>

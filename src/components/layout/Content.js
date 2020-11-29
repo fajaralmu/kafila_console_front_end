@@ -9,6 +9,7 @@ import ManagementMenu from './../pages/management/ManagementMenu';
 import UsersManagement from '../pages/management/UsersManagement';
 import DepartementManagement from '../pages/management/DepartementManagement';
 import UsersManagementForm from '../pages/management/UsersManagementForm';
+import DepartementManagementForm from '../pages/management/DepartementManagementForm';
 
 class Content extends Component {
 
@@ -61,6 +62,14 @@ class Content extends Component {
           <Route exact path="/management/departements" render={
             (props) =>
               <DepartementManagement app={this.props.app} />
+          } />
+          <Route exact path="/management/departements/create" render={
+            (props) =>
+              <DepartementManagementForm app={this.props.app} />
+          } />
+          <Route exact path="/management/departements/:id" render={
+            (props) =>
+              <DepartementManagementForm app={this.props.app} />
           } />
           <Route path="/login" render={
             (props) => <Login app={this.props.app} />

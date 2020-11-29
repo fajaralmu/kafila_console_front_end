@@ -41,6 +41,22 @@ export default class MasterManagementService
             filter: filter
         });
     }
+
+    storeDepartement = (departement) => {
+        const request = {
+            code: 'departement',
+            departement:departement
+        }
+
+        const endpoint = url.contextPath().concat("api/masterdata/store");
+        return commonAjaxPostCalls(endpoint, request);
+    }
+
+    viewDepartement = (id) => {
+        const endpoint = url.contextPath().concat("api/masterdata/view/"+id);
+        return commonAjaxPostCalls(endpoint, {code:"departement"});
+    }
+
     departementList = (filter) => {
         return this.list({
             code: 'departement',
