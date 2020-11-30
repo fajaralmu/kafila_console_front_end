@@ -33,3 +33,18 @@ export const getCurrentMMYY = () => {
     return [new Date().getMonth() + 1, new Date().getFullYear()];
 }
 
+export const dateStringDayMonthYear = (day, month, year) => {
+    return day+" "+MONTHS[month-1]+" "+year;
+}
+/**
+ * format = yyyy-mm-dd
+ * @param {String} text 
+ */
+export const dateStringDayMonthYearFromText = (text) => {
+    const raw = text.split("-");
+    const day = raw[2];
+    const month = raw[1];
+    const year = raw[0];
+    return day+" "+MONTHS[month-1]+" "+year;
+}
+

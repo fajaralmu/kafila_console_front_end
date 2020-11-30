@@ -54,7 +54,7 @@ class DepartementManagementForm extends BaseComponent {
             this.showInfo("SUCCESS SAVING RECORD");
         }
         this.recordFailedToSave = (e) => {
-            this.showInfo("FAILED SAVING RECORD");
+            this.showError("FAILED SAVING RECORD");
         }
 
         this.store = (departement) => {

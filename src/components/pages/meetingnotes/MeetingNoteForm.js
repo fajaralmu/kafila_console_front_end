@@ -3,12 +3,12 @@ import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent from './../BaseComponent';
-import MeetingNoteSerivce from './../../services/MeetingNoteSerivce';
-import Message from '../messages/Message';
-import * as formComponent from '../forms/commons';
-import Card from './../container/Card';
-import { SubmitResetButton } from './../forms/commons';
+import BaseComponent from '../../BaseComponent';
+import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
+import Message from '../../messages/Message';
+import * as formComponent from '../../forms/commons';
+import Card from '../../container/Card';
+import { SubmitResetButton } from '../../forms/commons';
 
 const FORM_ID = "form-input-meeting-note";
 class MeetingNoteForm extends BaseComponent {
@@ -32,9 +32,7 @@ class MeetingNoteForm extends BaseComponent {
                 if (accepted) {
                     app.fillDataAndStore(form);
                 }
-            });
-
-            
+            });            
         }
 
         this.fillDataAndStore = (form) => {
@@ -66,7 +64,7 @@ class MeetingNoteForm extends BaseComponent {
             } catch (error) { }
         }
         this.handleErrorSubmit = (error) => {
-            this.showInfo("handleErrorSubmit: " + error);
+            this.showError("handleErrorSubmit: " + error);
         }
         this.handleErrorGetRecord = (error) => {
             this.setState({ recordNotFound: true })
@@ -81,7 +79,8 @@ class MeetingNoteForm extends BaseComponent {
                 const element = inputs[i];
                 element.value = response.meeting_note[element.name];
 
-                if (element.name != "content" && element.name != "decision") {
+                if (this.isClosed() == false && 
+                    element.name != "content" && element.name != "decision") {
                     element.setAttribute("disabled", "disabled");
                 }
             }
@@ -107,6 +106,9 @@ class MeetingNoteForm extends BaseComponent {
         this.loadRecord = () => {
             this.commonAjax(this.meetingNoteService.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
+        }
+        this.isClosed = ()=> {
+            return this.getRecordId() != null && this.meetingNote != null && this.meetingNote.is_closed == true;
         }
     }
 
@@ -144,7 +146,10 @@ class MeetingNoteForm extends BaseComponent {
         return (
             <div>
                 <h2 style={{ textAlign: 'center' }}>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</h2>
-                <Card title="Formulir">
+                <Card title="Formulir Notulensi">
+                    {this.getRecordId() != null && this.meetingNote != null? 
+                    <h3>Status : {this.meetingNote.is_closed? "Closed":"Not Closed"}</h3>:
+                    null}
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                         <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Tempat" name="place" />
@@ -152,9 +157,10 @@ class MeetingNoteForm extends BaseComponent {
                         <InputField required={true} label="Keputusan" name="decision" type="textarea" />
                         <InputField required={true} label="Deadline" name="deadline_date" type="date" />
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
-
-                        <SubmitResetButton submitText={
-                            this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
+                        {this.isClosed()? null :
+                            <SubmitResetButton submitText={
+                                this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
+                        }
                     </form>
                 </Card>
             </div>

@@ -115,6 +115,23 @@ export const SelectField = (props) => {
     );
 }
 
+export const LabelField = (props) => {
+
+    const className = "input";
+    return (
+        <div className="field is-horizontal">
+            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Label"}</label></div>
+            <div className="field-body">
+                <div className="field">
+                    <div className="control">
+                    {props.children}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export const SubmitResetButton = (props) => {
     const submitValue = props.submitText ? props.submitText : "Submit";
     return (

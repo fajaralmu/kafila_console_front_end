@@ -23,4 +23,14 @@ export default class MeetingNoteSerivce {
         const endpoint = url.contextPath().concat("api/notes/view/"+id);
         return commonAjaxPostCalls(endpoint, request);
     }
+
+    storeAction = (action) => {
+
+        const request = {
+            action: action
+        }
+
+        const endpoint = url.contextPath().concat("api/action/store");
+        return commonAjaxPostCalls(endpoint, request);
+    }
 }

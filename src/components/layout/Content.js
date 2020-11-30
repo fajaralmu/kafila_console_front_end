@@ -4,12 +4,13 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import Login from '../pages/Login';
 import Dashboard from '../pages/Dashboard';
-import MeetingNoteForm from '../pages/MeetingNoteForm';
 import ManagementMenu from './../pages/management/ManagementMenu';
 import UsersManagement from '../pages/management/UsersManagement';
 import DepartementManagement from '../pages/management/DepartementManagement';
 import UsersManagementForm from '../pages/management/UsersManagementForm';
 import DepartementManagementForm from '../pages/management/DepartementManagementForm';
+import MeetingNoteForm from '../pages/meetingnotes/MeetingNoteForm';
+import MeetingNoteActionForm from '../pages/meetingnotes/MeetingNoteActionForm';
 
 class Content extends Component {
 
@@ -37,6 +38,10 @@ class Content extends Component {
           <Route exact path="/meetingnote/:id" render={
             (props) =>
               <MeetingNoteForm app={this.props.app} />
+          } />
+          <Route exact path="/meetingnote/:id/action" render={
+            (props) =>
+              <MeetingNoteActionForm app={this.props.app} />
           } />
 
           {/* ========= management ========== */}

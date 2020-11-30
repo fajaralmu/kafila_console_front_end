@@ -157,7 +157,7 @@ class Dashboard extends BaseComponent {
                                     { text: 'date', withFilter: true },
                                     { text: 'content', withFilter: true },
                                     { text: 'decision', withFilter: true },
-                                    { text: 'deadline_date', withFilter: true },
+                                    { text: 'deadline_date', alias:"Deadline", withFilter: true },
                                     { text: 'departement', withFilter: true },
                                     { text: 'user', withFilter: true },
                                     { text: 'status', },
@@ -174,11 +174,14 @@ class Dashboard extends BaseComponent {
                                     <td>{item.deadline_date}</td>
                                     <td>{item.departement.name}</td>
                                     <td>{item.user.name}</td>
-                                    <td>-</td>
+                                    <td>{item.is_closed == true? 'Closed':'Not Closed'}</td>
                                     <td>
-                                        <Link to={"/meetingnote/" + item.id} className="button" >
+                                        <Link to={"/meetingnote/" + item.id} className="button is-small" >
                                             view
-                                    </Link>
+                                        </Link>
+                                        <Link to={"/meetingnote/" + item.id+"/action"} className="button is-success is-small" >
+                                            action
+                                        </Link>
                                     </td>
                                 </tr>)
                             })}
