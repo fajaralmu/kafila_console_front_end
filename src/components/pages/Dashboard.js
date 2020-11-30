@@ -147,7 +147,8 @@ class Dashboard extends BaseComponent {
                     {navButtons}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         {formComponent.ButtonApplyResetFilter()}
-                        <table style={{ tableLayout: 'fixed' }} className="table">
+                        <div style={{overflow:'scroll'}}>
+                        <table style={{   }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
@@ -182,6 +183,7 @@ class Dashboard extends BaseComponent {
                                 </tr>)
                             })}
                         </table>
+                        </div>
                     </form>
                 </Card>
             </div>

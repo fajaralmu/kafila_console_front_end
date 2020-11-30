@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import './FormControls.css'
 
 export const TableHeadWithFilter = (props) => {
     const headers = props.headers;
@@ -10,15 +11,16 @@ export const TableHeadWithFilter = (props) => {
                 return <th>{header.alias == null ? header.text.toUpperCase().replaceAll("_", " ") : header.alias}
 
                     {header.withFilter ?
-                        <>
-                            <InputFormFilter type="text" name={header.text} />
-                            <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small">
-                                <i sort="asc" onClick={onButtonOrderClick} data={header.text} className="fas fa-angle-up"></i>
-                                </button>
-                            <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small">
-                                <i sort="asc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down"></i>
-                                </button>
-                        </>
+                       <div class="field has-addons">
+                       <div class="control">
+                                <InputFormFilter type="text" name={header.text} />
+                            </div>
+                            <div class="control" style={{fontSize:'0.7em', backgroundColor:'#ccc'}}>
+                                <i sort="asc" onClick={onButtonOrderClick} data={header.text} className="fas fa-angle-up sort-button"></i>
+                                <i sort="asc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down sort-button"></i>
+                            </div>
+                           
+                        </div>
                         : null}
                 </th>
             })}
