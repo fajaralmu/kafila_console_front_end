@@ -171,7 +171,9 @@ class App extends Component {
           null}
         <Header app={this} />
         <section className="container">
-          <Loader show={this.state.loading} />
+          <div style={{height:'50px'}}>
+            <Loader show={this.state.loading} />
+          </div>
           <div className="columns">
             <div className="column">
               <Content app={this} />

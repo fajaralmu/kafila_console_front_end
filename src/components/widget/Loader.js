@@ -1,5 +1,7 @@
 
 import React, { Component } from 'react';
+import './Loader.css';
+
 export default class Loader extends Component {
   constructor(props) {
     super(props);
@@ -20,18 +22,15 @@ export default class Loader extends Component {
       return null;
     }
     return (
-      <div className="has-background-info box" style={{
-        width: 'min-content',
-        zIndex: 500,
-        // backgroundColor: 'wheat',
-        position: 'fixed',
-        textAlign: 'center',
-        padding: '5px',
-        color: '#ffffff',
-        opacity: this.state.opacity
-      }}>
-        <span className="button is-loading is-info"></span>
-              &nbsp;Loading
+      <div style={{width:'100%', height:'50px', color:'#ccc', textAlign:'center'}}>
+        <div style={{position:'fixed'}}>
+        <div className="columns" style={{width:'min-content'}}>
+        <div className="column">
+          <div className="lds-ring"  ><div></div><div></div><div></div><div></div></div> 
+        </div>
+        <div className="column"><span style={{fontSize:'2em'}}>Loading</span></div>
+        </div>
+        </div>
       </div>
     )
   }
