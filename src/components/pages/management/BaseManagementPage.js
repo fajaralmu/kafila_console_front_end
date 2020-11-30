@@ -93,6 +93,15 @@ export default class BaseManagementPage extends BaseAdminPage {
             )
         }
 
+        this.buttonsModifyAndDelete = (editLink, id) => {
+            return (
+                <div className="buttons has-addons">
+                    {this.linkToFormEdit(editLink)}
+                    {this.buttonDeleteRecord(id)}
+                </div>
+            )
+        }
+
         this.buttonDeleteRecord = (id) => {
             return (
                 <a onClick={()=>this.delete(id)} className="button is-danger is-small">

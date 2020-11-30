@@ -12,8 +12,12 @@ export const TableHeadWithFilter = (props) => {
                     {header.withFilter ?
                         <>
                             <InputFormFilter type="text" name={header.text} />
-                            <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small"><i className="fas fa-angle-up"></i></button>
-                            <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small"><i className="fas fa-angle-down"></i></button>
+                            <button sort="asc" data={header.text} onClick={onButtonOrderClick} className="button is-small">
+                                <i sort="asc" onClick={onButtonOrderClick} data={header.text} className="fas fa-angle-up"></i>
+                                </button>
+                            <button sort="desc" data={header.text} onClick={onButtonOrderClick} className="button is-small">
+                                <i sort="asc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down"></i>
+                                </button>
                         </>
                         : null}
                 </th>
@@ -33,7 +37,7 @@ const InputFormFilter = (props) => {
 export const ButtonApplyResetFilter = (props) => {
     return (
         <>
-            
+            <div className="buttons has-addons">
             <button type="submit" className="button is-info">
                 <span className="icon">
                     <i className="fas fa-search"></i>
@@ -46,6 +50,7 @@ export const ButtonApplyResetFilter = (props) => {
                 </span>
                 <span>Reset Filter</span>
             </button>
+            </div>
         </>
     )
 }

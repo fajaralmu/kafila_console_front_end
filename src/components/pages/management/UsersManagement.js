@@ -100,8 +100,9 @@ class UsersManahement extends BaseManagementPage {
                                     <td>{item.role}</td>
                                     <td>{item.departement ? item.departement.name : '-'}</td>
                                     <td>
-                                        {this.linkToFormEdit("/management/users/" + item.id)}
-                                        {this.buttonDeleteRecord(item.id)}    
+                                        {this.buttonsModifyAndDelete(  
+                                            "/management/users/"+item.id,
+                                            item.id)}     
                                     </td>
                                 </tr>)
                             })}

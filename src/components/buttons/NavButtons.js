@@ -24,7 +24,7 @@ class NavButtons extends Component
         }
 
         return (
-            <div style={{marginTop:'5px', marginBottom: '5px'}}>
+            <div className="buttons" style={{marginTop:'5px', marginBottom: '5px'}}>
                 {buttonsData.map(data=>{
                     const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
                     return (

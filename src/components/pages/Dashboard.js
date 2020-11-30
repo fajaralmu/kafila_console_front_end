@@ -12,6 +12,7 @@ class Dashboard extends BaseComponent {
 
     constructor(props) {
         super(props);
+        this.state = {};
 
         this.page = 1;
         this.limit = 5;
@@ -70,9 +71,11 @@ class Dashboard extends BaseComponent {
         }
 
         this.onButtonOrderClick = (e) => {
-            e.preventDefault();
             this.orderBy = e.target.getAttribute("data")
             this.orderType = e.target.getAttribute("sort");
+            console.debug(e.target, "by ", this.orderBy, this.orderType);
+            e.preventDefault();
+            
             this.getMeetingNotes();
         }
 
@@ -155,6 +158,7 @@ class Dashboard extends BaseComponent {
                                     { text: 'decision', withFilter: true },
                                     { text: 'deadline_date', withFilter: true },
                                     { text: 'departement', withFilter: true },
+                                    { text: 'user', withFilter: true },
                                     { text: 'status', },
                                     { text: 'action', },
                                 ]} />
@@ -168,6 +172,7 @@ class Dashboard extends BaseComponent {
                                     <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td>
                                     <td>{item.deadline_date}</td>
                                     <td>{item.departement.name}</td>
+                                    <td>{item.user.name}</td>
                                     <td>-</td>
                                     <td>
                                         <Link to={"/meetingnote/" + item.id} className="button" >

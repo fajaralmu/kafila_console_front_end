@@ -89,8 +89,9 @@ class DeparementManagement extends BaseManagementPage {
                                     <td>{item.name}</td>
                                     <td>{item.description}</td>
                                     <td>
-                                        {this.linkToFormEdit("/management/departements/"+item.id)}
-                                        {this.buttonDeleteRecord(item.id)}    
+                                        {this.buttonsModifyAndDelete(  
+                                            "/management/departements/"+item.id,
+                                            item.id)}    
                                     </td>
                                 </tr>)
                             })}
