@@ -48,3 +48,15 @@ export const dateStringDayMonthYearFromText = (text) => {
     return day+" "+MONTHS[month-1]+" "+year;
 }
 
+export const getDiffDaysFromNow = (date) => {
+    const diff = new Date().getTime() - date.getTime();
+    const diffDays = diff / (24 * 60 * 60 * 1000);
+    return diffDays;
+}
+
+export const getDiffDaysToNow = (date) => {
+    const diff = date.getTime() - new Date().getTime();
+    const diffDays = diff / (24 * 60 * 60 * 1000);
+    return diffDays;
+}
+

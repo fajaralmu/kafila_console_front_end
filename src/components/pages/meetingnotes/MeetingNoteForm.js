@@ -19,19 +19,21 @@ class MeetingNoteForm extends BaseComponent {
             isLoadingRecord: true
         }
         this.meetingNote = {};
+        this.isSubmitting = false;
         this.meetingNoteService = MeetingNoteSerivce.instance;
         this.getRecordId = () => {
             return this.props.match.params.id;
         }
         this.onSubmit = (e) => {
             e.preventDefault();
-            
+            this.isSubmitting = true;
             const form = e.target;
             const app = this;
             this.showConfirmation("Submit Data?").then(function(accepted) {
                 if (accepted) {
                     app.fillDataAndStore(form);
                 }
+                app.isSubmitting = false;
             });            
         }
 
@@ -43,14 +45,16 @@ class MeetingNoteForm extends BaseComponent {
                 const element = inputs[i];
                 if (null != element.value && "" != element.value) {
                     this.meetingNote[element.name] = element.value;
+                    console.debug("this.meetingNote[element.name]",this.meetingNote[element.name], "element.value", element.value);
                 }
+                console.debug("inputs: ", element.tagName, element.value);
             }
 
             if (this.getRecordId() != null) {
                 this.meetingNote.id = this.getRecordId();
             }
 
-            console.debug("meetingNote>>", this.meetingNote);
+            console.debug("inputs size:", inputs.length, "meetingNote>>", this.meetingNote);
             this.storeMeetingNote();
 
         }
@@ -98,7 +102,9 @@ class MeetingNoteForm extends BaseComponent {
                 element.removeAttribute("disabled");
 
             }
-            form.reset();
+            if (this.isSubmitting == false) {
+                form.reset();
+            }
         }
 
         // ajax calls

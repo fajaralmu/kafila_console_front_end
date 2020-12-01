@@ -8,6 +8,7 @@ import * as formComponent from '../forms/commons';
 import NavButtons from './../buttons/NavButtons';
 import BaseComponent from './../BaseComponent';
 import Card from '../container/Card';
+import { getDiffDaysToNow } from './../../utils/DateUtil';
 class Dashboard extends BaseComponent {
 
     constructor(props) {
@@ -164,7 +165,20 @@ class Dashboard extends BaseComponent {
                                 ]} />
                             {meetingNoteList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
-                                return (<tr>
+                                const deadlineDate = Date.parse(item.deadline_date);
+                                const style = {};
+                                try {
+                                    const diffDay = getDiffDaysToNow(new Date(deadlineDate));
+                                    
+                                    if (item.is_closed == false && diffDay <= 3 && diffDay > 0) {
+                                        style.backgroundColor = 'orange';
+                                    } else if (item.is_closed == false && diffDay < 0) {
+                                        style.backgroundColor = 'red';
+                                    }
+                                } catch (e) {
+                                    //
+                                }
+                                return (<tr style={style}>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>
