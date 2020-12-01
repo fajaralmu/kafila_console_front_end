@@ -63,6 +63,8 @@ class MeetingNoteActionForm extends BaseComponent {
         }
 
         this.handleSuccessSubmit = (response) => {
+            this.meetingNote.action = response.action;
+            this.meetingNote.is_closed = true;
             this.showInfo("SUCCESS");
             try {
                 if (this.getRecordId() == null) {
@@ -130,9 +132,10 @@ class MeetingNoteActionForm extends BaseComponent {
             <div>
                 <h2 style={{ textAlign: 'center' }}>Konfirmasi Rapat Departemen {this.props.loggedUser.departement.name}</h2>
                 <Card title="Detail Notulen">
-                    {this.getRecordId() != null && this.meetingNote != null ?
-                        <h3>Status : {this.meetingNote.is_closed ? "Closed" : "Not Closed"}</h3> :
-                        null}
+                    <div className="tags has-addons are-medium">
+                        <span className="tag is-dark">Status</span>
+                        <span className="tag is-info">{this.meetingNote.is_closed ? "Closed" : "Not Closed"}</span>
+                    </div>
                     {this.state.showDetailNote? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">

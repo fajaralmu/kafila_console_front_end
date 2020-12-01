@@ -71,7 +71,7 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.handleSuccessGetRecord = (response) => {
-
+            this.meetingNote = response.meeting_note;
             this.setState({ isLoadingRecord: false });
             const form = document.getElementById(FORM_ID);
             const inputs = form.getElementsByClassName("input-form-field");
@@ -81,6 +81,10 @@ class MeetingNoteForm extends BaseComponent {
 
                 if (this.isClosed() == false && 
                     element.name != "content" && element.name != "decision") {
+                    element.setAttribute("disabled", "disabled");
+                }
+
+                if (this.isClosed()) {
                     element.setAttribute("disabled", "disabled");
                 }
             }
@@ -148,7 +152,12 @@ class MeetingNoteForm extends BaseComponent {
                 <h2 style={{ textAlign: 'center' }}>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</h2>
                 <Card title="Formulir Notulensi">
                     {this.getRecordId() != null && this.meetingNote != null? 
-                    <h3>Status : {this.meetingNote.is_closed? "Closed":"Not Closed"}</h3>:
+                        <div className="tags has-addons are-medium">
+                            <span className="tag is-dark">Status</span>
+                            <span className="tag is-info">{this.meetingNote.is_closed == true ? "Closed" : "Not Closed"}</span>
+                        </div>
+                    
+                    :
                     null}
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                         <InputField required={true} label="Tanggal" name="date" type="date" />
