@@ -14,17 +14,27 @@ class ManagementMenu extends BaseAdminPage {
         document.title = "Management"
     }
     render() {
+        const columnClass = "column is-one-third";
         return (
             <div>
                 <h2 style={{ textAlign: 'center' }}>Master Data Menu</h2>
                 <Card title="Menu">
-                    <aside className="menu">
-                        <p className="menu-label">General</p>
-                        <ul className="menu-list">
-                            <li style={{listStyle:'none'}}><Link to="/management/departements">Departements</Link></li>
-                            <li style={{listStyle:'none'}}><Link to="/management/users">Users</Link></li>
-                        </ul>
-                    </aside>
+                        <div  className="columns">
+                            <div className={columnClass}>
+                                <div className="box has-text-centered">
+                                    <p><i style={{fontSize:'50px'}} className="fas fa-puzzle-piece"></i></p>
+                                    <Link to="/management/departements">Departements</Link>
+                                </div>
+                            </div>
+                            
+                            <div className={columnClass}>
+                                <div className="box has-text-centered">
+                                <p><i style={{fontSize:'50px'}} className="fas fa-users"></i></p>
+                                    <Link to="/management/users">Users</Link>
+                                </div>
+                            </div>
+                        </div>
+                  
                 </Card>
             </div>
         )

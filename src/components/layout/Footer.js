@@ -4,7 +4,7 @@ class Footer extends Component {
 
     render(){
         return(
-            <footer class="footer">
+            <footer class="footer has-background-dark">
 			<div class="container">
 				<div class="content has-text-centered">
 					<div class="columns is-mobile is-centered">

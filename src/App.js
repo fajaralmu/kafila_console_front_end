@@ -170,7 +170,7 @@ class App extends Component {
           >{this.alertBody}</Alert> :
           null}
         <Header app={this} />
-        <section className="container">
+        <section className="container" style={{minHeight:'70vh'}}>
           <div style={{height:'50px'}}>
             <Loader show={this.state.loading} />
           </div>

@@ -86,7 +86,7 @@ class Profile extends BaseComponent {
         }
         return (
             <div>
-                <h2>Profile</h2>
+                <h2 style={{ textAlign: 'center' }}>Profile</h2>
                 <Card title={"Update Profile"} >
                     <form onSubmit={this.onSubmit} id="form-profile" >
                         <InputField label="Email" name="email" required={true} type="email" />

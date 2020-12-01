@@ -49,12 +49,12 @@ class Header extends BaseComponent{
     render(){
 
         return (
-            <nav className="navbar is-light topNav">
+            <nav className="navbar is-dark topNav">
 			<div className="container">
 				<div className="navbar-brand">
-					<a className="navbar-item" href="../">
-						<img src="favicon.ico" width="38" height="38"/>
-					</a>
+					<Link style={{backgroundColor:'#fff'}} className="navbar-item" to="/">
+						<img src="kiis-stroke.png" width="38" height="38"/>
+					</Link>
 					<div onClick={this.toggleNavBurger} className="navbar-burger burger">
 						<span></span>
 						<span></span>

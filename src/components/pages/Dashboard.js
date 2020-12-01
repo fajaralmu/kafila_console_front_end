@@ -137,8 +137,7 @@ class Dashboard extends BaseComponent {
             <div>
                 <h2 style={{ textAlign: 'center' }}>Dashboard</h2>
                 <Card title={this.props.loggedUser.display_name} >
-                    <p>Role {this.props.loggedUser.role.toUpperCase()}</p>
-                    <p>Departement {this.props.loggedUser.departement.name}</p>
+                    <p>Bidang {this.props.loggedUser.departement.name}</p>
                 </Card>
 
                 <Card title="Daftar Notulen Rapat">
@@ -153,13 +152,13 @@ class Dashboard extends BaseComponent {
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
                                     { text: 'No' },
-                                    { text: 'id', withFilter: true },
-                                    { text: 'date', withFilter: true },
-                                    { text: 'content', withFilter: true },
-                                    { text: 'decision', withFilter: true },
+                                    { text: 'id', alias:"Id", withFilter: true },
+                                    { text: 'date', alias:"Tanggal", withFilter: true },
+                                    { text: 'content', alias:"Pembahasan", withFilter: true },
+                                    { text: 'decision', alias:"Keputusan", withFilter: true },
                                     { text: 'deadline_date', alias:"Deadline", withFilter: true },
-                                    { text: 'departement', withFilter: true },
-                                    { text: 'user', withFilter: true },
+                                    { text: 'departement', alias:"Bidang", withFilter: true },
+                                    { text: 'user', alias:"Notulis", withFilter: true },
                                     { text: 'status', },
                                     { text: 'action', },
                                 ]} />
