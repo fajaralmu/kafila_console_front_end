@@ -28,17 +28,17 @@ export const configureStore = () => {
             meetingNoteMiddleware.getMeetingNotesMiddleware, 
 
             /*enntity management*/
-            managementMiddleware.getEntityListMiddleware,
-            managementMiddleware.getEntityByIdMiddleware,
-            managementMiddleware.updateEntityMiddleware,
-            managementMiddleware.removeManagedEntityMiddleware, 
-            managementMiddleware.getEntitiesWithCallbackMiddleware,
-            managementMiddleware.getEntityPropertyMiddleware,
-            managementMiddleware.getManagementMenusMiddleware,
+            // managementMiddleware.getEntityListMiddleware,
+            // managementMiddleware.getEntityByIdMiddleware,
+            // managementMiddleware.updateEntityMiddleware,
+            // managementMiddleware.removeManagedEntityMiddleware, 
+            // managementMiddleware.getEntitiesWithCallbackMiddleware,
+            // managementMiddleware.getEntityPropertyMiddleware,
+            // managementMiddleware.getManagementMenusMiddleware,
 
             /*realtime chat*/
-            realtimeChatMiddleware.storeChatMessageLocallyMiddleware,
-            realtimeChatMiddleware.getMessagesMiddleware,
+            // realtimeChatMiddleware.storeChatMessageLocallyMiddleware,
+            // realtimeChatMiddleware.getMessagesMiddleware,
 
         )
     );

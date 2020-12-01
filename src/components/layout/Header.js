@@ -28,7 +28,7 @@ const menus = [
 
 class Header extends BaseComponent{
     constructor(props){
-        super(props);
+        super(props, false);
         this.state = {
             showBurger:false
         }
@@ -71,15 +71,15 @@ class Header extends BaseComponent{
 					</div>
 					<div className="navbar-end">
 						<div className="navbar-item">
-							<div className="field has-addons">
-								<p className="control">
+							<div className="buttons has-addons">
+								 
                                     {this.props.loginStatus? 
-                                    <><a className="button is-info">
+                                    <><Link className="button is-info" to="/profile">
                                         <span className="icon">
                                             <i className="fas fa-user"></i>
                                         </span>
                                         <span>{this.props.loggedUser.display_name} - {this.props.loggedUser.role}</span>
-                                    </a>
+                                    </Link>
                                     <a onClick={this.performLogout} className="button is-danger">
                                         <span className="icon">
                                             <i className="fas fa-sign-out-alt"></i>
@@ -87,14 +87,13 @@ class Header extends BaseComponent{
                                         <span>Logout</span>
                                     </a>
                                     </>:
-                                    <Link className="button is-info" to="login">
+                                    <Link className="button is-info" to="/login">
 										<span className="icon">
 											<i className="fas fa-user"></i>
 										</span>
 										<span>Login</span>
 									</Link>
                                     }
-								</p>
 							</div>
 						</div>
 					</div>

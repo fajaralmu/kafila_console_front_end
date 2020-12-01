@@ -2,11 +2,15 @@ import { React , Component} from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 
 export default class BaseComponent extends Component {
-    constructor(props){
+    constructor(props, authenticated = true){
         super(props);
-        this.parentApp = props.app; 
+        this.parentApp = props.app;
+        this.authenticated =  authenticated;
     
         this.validateLoginStatus = () => {
+            if (!authenticated) {
+                return;
+            }
             if (this.props.loginStatus != true || this.props.loggedUser == null) {
                 this.backToLogin();
             }
@@ -32,6 +36,9 @@ export default class BaseComponent extends Component {
         }
 
         this.backToLogin = () => {
+            if (!authenticated) {
+                return;
+            }
             this.props.history.push("/login");
         }
         /**

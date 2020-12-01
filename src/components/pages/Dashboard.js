@@ -181,11 +181,12 @@ class Dashboard extends BaseComponent {
                                         <span className="tag is-success">Not Closed</span>}
                                     </td>
                                     <td>
+                                        
                                         <Link to={"/meetingnote/" + item.id} className="button is-small" >
-                                            view
+                                            <i className="fas fa-edit"></i>
                                         </Link>
                                         <Link to={"/meetingnote/" + item.id+"/action"} className="button is-primary is-small" >
-                                            action
+                                            <i className="fas fa-location-arrow"></i>
                                         </Link>
                                     </td>
                                 </tr>)
