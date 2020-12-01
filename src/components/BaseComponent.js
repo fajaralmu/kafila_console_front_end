@@ -15,7 +15,9 @@ export default class BaseComponent extends Component {
                 this.backToLogin();
             }
         }
-
+        this.getParentApp = () => {
+            return this.props.app;
+        }
         this.showConfirmation = (body) => {
             return new Promise((resolve, reject) =>{
                 const onYes = function(e) {

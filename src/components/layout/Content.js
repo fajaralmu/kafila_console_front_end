@@ -11,6 +11,7 @@ import UsersManagementForm from '../pages/management/UsersManagementForm';
 import DepartementManagementForm from '../pages/management/DepartementManagementForm';
 import MeetingNoteForm from '../pages/meetingnotes/MeetingNoteForm';
 import MeetingNoteActionForm from '../pages/meetingnotes/MeetingNoteActionForm';
+import Profile from '../pages/Profile';
 
 class Content extends Component {
 
@@ -80,7 +81,10 @@ class Content extends Component {
             (props) => <Login app={this.props.app} />
           } />
           {/* ///////////authenticated//////////// */}
-
+          <Route exact path="/profile" render={
+            (props) =>
+              <Profile app={this.props.app} />
+          } />
         </Switch></div>
     );
   }
