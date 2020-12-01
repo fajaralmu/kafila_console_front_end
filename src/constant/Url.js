@@ -8,6 +8,7 @@ const rootValue = devMode ?
 export const contextPath = function(){
     const contextPath = devMode? "http://localhost:8000".concat(rootValue):rootValue;
     //console.debug("contextPath: ",contextPath,document.getElementById("rootPath").value);
+    
     return contextPath;
 }
  
