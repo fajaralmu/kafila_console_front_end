@@ -78,7 +78,7 @@ class UsersManahement extends BaseManagementPage {
                             formComponent.ButtonApplyResetFilter(),
                             navButtons
                         ]} />
-                        <table style={{ tableLayout: 'fixed' }} className="table">
+                        <table  className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[

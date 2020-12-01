@@ -5,6 +5,7 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 
 import * as actions from '../../redux/actionCreators'
 import { connect } from 'react-redux'
+import BaseComponent from './../BaseComponent';
 const menus = [
     {
         name:'Home',
@@ -25,7 +26,7 @@ const menus = [
     }
 ]
 
-class Header extends Component{
+class Header extends BaseComponent{
     constructor(props){
         super(props);
         this.state = {
@@ -37,10 +38,12 @@ class Header extends Component{
         }
 
         this.performLogout = () => {
-            if (window.confirm("logout?")) {
-                this.props.performLogout(this.props.app);
-            }
-            
+            const props = this.props;
+            this.showConfirmation("Apakah Anda ingin keluar?").then(function(accepted){
+                if (accepted) {
+                    props.performLogout(props.app);
+                }
+            });
         }
     }
     render(){

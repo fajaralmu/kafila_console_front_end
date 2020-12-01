@@ -174,12 +174,17 @@ class Dashboard extends BaseComponent {
                                     <td>{item.deadline_date}</td>
                                     <td>{item.departement.name}</td>
                                     <td>{item.user.name}</td>
-                                    <td>{item.is_closed == true? 'Closed':'Not Closed'}</td>
+                                    <td>
+                                        {item.is_closed == true? 
+                                        <span className="tag is-info">Closed</span>
+                                        :
+                                        <span className="tag is-success">Not Closed</span>}
+                                    </td>
                                     <td>
                                         <Link to={"/meetingnote/" + item.id} className="button is-small" >
                                             view
                                         </Link>
-                                        <Link to={"/meetingnote/" + item.id+"/action"} className="button is-success is-small" >
+                                        <Link to={"/meetingnote/" + item.id+"/action"} className="button is-primary is-small" >
                                             action
                                         </Link>
                                     </td>

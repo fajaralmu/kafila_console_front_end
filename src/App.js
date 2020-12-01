@@ -157,7 +157,7 @@ class App extends Component {
   render() {
 
     if (!this.props.requestId) {
-      return (<h2 style={{ textAlign: 'center' }}>Please Wait</h2>)
+      return (<Loader show={true} />)
     }
     return (
       <div className="App">

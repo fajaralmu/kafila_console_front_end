@@ -95,8 +95,9 @@ class UserManagementForm extends BaseComponent {
 
                 if (element.name == "departement") {
                     element.value = response.user.departement_id;
+                } else if(element.name == "password"){
+                    element.value = null;
                 } else {
-
                     element.value = response.user[element.name];
                 }
             }
@@ -141,7 +142,7 @@ class UserManagementForm extends BaseComponent {
                         <InputField label="Username" name="name" required={true} />
                         <InputField label="Display Name" name="display_name" required={true} />
                         {/* <InputField label="Role" name="role" required={true} /> */}
-                        <InputField label="Password" name="password" required={true} />
+                        <InputField label="Password" name="password" note="Kosongkan password apabila tidak ingin diubah" />
                         <SelectField label="Departement" options={this.state.departementList.map(dep => {
                             return {
                                 value: dep.id,

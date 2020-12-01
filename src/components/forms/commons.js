@@ -17,7 +17,7 @@ export const TableHeadWithFilter = (props) => {
                             </div>
                             <div class="control" style={{fontSize:'0.7em', backgroundColor:'#ccc'}}>
                                 <i sort="asc" onClick={onButtonOrderClick} data={header.text} className="fas fa-angle-up sort-button"></i>
-                                <i sort="asc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down sort-button"></i>
+                                <i sort="desc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down sort-button"></i>
                             </div>
                            
                         </div>
@@ -64,7 +64,10 @@ export const InputField = (props) => {
     const className = "input input-form-field";
     return (
         <div className="field is-horizontal">
-            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Input"}</label></div>
+            <div className="field-label is-normal">
+                <label className="label">{props.label ? props.label : "Input"}</label>
+                  
+            </div>
             <div className="field-body">
                 <div className="field">
                     <div className="control">
@@ -79,6 +82,10 @@ export const InputField = (props) => {
                                 :
                                 <input type={props.type ? props.type : 'text'} id={'input-form-field-' + props.name} name={props.name} className={className} />
                         }
+                        {props.note? 
+                            <p><i>Note: {props.note}</i></p>
+                            :null
+                        }  
                     </div>
                 </div>
             </div>
