@@ -64,8 +64,8 @@ class Header extends BaseComponent{
 				<div id="topNav" className={this.state.showBurger? "is-active navbar-menu":" navbar-menu"}>
 					<div className="navbar-start">
                         {
-                            menus.map(linkProperty=>{
-                                return <AppLink loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
+                            menus.map((linkProperty, i)=>{
+                                return <AppLink key={"header-link-"+i}loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
                             })
                         }
 					</div>

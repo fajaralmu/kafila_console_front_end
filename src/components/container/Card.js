@@ -24,32 +24,32 @@ export default class Card extends Component {
 
     render() {
         return (
-            <div class="card" style={{ margin: '10px', ...this.props.style}}>
-                <header class="card-header">
-                    <p class="card-header-title">
+            <div className="card" style={{ margin: '10px', ...this.props.style}}>
+                <header className="card-header">
+                    <p className="card-header-title">
                         {this.props.title ? this.props.title : "Card Title"}
                     </p>
-                    <a class="card-header-icon" aria-label="more options">
-                        <span class="icon">
-                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    <a className="card-header-icon" aria-label="more options">
+                        <span className="icon">
+                            <i className="fas fa-angle-down" aria-hidden="true"></i>
                         </span>
                     </a>
                 </header>
-                <div class="card-content">
-                    <div class="content">
+                <div className="card-content">
+                    <div className="content">
                         {this.props.children}
                     </div>
                 </div>
                 {this.props.withButtonFooter ?
-                    <footer class="card-footer">
-                        <a href="#" onClick={this.saveButtonOnClick} class="card-footer-item">Save</a>
-                        <a href="#" onClick={this.editButtonOnClick} class="card-footer-item">Edit</a>
-                        <a href="#" onClick={this.deleteButtonOnClick} class="card-footer-item">Delete</a>
+                    <footer className="card-footer">
+                        <a href="#" onClick={this.saveButtonOnClick} className="card-footer-item">Save</a>
+                        <a href="#" onClick={this.editButtonOnClick} className="card-footer-item">Edit</a>
+                        <a href="#" onClick={this.deleteButtonOnClick} className="card-footer-item">Delete</a>
                     </footer>
                     : null
                 }
                 {this.props.footerContent ?
-                    <footer class="card-footer">
+                    <footer className="card-footer">
                         {this.props.footerContent}
                     </footer>
                     :

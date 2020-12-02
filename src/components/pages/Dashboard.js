@@ -191,7 +191,7 @@ class Dashboard extends BaseComponent {
                                         {item.is_closed == true? 
                                         <span className="tag is-info">Closed</span>
                                         :
-                                        <span className="tag is-success">Not Closed</span>}
+                                        <span className="tag is-warning">Not Closed</span>}
                                     </td>
                                     <td>
                                         

@@ -7,15 +7,15 @@ export const TableHeadWithFilter = (props) => {
     const onButtonOrderClick = props.onButtonOrderClick;
     return (<thead>
         <tr>
-            {headers.map(header => {
-                return <th>{header.alias == null ? header.text.toUpperCase().replaceAll("_", " ") : header.alias}
+            {headers.map((header, i) => {
+                return <th key={"TH_"+i}>{header.alias == null ? header.text.toUpperCase().replaceAll("_", " ") : header.alias}
 
                     {header.withFilter ?
-                       <div class="field has-addons">
-                       <div class="control">
+                       <div className="field has-addons">
+                       <div className="control">
                                 <InputFormFilter type="text" name={header.text} />
                             </div>
-                            <div class="control" style={{fontSize:'0.7em', backgroundColor:'#ccc'}}>
+                            <div className="control" style={{fontSize:'0.7em', backgroundColor:'#ccc'}}>
                                 <i sort="asc" onClick={onButtonOrderClick} data={header.text} className="fas fa-angle-up sort-button"></i>
                                 <i sort="desc" onClick={onButtonOrderClick}  data={header.text}  className="fas fa-angle-down sort-button"></i>
                             </div>
