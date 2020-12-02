@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import './FormControls.css'
+import { replaceString } from '../../utils/StringUtil';
 
 export const TableHeadWithFilter = (props) => {
     const headers = props.headers;
@@ -8,7 +9,8 @@ export const TableHeadWithFilter = (props) => {
     return (<thead>
         <tr>
             {headers.map((header, i) => {
-                return <th key={"TH_"+i}>{header.alias == null ? header.text.toUpperCase().replaceAll("_", " ") : header.alias}
+                
+                return <th key={"TH_"+i}>{header.alias == null ?replaceString(header.text.toUpperCase(), "_", " ") : header.alias}
 
                     {header.withFilter ?
                        <div className="field has-addons">

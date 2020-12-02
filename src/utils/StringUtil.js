@@ -5,6 +5,15 @@ export const uniqueId = function () {
 	index++;
 	return index + "-" + string;
 }
+
+export const replaceString = (string, toReplace, replacement) => {
+	try {
+		const splitted = new String(string).split(toReplace);
+		return splitted.join(replacement);
+	} catch (error) {
+		return "";
+	}
+}
  
 export function beautifyNominal(val) {
 	if (val == "" || val == null) return "0";
