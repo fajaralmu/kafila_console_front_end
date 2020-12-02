@@ -1,5 +1,6 @@
 import * as common from './Common'
 import * as types from '../redux/types'
+import * as url from '../constant/Url'
 const axios = require('axios');
 
 const POST_METHOD = "post";
@@ -42,13 +43,11 @@ export const requestAppIdMiddleware = store => next => action => {
     let headers = common.commonAuthorizedHeader(); 
 
     // Axios.post
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
+    axios.post(action.meta.url, action.payload, {
         headers: headers
-    }).then(response => { return Promise.all([response.json(), response]); })
-    .then(([responseJson, response]) => {
-
-            console.debug("Request App Id Middleware Response:", responseJson);
+    }).then(response  => {
+            const responseJson = response.data;
+            
             let loginKey = "";
             let requestId = responseJson.message;
             let loginStatus = false;
@@ -61,7 +60,19 @@ export const requestAppIdMiddleware = store => next => action => {
             delete newAction.meta;
             store.dispatch(newAction);
         })
-        .catch(err => { console.error("ERROR Get Request ID: ", err); })
+        .catch(err => {
+            
+             console.error("ERROR Get User, will get requestId"); 
+             const endpoint = url.contextPath().concat("api/account/requestid")
+            axios.get(endpoint).then(response=>{
+                const responseJson = response.data;
+                let requestId = responseJson.message;
+            
+                let newAction = Object.assign({}, action, { payload: {loginStatus: false, loginKey:null, requestId:requestId, ...responseJson }});
+                delete newAction.meta;
+                store.dispatch(newAction);
+            })
+         })
         .finally(param => action.meta.app.endLoading());
 }
 

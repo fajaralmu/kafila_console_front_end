@@ -163,6 +163,7 @@ class Dashboard extends BaseComponent {
                                     { text: 'status', },
                                     { text: 'action', },
                                 ]} />
+                            <tbody>
                             {meetingNoteList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
                                 const deadlineDate = Date.parse(item.deadline_date);
@@ -178,7 +179,7 @@ class Dashboard extends BaseComponent {
                                 } catch (e) {
                                     //
                                 }
-                                return (<tr style={style}>
+                                return (<tr key={"record-meeting-note-"+i} style={style}>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>
@@ -204,6 +205,7 @@ class Dashboard extends BaseComponent {
                                     </td>
                                 </tr>)
                             })}
+                            </tbody>
                         </table>
                         </div>
                     </form>

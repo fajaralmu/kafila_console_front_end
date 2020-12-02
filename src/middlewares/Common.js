@@ -1,10 +1,15 @@
 
 
 export const commonAuthorizedHeader = () => {
-    return {
+    const token = getLoginKey();
+    const header = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+ getLoginKey()
+        // 'Authorization': 'Bearer '+ getLoginKey()
     }
+    if (token != null && token.toString().trim() != "") {
+        header['Authorization'] = 'Bearer '+ token;
+    }
+    return header;
 };
 
 export const getLoginKey = () => {
