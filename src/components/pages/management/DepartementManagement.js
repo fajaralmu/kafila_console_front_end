@@ -72,7 +72,7 @@ class DeparementManagement extends BaseManagementPage {
                             formComponent.ButtonApplyResetFilter(), navButtons
                         ]} />
                         <div style={{overflow:'scroll'}}>
-                        <table style={{ tableLayout: 'fixed' }} className="table">
+                        <table className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
