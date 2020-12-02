@@ -8,12 +8,24 @@ import BaseManagementPage from './../management/BaseManagementPage';
 import NavButtons from './../../buttons/NavButtons';
 import Columns from './../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from './../../forms/commons';
+import IssuesService from './../../../services/IssuesService';
 
 class IssuesList extends BaseManagementPage
 {
     constructor(props){
         super(props, "Aduan", "issue");
         this.state = {}
+        this.issueService = IssuesService.instance;
+
+        //overrid
+        this.deleteRecord = (id) => {
+            this.commonAjax(
+                this.issueService.delete,
+                id,
+                this.onSuccessDelete,
+                this.onErrorDelete
+            )
+        }
     }
 
     loadRecords = () => {
@@ -27,7 +39,7 @@ class IssuesList extends BaseManagementPage
             fieldsFilter: this.fieldsFilter
         };
 
-        this.commonAjax(this.masterDataServce.issueList, request, this.successLoaded, this.errorLoaded);
+        this.commonAjax(this.issueService.list, request, this.successLoaded, this.errorLoaded);
     }
 
     createNavButton() {
@@ -43,6 +55,13 @@ class IssuesList extends BaseManagementPage
     componentDidMount() {
         this.loadRecords();
         document.title = "Daftar Aduan";
+    }
+
+    //overrid baseAdminPage
+    componentDidUpdate(){
+        if (this.props.loginStatus == false || this.props.loggedUser == null ) {
+            this.backToLogin();
+        }
     }
 
     render() {
@@ -98,10 +117,14 @@ class IssuesList extends BaseManagementPage
                                         <span className="tag is-warning">Not Closed</span>}
                                     </td>
                                     <td>
-                                        
+                                        {isAdmin?
+                                        <>
                                         <Link to={"/issues/" + item.id} className="button is-small" >
                                             <i className="fas fa-edit"></i>
                                         </Link>
+                                        {this.buttonDeleteRecord(item.id, false)}
+                                        </>
+                                        :null}
                                         <Link to={"/issues/" + item.id+"/action"} className="button is-primary is-small" >
                                             <i className="fas fa-location-arrow"></i>
                                         </Link>

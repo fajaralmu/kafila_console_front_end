@@ -1,6 +1,6 @@
 import * as url from '../constant/Url'
 import { commonAuthorizedHeader } from '../middlewares/Common';
-import { rejectedPromise, commonAjaxPostCalls } from './Promises';
+import { commonAjaxPostCalls } from './Promises';
 export default class MeetingNoteSerivce {
     static instance = MeetingNoteSerivce.instance || new MeetingNoteSerivce();
 
@@ -15,13 +15,8 @@ export default class MeetingNoteSerivce {
     }
 
     view = (id) => {
-
-        const request = {
-            code: 'meeting_note'
-        }
-
         const endpoint = url.contextPath().concat("api/notes/view/"+id);
-        return commonAjaxPostCalls(endpoint, request);
+        return commonAjaxPostCalls(endpoint, {});
     }
 
     storeAction = (action) => {

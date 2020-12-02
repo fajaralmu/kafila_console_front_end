@@ -7,12 +7,13 @@ import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
+import BaseAdminPage from './../BaseAdminPage';
 
 const issue_sources = [
     'Yayasan', 'Orang Tua', 'Santri', 'Tamu'
 ]
 
-class IssuesForm extends BaseComponent {
+class IssuesForm extends BaseAdminPage {
     constructor(props) {
         super(props);
         this.state = {

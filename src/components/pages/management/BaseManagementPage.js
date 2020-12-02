@@ -102,13 +102,15 @@ export default class BaseManagementPage extends BaseAdminPage {
             )
         }
 
-        this.buttonDeleteRecord = (id) => {
+        this.buttonDeleteRecord = (id, withText = true) => {
             return (
                 <a onClick={()=>this.delete(id)} className="button is-danger is-small">
                     <span className="icon">
                         <i className="fas fa-trash"></i>
                     </span>
+                    {withText?
                     <span>Delete</span>
+                    :null}
                 </a>
             )
         }
