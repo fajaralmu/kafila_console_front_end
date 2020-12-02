@@ -12,6 +12,8 @@ import DepartementManagementForm from '../pages/management/DepartementManagement
 import MeetingNoteForm from '../pages/meetingnotes/MeetingNoteForm';
 import MeetingNoteActionForm from '../pages/meetingnotes/MeetingNoteActionForm';
 import Profile from '../pages/Profile';
+import IssuesList from '../pages/issues/IssuesList';
+import IssuesForm from '../pages/issues/IssuesForm';
 
 class Content extends Component {
 
@@ -44,7 +46,19 @@ class Content extends Component {
             (props) =>
               <MeetingNoteActionForm app={this.props.app} />
           } />
-
+          {/* ======== issues ========= */}
+          <Route exact path="/issues" render={
+            (props) =>
+              <IssuesList app={this.props.app} />
+          } />
+          <Route exact path="/issues/create" render={
+            (props) =>
+              <IssuesForm app={this.props.app} />
+          } />
+          <Route exact path="/issues/:id" render={
+            (props) =>
+              <IssuesForm app={this.props.app} />
+          } />
           {/* ========= management ========== */}
           <Route exact path="/management" render={
             (props) =>

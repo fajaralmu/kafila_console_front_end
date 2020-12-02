@@ -29,6 +29,15 @@ export default class MasterManagementService
         const endpoint = url.contextPath().concat("api/masterdata/store");
         return commonAjaxPostCalls(endpoint, request);
     }
+    storeIssue = (issue) => {
+        const request = {
+            code: 'issue',
+            issue:issue
+        }
+
+        const endpoint = url.contextPath().concat("api/masterdata/store");
+        return commonAjaxPostCalls(endpoint, request);
+    }
 
     viewUser = (id) => {
         const endpoint = url.contextPath().concat("api/masterdata/view/"+id);
@@ -38,6 +47,18 @@ export default class MasterManagementService
     userList = (filter) => {
         return this.list({
             code: 'user',
+            filter: filter
+        });
+    }
+
+    viewIssue = (id) => {
+        const endpoint = url.contextPath().concat("api/masterdata/view/"+id);
+        return commonAjaxPostCalls(endpoint, {code:"issue"});
+    }
+
+    issueList = (filter) => {
+        return this.list({
+            code: 'issue',
             filter: filter
         });
     }

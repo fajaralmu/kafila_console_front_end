@@ -19,6 +19,11 @@ const menus = [
         link:'/meetingnote/create',
         authenticated: true,
     }, {
+    }, {
+        name:'Daftar Aduan',
+        link:'/issues',
+        authenticated: true,
+    }, {
         name:'Management',
         link:'/management',
         authenticated: true,
@@ -108,6 +113,10 @@ const AppLink = (props) => {
     const linkProperty = props.linkProperty;
     const loginStatus = props.loginStatus;
     const loggedUser = props.loggedUser
+    if (null == linkProperty.link){
+        return null;
+    }
+
     if (!loginStatus && linkProperty.authenticated) {
         return null;
     }

@@ -2,7 +2,6 @@ import * as common from './Common'
 import * as types from '../redux/types'
 
 const axios = require('axios');
-const POST_METHOD = "post";
 
 export const getMeetingNotesMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_MEETING_NOTES) {

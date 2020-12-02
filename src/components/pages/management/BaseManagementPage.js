@@ -22,7 +22,7 @@ export default class BaseManagementPage extends BaseAdminPage {
         }
 
         this.errorLoaded = (e) => {
-
+            console.error("Error loading resource: ", e);
         }
 
         this.getRecordDataStored = () => {

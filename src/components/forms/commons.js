@@ -97,8 +97,8 @@ export const InputField = (props) => {
 
 export const SelectField = (props) => {
     const optionValues = props.options == null ? [] : props.options;
-    const options = optionValues.map((option) => {
-        return <option value={option.value} >{option.text}</option>
+    const options = optionValues.map((option, i) => {
+        return <option key={"select-option-"+i} value={option.value} >{option.text}</option>
     })
     return (
         <div className="field is-horizontal">

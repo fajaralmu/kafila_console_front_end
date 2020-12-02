@@ -8,12 +8,17 @@ import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
 
-class DepartementManagementForm extends BaseComponent {
+const issue_sources = [
+    'Yayasan', 'Orang Tua', 'Santri', 'Tamu'
+]
+
+class IssuesForm extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
             recordNotFound: false,
             isLoadingRecord: true,
+            departementList: []
         };
         this.masterDataService = MasterManagementService.instance;
 
@@ -21,52 +26,67 @@ class DepartementManagementForm extends BaseComponent {
             e.preventDefault();
             const form = e.target;
             const app = this;
-            this.showConfirmation("Save Data?").then(function(accepted){
+            this.showConfirmation("Save Data?").then(function(accepted) {
                 if (accepted) {
-                    app.storeDepartement(form);
+                    app.storeRecord(form);
                 }
-            });
-           
+            });            
         }
 
-        this.storeDepartement = (form) => {
+        this.storeRecord = (form) => {
             const inputs = form.getElementsByClassName("input-form-field");
-            const departement = {};
+            const issue = {};
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
                 if (null != element.value && "" != element.value) {
                     let fieldName = element.name;
-                    departement[fieldName] = element.value;
+
+                    if (fieldName == 'departement') {
+                        fieldName = 'departement_id'
+                    }
+
+                    issue[fieldName] = element.value;
                 }
             }
             if (this.getRecordId() != null) {
-                departement.id = this.getRecordId();
+                issue.id = this.getRecordId();
             }
-            this.store(departement);
-            console.debug("Departement: ", departement);
+            this.store(issue);
+            console.debug("ISSUE: ", issue);
         }
 
         this.getRecordId = () => {
             return this.props.match.params.id;
         }
 
+        this.departementListLoaded = (response) => {
+            this.setState({ departementList: response.result_list });
+            if (null != this.getRecordId()) {
+                this.loadRecord();
+            }
+            console.log("departementListLoaded: ", response);
+        }
+
         this.recordSaved = (response) => {
             this.showInfo("SUCCESS SAVING RECORD");
-
-            if (this.getRecordId() == null) {
-                this.handleSuccessGetRecord(response);
-                this.props.history.push("/management/departements/"+response.departement.id);
-            }
         }
         this.recordFailedToSave = (e) => {
             this.showError("FAILED SAVING RECORD");
         }
 
-        this.store = (departement) => {
+        this.store = (issue) => {
             this.commonAjax(
-                this.masterDataService.storeDepartement, departement,
+                this.masterDataService.storeIssue, issue,
                 this.recordSaved, this.recordFailedToSave
             )
+        }
+
+        this.loadDepartements = () => {
+            this.commonAjax(
+                this.masterDataService.departementList, {},
+                this.departementListLoaded,
+                (error) => { }
+            );
         }
 
         this.handleSuccessGetRecord = (response) => {
@@ -76,8 +96,12 @@ class DepartementManagementForm extends BaseComponent {
             const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
-                element.value = response.departement[element.name];
 
+                if (element.name == "departement") {
+                    element.value = response.issue.departement_id;
+                } else {
+                    element.value = response.issue[element.name];
+                }
             }
         }
 
@@ -86,16 +110,14 @@ class DepartementManagementForm extends BaseComponent {
         }
 
         this.loadRecord = () => {
-            this.commonAjax(this.masterDataService.viewDepartement, this.getRecordId(),
+            this.commonAjax(this.masterDataService.viewIssue, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
         }
     }
 
     componentDidMount() {
-        document.title = "Departement Form";
-        if (null != this.getRecordId()) {
-            this.loadRecord();
-        }
+        this.loadDepartements();
+        document.title = "Form Aduan";
     }
 
     render() {
@@ -106,20 +128,35 @@ class DepartementManagementForm extends BaseComponent {
 
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
             return <div>
-                <h2 style={{ textAlign: 'center' }}>Departements Management</h2><h3>Please Wait...</h3>
+                <h2 style={{ textAlign: 'center' }}>Form Aduan</h2><h3>Please Wait...</h3>
             </div>
         }
 
         const formTitle = <>
-            <Link to="/management/departements">Departements</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
+            <Link to="/issues">Aduan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
         </>
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Departements Management</h2>
+                <h2 style={{ textAlign: 'center' }}>Form Aduan</h2>
                 <Card title={formTitle} >
                     <form onSubmit={this.onSubmit} id="form-management" >
-                        <InputField label="Nama" name="name" required={true} />
-                        <InputField label="Deskripsi" name="description" type="textarea" required={true} />
+                        <InputField label="Tanggal" name="date" type="date" required={true} />
+                        <InputField label="Tempat" name="place" required={true} />
+                        <InputField label="Permasalahan" name="content" type="textarea" required={true} />
+                        <InputField label="Email" name="email" required={true} type="email" />
+                        <InputField label="Sumber Aduan" name="issue_input" required={true} />
+                        <SelectField label="Pengadu" options={issue_sources.map(source => {
+                            return {
+                                value: source,
+                                text: source
+                            }
+                        })} name="issuer" required={true} />
+                        <SelectField label="Departement" options={this.state.departementList.map(dep => {
+                            return {
+                                value: dep.id,
+                                text: dep.name
+                            }
+                        })} name="departement" required={true} />
                         <SubmitResetButton submitText={
                             this.getRecordId() == null ? "Create" : "Update"
                         } withReset={this.getRecordId() == null} />
@@ -138,4 +175,4 @@ const mapStateToProps = state => {
     }
 }
 export default withRouter(
-    connect(mapStateToProps)(DepartementManagementForm));
+    connect(mapStateToProps)(IssuesForm));
