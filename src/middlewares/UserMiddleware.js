@@ -57,7 +57,7 @@ export const requestAppIdMiddleware = store => next => action => {
                 loginStatus = true;
             }
 
-            let newAction = Object.assign({}, action, { payload: {loginStatus: loginStatus, loginKey:loginKey, requestId:requestId, ...responseJson }});
+            let newAction = Object.assign({}, action, { payload: {loginStatus: true, loginKey:loginKey, requestId:requestId, ...responseJson }});
             delete newAction.meta;
             store.dispatch(newAction);
         })

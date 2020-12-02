@@ -52,12 +52,12 @@ class Login extends Component {
                 {this.props.loginFailed ? 
                     <Message ref={this.child}  className="is-danger" body="Login Failed" /> : null}
 
-                <div class="columns is-centered">
+                <div className="columns is-centered">
 
-                    <div style={{ marginTop: '10px', marginBottom: '10px' }} class="column is-5-tablet is-4-desktop is-3-widescreen">
+                    <div style={{ marginTop: '10px', marginBottom: '10px' }} className="column is-5-tablet is-4-desktop is-3-widescreen">
                         <form id="formLogin" onSubmit={this.handleSubmit} className="box">
                             <div className="field">
-                                <label for="" className="label">Email</label>
+                                <label   className="label">Email</label>
                                 <div className="control has-icons-left">
                                     <input nam="email" type="email" placeholder="e.g. bobsmith@gmail.com" className="input" required />
                                     <span className="icon is-small is-left">
@@ -66,7 +66,7 @@ class Login extends Component {
                                 </div>
                             </div>
                             <div className="field">
-                                <label for="" className="label">Password</label>
+                                <label  className="label">Password</label>
                                 <div className="control has-icons-left">
                                     <input name="password" type="password" placeholder="*******" className="input" required />
                                     <span className="icon is-small is-left">

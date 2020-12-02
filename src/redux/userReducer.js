@@ -15,13 +15,13 @@ export const initState = {
 };
 
 export const reducer = (state = initState, action) => {
-    // let result = {};
+    let result = {};
     /*
         ========setting menu========
     */
     switch (action.type) {
         case types.REQUEST_ID:
-           let result = { ...state, 
+           result = { ...state, 
                 requestId: action.payload.requestId, 
                 applicationProfile: action.payload.applicationProfile };
             
@@ -44,19 +44,24 @@ export const reducer = (state = initState, action) => {
 
             return result;
         case types.DO_LOGIN:
+            console.debug("DO_LOGIN");
             if (!action.payload.loginStatus) {
                 return { ...state, lastLoginAttempt:new Date(), loginFailed: true }
             }
+
+            console.debug("DO_LOGIN true ", new Date());
+            console.debug("APITOKEN: ", action.payload.loginKey);
+            setApiToken(action.payload.loginKey);
             result = {
                 ...state,
                 lastLoginAttempt:new Date(),
                 loginAttempt: true,
-                loginStatus: action.payload.loginStatus,
+                loginStatus: true, //action.payload.loginStatus,
                 loginKey: action.payload.loginKey,
                 loginFailed: false, 
                 loggedUser: action.payload.loggedUser
             };
-            setApiToken(result.loginKey);
+           
             
             return result;
         case types.DO_LOGOUT:
