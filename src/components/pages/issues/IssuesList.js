@@ -73,7 +73,7 @@ class IssuesList extends BaseManagementPage
         const isAdmin = this.props.loggedUser.role == "admin";
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Daftar Aduan {this.props.loggedUser.departement.name}</h2>
+                <h2 style={{ textAlign: 'center' }}>Daftar Aduan</h2>
                 <Card title="Daftar Aduan">
                 {!isAdmin?null:this.linkToFormCreate("/issues/create", "Tambah Aduan")}
                 <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
@@ -125,7 +125,7 @@ class IssuesList extends BaseManagementPage
                                         {this.buttonDeleteRecord(item.id, false)}
                                         </>
                                         :null}
-                                        <Link to={"/issues/" + item.id+"/action"} className="button is-primary is-small" >
+                                        <Link to={"/issues/" + item.id+"/followup"} className="button is-primary is-small" >
                                             <i className="fas fa-location-arrow"></i>
                                         </Link>
                                     </td>

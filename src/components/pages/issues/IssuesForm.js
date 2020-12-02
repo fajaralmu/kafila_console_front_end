@@ -70,6 +70,11 @@ class IssuesForm extends BaseAdminPage {
 
         this.recordSaved = (response) => {
             this.showInfo("SUCCESS SAVING RECORD");
+
+            if (this.getRecordId() == null) {
+                this.handleSuccessGetRecord(response);
+                this.props.history.push("/issues/"+response.issue.id);
+            }
         }
         this.recordFailedToSave = (e) => {
             this.showError("FAILED SAVING RECORD");

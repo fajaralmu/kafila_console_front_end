@@ -19,8 +19,20 @@ export default class IssuesService
         const endpoint = contextPath().concat("api/issues/list");
         return commonAjaxPostCalls(endpoint, request);
     }
+    view = (id) => {
+        const endpoint = contextPath().concat("api/issues/view/"+id);
+        return commonAjaxPostCalls(endpoint, {});
+    }
     delete = (id) => {
         const endpoint = contextPath().concat("api/issues/delete/"+id);
         return commonAjaxPostCalls(endpoint, {});
+    }
+    followUpIssue = (followUp) => {
+        const request = {
+            followed_up_issue: followUp
+        }
+
+        const endpoint = contextPath().concat("api/issues/followup");
+        return commonAjaxPostCalls(endpoint, request);
     }
 }

@@ -1,0 +1,217 @@
+
+import React, { Component } from 'react';
+
+import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import BaseComponent from '../../BaseComponent';
+import Message from '../../messages/Message';
+import * as formComponent from '../../forms/commons';
+import Card from '../../container/Card';
+import { SubmitResetButton } from '../../forms/commons';
+import { LabelField } from '../../forms/commons';
+import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
+import IssuesService from './../../../services/IssuesService';
+
+const FORM_ID = "form-input-follow-up-issue";
+class IssuesFollowingUpForm extends BaseComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            recordNotFound: false,
+            isLoadingRecord: true,
+            showDetailForm: true,
+        }
+        this.issue = {};
+        this.issueService = IssuesService.instance;
+        this.getRecordId = () => {
+            return this.props.match.params.id;
+        }
+        this.hideDetailNote = () => {
+            this.setState({showDetailForm:false});
+        }
+        this.showDetailForm = () => {
+            this.setState({showDetailForm:true});
+        }
+        this.onSubmit = (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const app = this;
+            this.showConfirmation("Submit Data?").then(function (accepted) {
+                if (accepted) {
+                    app.fillDataAndStore(form);
+                }
+            });
+        }
+
+        this.fillDataAndStore = (form) => {
+            const inputs = form.getElementsByClassName("input-form-field");
+
+            const action = {
+                issue_id : this.issue.id
+            };
+            for (let i = 0; i < inputs.length; i++) {
+                const element = inputs[i];
+                if (null != element.value && "" != element.value) {
+                    action[element.name] = element.value;
+                }
+            }
+
+            console.debug("issue action>>", action);
+            this.storeAction(action);
+
+        }
+
+        this.handleSuccessSubmit = (response) => {
+            this.issue.follow_up = response.followed_up_issue;
+            this.issue.is_closed = true;
+            this.showInfo("SUCCESS");
+            try {
+                if (this.getRecordId() == null) {
+                    document.getElementById(FORM_ID).reset();
+                }
+            } catch (error) { }
+        }
+        this.handleErrorSubmit = (error) => {
+            this.showError("handleErrorSubmit: " + error);
+        }
+        this.handleErrorGetRecord = (error) => {
+            this.setState({ recordNotFound: true })
+        }
+
+        this.handleSuccessGetRecord = (response) => {
+            this.issue = response.issue;
+            this.setState({ isLoadingRecord: false, recordNotFound: false });
+        }
+
+        // ajax calls
+
+        this.storeAction = (followUp) => {
+            this.commonAjax(this.issueService.followUpIssue, followUp,
+                this.handleSuccessSubmit, this.handleErrorSubmit);
+        }
+        this.loadRecord = () => {
+            this.commonAjax(this.issueService.view, this.getRecordId(),
+                this.handleSuccessGetRecord, this.handleErrorGetRecord);
+        }
+        this.isClosed = () => {
+            return this.getRecordId() != null && this.issue != null && this.issue.is_closed == true;
+        }
+    }
+
+    componentWillMount() {
+        this.validateLoginStatus();
+    }
+
+    componentDidMount() {
+        document.title = "Action Form";
+        if (this.getRecordId() == null) {
+            this.backToLogin();
+        }
+        this.loadRecord();
+    }
+
+    componentDidUpdate() {
+    }
+
+    render() {
+
+        if (this.state.recordNotFound) {
+            return <Message className="is-danger" body="Record Not Found" />
+        }
+
+        if (this.state.isLoadingRecord) {
+            return <h3>Please Wait...</h3>
+        }
+
+        const loggedUser = this.props.loggedUser;
+        if (null == loggedUser) {
+            return <></>
+        }
+        return (
+            <div>
+                <h2 style={{ textAlign: 'center' }}>Tindak Lanjut Aduan</h2>
+                <Card title="Detail Notulen">
+                    <div className="tags has-addons are-medium">
+                        <span className="tag is-dark">Status</span>
+                        <span className="tag is-info">{this.issue.is_closed ? "Closed" : "Not Closed"}</span>
+                    </div>
+                    {this.state.showDetailForm? 
+                    <article style={{ marginBottom: '10px' }} className="is-info">
+                        <div className="message-header">
+                            <p>Detail Notulen</p>
+                            <button onClick={this.hideDetailNote} className="delete" aria-label="delete"></button>
+                        </div>
+                        <div className="message-body has-background-light">
+                            <LabelField label="Waktu dan Tempat">
+                                <p>{this.issue.place}, {dateStringDayMonthYearFromText(this.issue.date)}</p>
+                            </LabelField>
+                            <LabelField label="Bidang">
+                                <p>{this.issue.departement.name}</p>
+                            </LabelField>
+                            <LabelField label="Permasalahan">
+                                <p>{this.issue.content}</p>
+                            </LabelField>
+                            <LabelField label="Pengadu">
+                                <p>{this.issue.email}, {this.issue.issuer}</p>
+                            </LabelField>
+                            <LabelField label="Sumber Input">
+                                <p>{this.issue.issue_input}</p>
+                            </LabelField>
+
+                        </div>
+                    </article>
+                    :
+                    <a className="button" onClick={this.showDetailForm}>Tampilkan Detail Aduan</a>
+                    }
+                </Card>
+                <Card title="Formulir Tindak Lanjut">
+                    {this.issue.follow_up == null ?
+                    <form id={FORM_ID} onSubmit={this.onSubmit}>
+                            <InputField required={true} label="Tanggal" name="date" type="date" />
+                            <InputField required={true} label="Keterangan" name="description" type="textarea" />
+                            <SubmitResetButton submitText={"Submit"} withReset={true} />
+                    </form>
+                    :
+                    <article style={{ marginBottom: '10px' }} className="is-info">
+                        <div className="message-header">
+                            <p>Detail Tindak Lanjut</p>
+                        </div>
+                        <div className="message-body has-background-light">
+                            <LabelField label="Tanggal">
+                                <p>{this.issue.follow_up.date}</p>
+                            </LabelField>
+                            <LabelField label="Keterangan">
+                                <p>{this.issue.follow_up.description}</p>
+                            </LabelField>
+                        </div>
+                    </article>
+                    }
+                </Card>
+            </div>
+        )
+    }
+}
+
+
+const InputField = (props) => {
+
+    return formComponent.InputField(props);
+}
+
+
+const mapStateToProps = state => {
+
+    return {
+        loggedUser: state.userState.loggedUser,
+        loginStatus: state.userState.loginStatus,
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    //   getissues: (request, app) => dispatch(actions.issuesAction.list(request, app)),
+})
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IssuesFollowingUpForm));

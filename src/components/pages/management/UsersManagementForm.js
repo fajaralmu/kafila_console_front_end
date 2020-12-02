@@ -65,6 +65,10 @@ class UserManagementForm extends BaseComponent {
 
         this.recordSaved = (response) => {
             this.showInfo("SUCCESS SAVING RECORD");
+            if (this.getRecordId() == null) {
+                this.handleSuccessGetRecord(response);
+                this.props.history.push("/management/users/"+response.user.id);
+            }
         }
         this.recordFailedToSave = (e) => {
             this.showError("FAILED SAVING RECORD");
