@@ -1,6 +1,7 @@
 import * as common from './Common'
 import * as types from '../redux/types'
 
+const axios = require('axios');
 const POST_METHOD = "post";
 
 export const getMeetingNotesMiddleware = store => next => action => {
@@ -9,11 +10,12 @@ export const getMeetingNotesMiddleware = store => next => action => {
         return next(action);
     }
     const app = action.meta.app;
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: common.commonAuthorizedHeader()
+    axios.post(action.meta.url, action.payload, {
+        headers: common.commonAuthorizedHeader()
     })
-        .then(response => response.json())
-        .then(response => {
+        // .then(response => response.json())
+        .then(result => {
+            const response = result.data;
             let newAction = Object.assign({}, action, {
                 payload: {
                     ...response
@@ -34,8 +36,8 @@ export const storeMeetingNote = store => next => action => {
         return next(action);
     }
     const app = action.meta.app;
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: common.commonAuthorizedHeader()
+    axios.post(action.meta.url, action.payload, {
+         headers: common.commonAuthorizedHeader()
     })
         .then(response => { return Promise.all([response.json()]); })
         .then(response => {

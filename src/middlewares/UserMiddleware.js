@@ -1,5 +1,6 @@
 import * as common from './Common'
 import * as types from '../redux/types'
+const axios = require('axios');
 
 const POST_METHOD = "post";
 
@@ -8,12 +9,10 @@ export const performLoginMiddleware = store => next => action => {
         return next(action);
     }
     const app = action.meta.app;
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload), headers: common.commonAuthorizedHeader()
+    axios.post(action.meta.url, action.payload, {headers: common.commonAuthorizedHeader()
     })
-        .then(response => { return Promise.all([response.json(), response]); })
-        .then(([responseJson, response]) => {
-
+        .then(response => {
+            const responseJson = response.data;
             let loginKey = responseJson.user.api_token;
             let loginSuccess = true;
             let newAction = Object.assign({}, action, {
@@ -42,6 +41,7 @@ export const requestAppIdMiddleware = store => next => action => {
 
     let headers = common.commonAuthorizedHeader(); 
 
+    // Axios.post
     fetch(action.meta.url, {
         method: POST_METHOD, body: JSON.stringify(action.payload),
         headers: headers
@@ -79,12 +79,11 @@ export const performLogoutMiddleware = store => next => action => {
     }
     const app = action.meta.app;
 
-    fetch(action.meta.url, {
-        method: POST_METHOD, body: JSON.stringify(action.payload),
+    axios.post(action.meta.url, action.payload, {
         headers: common.commonAuthorizedHeader()
     })
-        .then(response => { return Promise.all([response.json(), response]); })
-        .then(([responseJson, response]) => {
+        .then(response => {
+            const responseJson = response.data;
             let logoutSuccess = false;
             if (responseJson.code == "00") {
                 logoutSuccess = true;

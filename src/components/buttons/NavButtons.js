@@ -25,10 +25,10 @@ class NavButtons extends Component
 
         return (
             <div className="buttons" style={{marginTop:'5px', marginBottom: '5px'}}>
-                {buttonsData.map(data=>{
+                {buttonsData.map((data, i)=>{
                     const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
                     return (
-                        <a onClick={()=>{this.onClick(data.index)}} className={className}>{data.index}</a>
+                        <a key={"nav_btn_"+i} onClick={()=>{this.onClick(data.index)}} className={className}>{data.index}</a>
                     )
                 })}
             </div>

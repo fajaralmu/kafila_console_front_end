@@ -71,6 +71,7 @@ class DeparementManagement extends BaseManagementPage {
                         <Columns cells={[
                             formComponent.ButtonApplyResetFilter(), navButtons
                         ]} />
+                        <div style={{overflow:'scroll'}}>
                         <table style={{ tableLayout: 'fixed' }} className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
@@ -81,9 +82,10 @@ class DeparementManagement extends BaseManagementPage {
                                     { text: 'description', withFilter: true },
                                     { text: 'action'}
                                 ]} />
+                                <tbody>
                             {recordList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
-                                return (<tr>
+                                return (<tr key={"record_"+i}>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.name}</td>
@@ -95,7 +97,9 @@ class DeparementManagement extends BaseManagementPage {
                                     </td>
                                 </tr>)
                             })}
+                            </tbody>
                         </table>
+                        </div>
                     </form>
                 </Card>
             </div>

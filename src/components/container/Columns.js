@@ -6,8 +6,8 @@ export default class Columns extends Component
         const cells = this.props.cells?this.props.cells:[];
         return (
             <div className="columns">
-                {cells.map(cell=>{
-                    return <div className="column">{cell}</div>
+                {cells.map((cell, i)=>{
+                    return <div key={"column-"+i} className="column">{cell}</div>
                 })}
             </div>
         )

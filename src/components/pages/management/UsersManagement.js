@@ -78,6 +78,7 @@ class UsersManahement extends BaseManagementPage {
                             formComponent.ButtonApplyResetFilter(),
                             navButtons
                         ]} />
+                        <div style={{overflow:'scroll'}}>
                         <table  className="table">
                             <TableHeadWithFilter
                                 onButtonOrderClick={this.onButtonOrderClick}
@@ -90,9 +91,10 @@ class UsersManahement extends BaseManagementPage {
                                     { text: 'departement', withFilter: true },
                                     { text: 'action', },
                                 ]} />
+                                <tbody>
                             {recordList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
-                                return (<tr>
+                                return (<tr key={"record-user-"+i}>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.email}</td>
@@ -106,7 +108,9 @@ class UsersManahement extends BaseManagementPage {
                                     </td>
                                 </tr>)
                             })}
+                            </tbody>
                         </table>
+                        </div>
                     </form>
                 </Card>
             </div>
