@@ -15,12 +15,13 @@ export const initState = {
 };
 
 export const reducer = (state = initState, action) => {
+    // let result = {};
     /*
         ========setting menu========
     */
     switch (action.type) {
         case types.REQUEST_ID:
-            result = { ...state, 
+           let result = { ...state, 
                 requestId: action.payload.requestId, 
                 applicationProfile: action.payload.applicationProfile };
             
@@ -46,7 +47,7 @@ export const reducer = (state = initState, action) => {
             if (!action.payload.loginStatus) {
                 return { ...state, lastLoginAttempt:new Date(), loginFailed: true }
             }
-            let result = {
+            result = {
                 ...state,
                 lastLoginAttempt:new Date(),
                 loginAttempt: true,

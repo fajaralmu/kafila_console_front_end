@@ -5,6 +5,7 @@ const POST_METHOD = "post";
 
 export const getMeetingNotesMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.GET_MEETING_NOTES) {
+        // console.debug("next: ", action)
         return next(action);
     }
     const app = action.meta.app;
