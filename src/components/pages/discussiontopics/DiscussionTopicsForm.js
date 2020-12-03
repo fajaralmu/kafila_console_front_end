@@ -2,26 +2,22 @@ import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import { InputField, SelectField } from '../../forms/commons';
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
-import BaseAdminPage from './../BaseAdminPage';
+import { CommonTitle } from '../../BaseComponent';
+import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
+import BaseManagementPage from './../management/BaseManagementPage';
 
-const issue_sources = [
-    'Yayasan', 'Orang Tua', 'Santri', 'Tamu'
-]
-
-class IssuesForm extends BaseAdminPage {
+class DiscussionTopicsForm extends BaseManagementPage {
     constructor(props) {
         super(props);
         this.state = {
             recordNotFound: false,
             isLoadingRecord: true,
-            departementList: []
         };
-        this.masterDataService = MasterManagementService.instance;
+        this.discussionTopicService = DiscussionTopicsService.instance;
 
         this.onSubmit = (e) => {
             e.preventDefault();
@@ -36,36 +32,23 @@ class IssuesForm extends BaseAdminPage {
 
         this.storeRecord = (form) => {
             const inputs = form.getElementsByClassName("input-form-field");
-            const issue = {};
+            const discussionTopic = {};
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
                 if (null != element.value && "" != element.value) {
                     let fieldName = element.name;
-
-                    if (fieldName == 'departement') {
-                        fieldName = 'departement_id'
-                    }
-
-                    issue[fieldName] = element.value;
+                    discussionTopic[fieldName] = element.value;
                 }
             }
             if (this.getRecordId() != null) {
-                issue.id = this.getRecordId();
+                discussionTopic.id = this.getRecordId();
             }
-            this.store(issue);
-            console.debug("ISSUE: ", issue);
+            this.store(discussionTopic);
+            console.debug("discussionTopic: ", discussionTopic);
         }
 
         this.getRecordId = () => {
             return this.props.match.params.id;
-        }
-
-        this.departementListLoaded = (response) => {
-            this.setState({ departementList: response.result_list });
-            if (null != this.getRecordId()) {
-                this.loadRecord();
-            }
-            console.log("departementListLoaded: ", response);
         }
 
         this.recordSaved = (response) => {
@@ -73,41 +56,28 @@ class IssuesForm extends BaseAdminPage {
 
             if (this.getRecordId() == null) {
                 this.handleSuccessGetRecord(response);
-                this.props.history.push("/issues/"+response.issue.id);
+                this.props.history.push("/discussiontopics/"+response.discussion_topic.id);
             }
         }
         this.recordFailedToSave = (e) => {
             this.showError("FAILED SAVING RECORD");
         }
 
-        this.store = (issue) => {
+        this.store = (discussionTopic) => {
             this.commonAjax(
-                this.masterDataService.storeIssue, issue,
+                this.discussionTopicService.store, discussionTopic,
                 this.recordSaved, this.recordFailedToSave
             )
         }
 
-        this.loadDepartements = () => {
-            this.commonAjax(
-                this.masterDataService.departementList, {},
-                this.departementListLoaded,
-                (error) => { }
-            );
-        }
-
         this.handleSuccessGetRecord = (response) => {
-
+            this.recordData = response;
             this.setState({ isLoadingRecord: false });
             const form = document.getElementById("form-management");
             const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
-
-                if (element.name == "departement") {
-                    element.value = response.issue.departement_id;
-                } else {
-                    element.value = response.issue[element.name];
-                }
+                element.value = response.discussion_topic[element.name];
             }
         }
 
@@ -116,16 +86,23 @@ class IssuesForm extends BaseAdminPage {
         }
 
         this.loadRecord = () => {
-            this.commonAjax(this.masterDataService.viewIssue, this.getRecordId(),
+            this.commonAjax(this.discussionTopicService.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
+        }
+        this.isClosed = ()=> {
+            return this.getRecordId() != null && this.discussionTopic != null && this.discussionTopic.is_closed == true;
         }
     }
 
     componentDidMount() {
-        this.loadDepartements();
-        document.title = "Form Aduan";
+        if (this.getRecordId() != null) {
+            this.loadRecord();
+        }
+        document.title = "Form Tema Pembahasan";
     }
 
+    componentDidUpdate() {
+    }
     render() {
 
         if (this.state.recordNotFound) {
@@ -139,33 +116,35 @@ class IssuesForm extends BaseAdminPage {
         }
 
         const formTitle = <>
-            <Link to="/issues">Aduan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
+            <Link to="/discussiontopics">Tema Pembahasan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
         </>
         return (
             <div>
-                <CommonTitle>Form Aduan</CommonTitle>
+                <CommonTitle>Form Tema Pembahasan</CommonTitle>
                 <Card title={formTitle} >
+                {this.getRecordId() != null && this.recordData.discussion_topic != null ?
+                        <div className="level">
+                            <div className="level-left">
+                                <div className="tags has-addons are-medium">
+                                    <span className="tag is-dark">Status</span>
+                                    <span className="tag is-info">{this.recordData.discussion_topic.is_closed == true ? "Closed" : "Not Closed"}</span>
+                                </div></div>
+                            <div className="level-right">
+                                <span className="tag is-primary is-medium">{this.recordData.discussion_topic.departement.name}</span>
+                            </div>
+                        </div>
+                        :
+                        null}
                     <form onSubmit={this.onSubmit} id="form-management" >
-                        <InputField label="Tanggal" name="date" type="date" required={true} />
-                        <InputField label="Tempat" name="place" required={true} />
-                        <InputField label="Permasalahan" name="content" type="textarea" required={true} />
-                        <InputField label="Email" name="email" required={true} type="email" />
-                        <InputField label="Sumber Aduan" name="issue_input" required={true} />
-                        <SelectField label="Pengadu" options={issue_sources.map(source => {
-                            return {
-                                value: source,
-                                text: source
-                            }
-                        })} name="issuer" required={true} />
-                        <SelectField label="Departement" options={this.state.departementList.map(dep => {
-                            return {
-                                value: dep.id,
-                                text: dep.name
-                            }
-                        })} name="departement" required={true} />
-                        <SubmitResetButton submitText={
-                            this.getRecordId() == null ? "Create" : "Update"
-                        } withReset={this.getRecordId() == null} />
+                    <InputField required={true} label="Tanggal" name="date" type="date" />
+                        <InputField required={true} label="Pembahasan" name="content" type="textarea" />
+                        <InputField required={true} label="Keputusan" name="decision" type="textarea" />
+                        <InputField required={true} label="Deadline" name="deadline_date" type="date" />
+                        <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
+                        {this.isClosed()? null :
+                            <SubmitResetButton submitText={
+                                this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
+                        }
                     </form>
                 </Card>
             </div>
@@ -181,4 +160,4 @@ const mapStateToProps = state => {
     }
 }
 export default withRouter(
-    connect(mapStateToProps)(IssuesForm));
+    connect(mapStateToProps)(DiscussionTopicsForm));

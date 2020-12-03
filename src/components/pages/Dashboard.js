@@ -6,7 +6,7 @@ import * as actions from '../../redux/actionCreators'
 import { connect } from 'react-redux'
 import * as formComponent from '../forms/commons';
 import NavButtons from './../buttons/NavButtons';
-import BaseComponent from './../BaseComponent';
+import BaseComponent, { CommonTitle } from './../BaseComponent';
 import Card from '../container/Card';
 import { getDiffDaysToNow } from './../../utils/DateUtil';
 class Dashboard extends BaseComponent {
@@ -136,7 +136,7 @@ class Dashboard extends BaseComponent {
 
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Dashboard</h2>
+                <CommonTitle>Dashboard</CommonTitle>
                 <Card title={this.props.loggedUser.display_name} >
                     <p>Bidang {this.props.loggedUser.departement.name}</p>
                 </Card>

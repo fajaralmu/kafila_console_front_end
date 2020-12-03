@@ -15,6 +15,9 @@ import Profile from '../pages/Profile';
 import IssuesList from '../pages/issues/IssuesList';
 import IssuesForm from '../pages/issues/IssuesForm';
 import IssuesFollowingUpForm from '../pages/issues/IssuesFollowingUpForm';
+import DiscussionActionForm from '../pages/discussiontopics/DiscussionActionForm';
+import DiscussionTopicsForm from '../pages/discussiontopics/DiscussionTopicsForm';
+import DiscussionTopicsList from '../pages/discussiontopics/DiscussionTopicsList';
 
 class Content extends Component {
 
@@ -64,13 +67,30 @@ class Content extends Component {
             (props) =>
               <IssuesFollowingUpForm app={this.props.app} />
           } />
+          {/* ======== discussiontopics ========= */}
+          <Route exact path="/discussiontopics" render={
+            (props) =>
+              <DiscussionTopicsList app={this.props.app} />
+          } />
+          <Route exact path="/discussiontopics/create" render={
+            (props) =>
+              <DiscussionTopicsForm app={this.props.app} />
+          } />
+          <Route exact path="/discussiontopics/:id" render={
+            (props) =>
+              <DiscussionTopicsForm app={this.props.app} />
+          } />
+          <Route exact path="/discussiontopics/:id/action" render={
+            (props) =>
+              <DiscussionActionForm app={this.props.app} />
+          } />
           {/* ========= management ========== */}
           <Route exact path="/management" render={
             (props) =>
               <ManagementMenu app={this.props.app} />
           } />
 
-          {/* users */}
+          {/* ============== users management ============= */}
           <Route exact path="/management/users" render={
             (props) =>
               <UsersManagement app={this.props.app} />
@@ -83,7 +103,7 @@ class Content extends Component {
             (props) =>
               <UsersManagementForm app={this.props.app} />
           } />
-          {/* departements */}
+          {/* ================ departements management ============= */}
           <Route exact path="/management/departements" render={
             (props) =>
               <DepartementManagement app={this.props.app} />

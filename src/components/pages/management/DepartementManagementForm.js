@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import { InputField, SelectField } from '../../forms/commons';
-import BaseComponent from '../../BaseComponent';
+import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
@@ -115,7 +115,7 @@ class DepartementManagementForm extends BaseComponent {
         </>
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Departements Management</h2>
+               <CommonTitle>Departements Management</CommonTitle>
                 <Card title={formTitle} >
                     <form onSubmit={this.onSubmit} id="form-management" >
                         <InputField label="Nama" name="name" required={true} />

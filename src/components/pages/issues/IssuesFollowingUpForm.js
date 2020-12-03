@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent from '../../BaseComponent';
+import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import Message from '../../messages/Message';
 import * as formComponent from '../../forms/commons';
 import Card from '../../container/Card';
@@ -19,18 +19,18 @@ class IssuesFollowingUpForm extends BaseComponent {
         this.state = {
             recordNotFound: false,
             isLoadingRecord: true,
-            showDetailForm: true,
+            showDetailIssue: true,
         }
         this.issue = {};
         this.issueService = IssuesService.instance;
         this.getRecordId = () => {
             return this.props.match.params.id;
         }
-        this.hideDetailNote = () => {
-            this.setState({showDetailForm:false});
+        this.hideDetailIssue = () => {
+            this.setState({showDetailIssue:false});
         }
-        this.showDetailForm = () => {
-            this.setState({showDetailForm:true});
+        this.showDetailIssue = () => {
+            this.setState({showDetailIssue:true});
         }
         this.onSubmit = (e) => {
             e.preventDefault();
@@ -104,7 +104,7 @@ class IssuesFollowingUpForm extends BaseComponent {
     }
 
     componentDidMount() {
-        document.title = "Action Form";
+        document.title = "Follow Up Issue";
         if (this.getRecordId() == null) {
             this.backToLogin();
         }
@@ -130,17 +130,18 @@ class IssuesFollowingUpForm extends BaseComponent {
         }
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Tindak Lanjut Aduan</h2>
-                <Card title="Detail Notulen">
+                <CommonTitle>Tindak Lanjut Aduan</CommonTitle>
+                
+                <Card title="Detail Aduan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
                         <span className="tag is-info">{this.issue.is_closed ? "Closed" : "Not Closed"}</span>
                     </div>
-                    {this.state.showDetailForm? 
+                    {this.state.showDetailIssue? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">
-                            <p>Detail Notulen</p>
-                            <button onClick={this.hideDetailNote} className="delete" aria-label="delete"></button>
+                            <p>Detail Aduan</p>
+                            <button onClick={this.hideDetailIssue} className="delete" aria-label="delete"></button>
                         </div>
                         <div className="message-body has-background-light">
                             <LabelField label="Waktu dan Tempat">
@@ -162,7 +163,7 @@ class IssuesFollowingUpForm extends BaseComponent {
                         </div>
                     </article>
                     :
-                    <a className="button" onClick={this.showDetailForm}>Tampilkan Detail Aduan</a>
+                    <a className="button" onClick={this.showDetailIssue}>Tampilkan Detail Aduan</a>
                     }
                 </Card>
                 <Card title="Formulir Tindak Lanjut">

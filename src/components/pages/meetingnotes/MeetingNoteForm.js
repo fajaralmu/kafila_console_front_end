@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent from '../../BaseComponent';
+import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
 import Message from '../../messages/Message';
 import * as formComponent from '../../forms/commons';
@@ -29,12 +29,12 @@ class MeetingNoteForm extends BaseComponent {
             this.isSubmitting = true;
             const form = e.target;
             const app = this;
-            this.showConfirmation("Submit Data?").then(function(accepted) {
+            this.showConfirmation("Submit Data?").then(function (accepted) {
                 if (accepted) {
                     app.fillDataAndStore(form);
                 }
                 app.isSubmitting = false;
-            });            
+            });
         }
 
         this.fillDataAndStore = (form) => {
@@ -45,7 +45,7 @@ class MeetingNoteForm extends BaseComponent {
                 const element = inputs[i];
                 if (null != element.value && "" != element.value) {
                     this.meetingNote[element.name] = element.value;
-                    console.debug("this.meetingNote[element.name]",this.meetingNote[element.name], "element.value", element.value);
+                    console.debug("this.meetingNote[element.name]", this.meetingNote[element.name], "element.value", element.value);
                 }
                 console.debug("inputs: ", element.tagName, element.value);
             }
@@ -83,7 +83,7 @@ class MeetingNoteForm extends BaseComponent {
                 const element = inputs[i];
                 element.value = response.meeting_note[element.name];
 
-                if (this.isClosed() == false && 
+                if (this.isClosed() == false &&
                     element.name != "content" && element.name != "decision") {
                     element.setAttribute("disabled", "disabled");
                 }
@@ -117,7 +117,7 @@ class MeetingNoteForm extends BaseComponent {
             this.commonAjax(this.meetingNoteService.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
         }
-        this.isClosed = ()=> {
+        this.isClosed = () => {
             return this.getRecordId() != null && this.meetingNote != null && this.meetingNote.is_closed == true;
         }
     }
@@ -155,16 +155,21 @@ class MeetingNoteForm extends BaseComponent {
         }
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</h2>
+                <CommonTitle>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</CommonTitle>
                 <Card title="Formulir Notulensi">
-                    {this.getRecordId() != null && this.meetingNote != null? 
-                        <div className="tags has-addons are-medium">
-                            <span className="tag is-dark">Status</span>
-                            <span className="tag is-info">{this.meetingNote.is_closed == true ? "Closed" : "Not Closed"}</span>
+                    {this.getRecordId() != null && this.meetingNote != null ?
+                        <div className="level">
+                            <div className="level-left">
+                                <div className="tags has-addons are-medium">
+                                    <span className="tag is-dark">Status</span>
+                                    <span className="tag is-info">{this.meetingNote.is_closed == true ? "Closed" : "Not Closed"}</span>
+                                </div></div>
+                            <div className="level-right">
+                                <span className="tag is-primary is-medium">{this.meetingNote.departement.name}</span>
+                            </div>
                         </div>
-                    
-                    :
-                    null}
+                        :
+                        null}
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                         <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Tempat" name="place" />
@@ -172,7 +177,7 @@ class MeetingNoteForm extends BaseComponent {
                         <InputField required={true} label="Keputusan" name="decision" type="textarea" />
                         <InputField required={true} label="Deadline" name="deadline_date" type="date" />
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
-                        {this.isClosed()? null :
+                        {this.isClosed() ? null :
                             <SubmitResetButton submitText={
                                 this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
                         }

@@ -1,5 +1,5 @@
 
-import BaseComponent from './../BaseComponent';
+import BaseComponent, { CommonTitle } from './../BaseComponent';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
@@ -86,7 +86,7 @@ class Profile extends BaseComponent {
         }
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Profile</h2>
+                <CommonTitle>Profile</CommonTitle>
                 <Card title={"Update Profile"} >
                     <form onSubmit={this.onSubmit} id="form-profile" >
                         <InputField label="Email" name="email" required={true} type="email" />

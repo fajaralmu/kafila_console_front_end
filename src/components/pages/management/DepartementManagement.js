@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import NavButtons from '../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
 import Columns from './../../container/Columns';
+import { CommonTitle } from '../../BaseComponent';
 class DeparementManagement extends BaseManagementPage {
     constructor(props) {
         super(props, "Departement", "departement");
@@ -64,7 +65,7 @@ class DeparementManagement extends BaseManagementPage {
                 recordData.result_list;
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Departement Management</h2>
+                <CommonTitle>Departement Management</CommonTitle>
                 <Card title="Departement">
                     {this.linkToFormCreate("/management/departements/create", "Tambah Data")}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>

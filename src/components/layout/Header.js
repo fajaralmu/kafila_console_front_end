@@ -24,6 +24,10 @@ const menus = [
         link:'/issues',
         authenticated: true,
     }, {
+        name:'Tema Pembahasan',
+        link:'/discussiontopics',
+        authenticated: true,
+    }, {
         name:'Management',
         link:'/management',
         authenticated: true,

@@ -1,30 +1,29 @@
 import React,{ Component } from 'react';
-import BaseComponent, { CommonTitle } from './../../BaseComponent';
 import { Route, Switch, withRouter, Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Card from '../../container/Card';
-import MasterManagementService from './../../../services/MasterDataService';
-import BaseManagementPage from './../management/BaseManagementPage';
-import NavButtons from './../../buttons/NavButtons';
-import Columns from './../../container/Columns';
-import { TableHeadWithFilter, ButtonApplyResetFilter } from './../../forms/commons';
-import IssuesService from './../../../services/IssuesService';
+import BaseManagementPage from '../management/BaseManagementPage';
+import NavButtons from '../../buttons/NavButtons';
+import Columns from '../../container/Columns';
+import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons';
+import IssuesService from '../../../services/IssuesService';
+import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 
-class IssuesList extends BaseManagementPage
+class DiscussionTopicsList extends BaseManagementPage
 {
     constructor(props){
-        super(props, "Aduan", "issue");
+        super(props, "Topik Pembahasan", "discussiontopic");
         this.state = {}
-        this.issueService = IssuesService.instance;
+        this.discussionTopicService = DiscussionTopicsService.instance;
 
-        //overrid
+        //override
         this.deleteRecord = (id) => {
-            this.commonAjax(
-                this.issueService.delete,
-                id,
-                this.onSuccessDelete,
-                this.onErrorDelete
-            )
+            // this.commonAjax(
+            //     this.discussionTopicService.delete,
+            //     id,
+            //     this.onSuccessDelete,
+            //     this.onErrorDelete
+            // )
         }
     }
 
@@ -39,7 +38,7 @@ class IssuesList extends BaseManagementPage
             fieldsFilter: this.fieldsFilter
         };
 
-        this.commonAjax(this.issueService.list, request, this.successLoaded, this.errorLoaded);
+        this.commonAjax(this.discussionTopicService.list, request, this.successLoaded, this.errorLoaded);
     }
 
     createNavButton() {
@@ -54,10 +53,10 @@ class IssuesList extends BaseManagementPage
 
     componentDidMount() {
         this.loadRecords();
-        document.title = "Daftar Aduan";
+        document.title = "Daftar Tema Pembahasan";
     }
 
-    //overrid baseAdminPage
+    //override baseAdminPage
     componentDidUpdate(){
         if (this.props.loginStatus == false || this.props.loggedUser == null ) {
             this.backToLogin();
@@ -73,9 +72,9 @@ class IssuesList extends BaseManagementPage
         const isAdmin = this.props.loggedUser.role == "admin";
         return (
             <div>
-                <CommonTitle>Daftar Aduan</CommonTitle>
-                <Card title="Daftar Aduan">
-                {!isAdmin?null:this.linkToFormCreate("/issues/create", "Tambah Aduan")}
+                <h2 style={{ textAlign: 'center' }}>Daftar Tema Pembahasan</h2>
+                <Card title="Daftar Tema Pembahasan">
+                {this.linkToFormCreate("/discussiontopics/create", "Tambah Tema Pembahasan")}
                 <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <Columns cells={[
                             ButtonApplyResetFilter(), navButtons
@@ -86,14 +85,13 @@ class IssuesList extends BaseManagementPage
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
                                     { text: 'No' },
-                                    { text: 'id', withFilter: true },
-                                    { text: 'date', withFilter: true },
-                                    { text: 'place', withFilter: true },
-                                    { text: 'content', withFilter: true },
-                                    { text: 'issuer', withFilter: true },
-                                    { text: 'email', withFilter: true },
-                                    { text: 'departement', withFilter: true },
-                                    { text: 'issue_input', withFilter: true },
+                                    { text: 'id', alias:"Id", withFilter: true },
+                                    { text: 'date', alias:"Tanggal", withFilter: true },
+                                    { text: 'content', alias:"Pembahasan", withFilter: true },
+                                    { text: 'decision', alias:"Keputusan", withFilter: true },
+                                    { text: 'deadline_date', alias:"Deadline", withFilter: true },
+                                    { text: 'departement', alias:"Bidang", withFilter: true },
+                                    { text: 'user', alias:"User", withFilter: true },
                                     { text: 'status'},
                                     { text: 'action'}
                                 ]} />
@@ -104,12 +102,11 @@ class IssuesList extends BaseManagementPage
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>
-                                    <td>{item.place}</td>
-                                    <td>{item.content}</td>
-                                    <td>{item.issuer}</td>
-                                    <td>{item.email}</td>
+                                    <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
+                                    <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td>
+                                    <td>{item.deadline_date}</td>
                                     <td>{item.departement.name}</td>
-                                    <td>{item.issue_input}</td>
+                                    <td>{item.user.name}</td>
                                     <td>
                                         {item.is_closed == true? 
                                         <span className="tag is-info">Closed</span>
@@ -117,15 +114,12 @@ class IssuesList extends BaseManagementPage
                                         <span className="tag is-warning">Not Closed</span>}
                                     </td>
                                     <td>
-                                        {isAdmin?
-                                        <>
-                                        <Link to={"/issues/" + item.id} className="button is-small" >
+                                        
+                                        <Link to={"/discussiontopics/" + item.id} className="button is-small" >
                                             <i className="fas fa-edit"></i>
                                         </Link>
-                                        {this.buttonDeleteRecord(item.id, false)}
-                                        </>
-                                        :null}
-                                        <Link to={"/issues/" + item.id+"/followup"} className="button is-primary is-small" >
+                                        
+                                        <Link to={"/discussiontopics/" + item.id+"/action"} className="button is-primary is-small" >
                                             <i className="fas fa-location-arrow"></i>
                                         </Link>
                                     </td>
@@ -156,4 +150,4 @@ const mapDispatchToProps = dispatch => ({
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(IssuesList));
+)(DiscussionTopicsList));

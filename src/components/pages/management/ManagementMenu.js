@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import BaseAdminPage from './../BaseAdminPage';
+import { CommonTitle } from '../../BaseComponent';
 
 
 class ManagementMenu extends BaseAdminPage {
@@ -17,7 +18,7 @@ class ManagementMenu extends BaseAdminPage {
         const columnClass = "column is-one-third";
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Master Data Menu</h2>
+                <CommonTitle>Master Data Menu</CommonTitle>
                 <Card title="Menu">
                         <div  className="columns">
                             <div className={columnClass}>

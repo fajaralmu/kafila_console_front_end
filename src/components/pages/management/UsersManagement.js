@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import NavButtons from './../../buttons/NavButtons';
 import BaseManagementPage from './BaseManagementPage';
 import Columns from './../../container/Columns';
+import { CommonTitle } from '../../BaseComponent';
 
 class UsersManahement extends BaseManagementPage {
     constructor(props) {
@@ -69,7 +70,7 @@ class UsersManahement extends BaseManagementPage {
                 recordData.result_list;
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Users Management</h2>
+                <CommonTitle>Users Management</CommonTitle>
                 
                 <Card title="Users">
                     {this.linkToFormCreate("/management/users/create", "Tambah Data")}

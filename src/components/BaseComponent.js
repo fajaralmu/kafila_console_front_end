@@ -1,4 +1,4 @@
-import { React , Component} from 'react';
+import  React , {Component} from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 
 export default class BaseComponent extends Component {
@@ -112,4 +112,8 @@ export default class BaseComponent extends Component {
             this.backToLogin();
         }
     }
+}
+
+export const CommonTitle = (props) => {
+    return <h2 style={{ textAlign: 'center' }}>{props.children}</h2>
 }

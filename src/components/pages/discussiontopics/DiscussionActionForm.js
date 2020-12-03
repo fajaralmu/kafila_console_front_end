@@ -4,33 +4,34 @@ import React, { Component } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BaseComponent, { CommonTitle } from '../../BaseComponent';
-import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
 import Message from '../../messages/Message';
 import * as formComponent from '../../forms/commons';
 import Card from '../../container/Card';
 import { SubmitResetButton } from '../../forms/commons';
-import { LabelField } from './../../forms/commons';
-import { dateStringDayMonthYearFromText } from './../../../utils/DateUtil';
+import { LabelField } from '../../forms/commons';
+import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
+import IssuesService from '../../../services/IssuesService';
+import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 
-const FORM_ID = "form-input-meeting-note-action";
-class MeetingNoteActionForm extends BaseComponent {
+const FORM_ID = "form-input-discussion-action";
+class DiscussionActionForm extends BaseComponent {
     constructor(props) {
         super(props);
         this.state = {
             recordNotFound: false,
             isLoadingRecord: true,
-            showDetailNote: true,
+            showDetailDiscussionTopic: true,
         }
-        this.meetingNote = {};
-        this.meetingNoteService = MeetingNoteSerivce.instance;
+        this.discussionTopic = {};
+        this.discussionTopicSerivce = DiscussionTopicsService.instance;
         this.getRecordId = () => {
             return this.props.match.params.id;
         }
-        this.hideDetailNote = () => {
-            this.setState({showDetailNote:false});
+        this.hideDetailIssue = () => {
+            this.setState({showDetailDiscussionTopic:false});
         }
-        this.showDetailNote = () => {
-            this.setState({showDetailNote:true});
+        this.showDetailDiscussionTopic = () => {
+            this.setState({showDetailDiscussionTopic:true});
         }
         this.onSubmit = (e) => {
             e.preventDefault();
@@ -48,7 +49,7 @@ class MeetingNoteActionForm extends BaseComponent {
             const inputs = form.getElementsByClassName("input-form-field");
 
             const action = {
-                note_id : this.meetingNote.id
+                topic_id : this.discussionTopic.id
             };
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
@@ -57,14 +58,14 @@ class MeetingNoteActionForm extends BaseComponent {
                 }
             }
 
-            console.debug("meetingNote action>>", action);
+            console.debug("issue action>>", action);
             this.storeAction(action);
 
         }
 
         this.handleSuccessSubmit = (response) => {
-            this.meetingNote.action = response.action;
-            this.meetingNote.is_closed = true;
+            this.discussionTopic.discussion_action = response.discussion_action;
+            this.discussionTopic.is_closed = true;
             this.showInfo("SUCCESS");
             try {
                 if (this.getRecordId() == null) {
@@ -80,22 +81,22 @@ class MeetingNoteActionForm extends BaseComponent {
         }
 
         this.handleSuccessGetRecord = (response) => {
-            this.meetingNote = response.meeting_note;
+            this.discussionTopic = response.discussion_topic;
             this.setState({ isLoadingRecord: false, recordNotFound: false });
         }
 
         // ajax calls
 
         this.storeAction = (action) => {
-            this.commonAjax(this.meetingNoteService.storeAction, action,
+            this.commonAjax(this.discussionTopicSerivce.storeAction, action,
                 this.handleSuccessSubmit, this.handleErrorSubmit);
         }
         this.loadRecord = () => {
-            this.commonAjax(this.meetingNoteService.view, this.getRecordId(),
+            this.commonAjax(this.discussionTopicSerivce.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
         }
         this.isClosed = () => {
-            return this.getRecordId() != null && this.meetingNote != null && this.meetingNote.is_closed == true;
+            return this.getRecordId() != null && this.discussionTopic != null && this.discussionTopic.is_closed == true;
         }
     }
 
@@ -104,7 +105,7 @@ class MeetingNoteActionForm extends BaseComponent {
     }
 
     componentDidMount() {
-        document.title = "Action Form";
+        document.title = "Follow Up Issue";
         if (this.getRecordId() == null) {
             this.backToLogin();
         }
@@ -130,46 +131,46 @@ class MeetingNoteActionForm extends BaseComponent {
         }
         return (
             <div>
-               <CommonTitle>Konfirmasi Rapat Departemen {this.props.loggedUser.departement.name}</CommonTitle>
-                <Card title="Detail Notulen">
+                <CommonTitle>Konfirmasi Tema Pembahasan</CommonTitle>
+                <Card title="Detail Tema Pembahasan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
-                        <span className="tag is-info">{this.meetingNote.is_closed ? "Closed" : "Not Closed"}</span>
+                        <span className="tag is-info">{this.discussionTopic.is_closed ? "Closed" : "Not Closed"}</span>
                     </div>
-                    {this.state.showDetailNote? 
+                    {this.state.showDetailDiscussionTopic? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">
-                            <p>Detail Notulen</p>
-                            <button onClick={this.hideDetailNote} className="delete" aria-label="delete"></button>
+                            <p>Detail Tema Pembahasan</p>
+                            <button onClick={this.hideDetailIssue} className="delete" aria-label="delete"></button>
                         </div>
                         <div className="message-body has-background-light">
-                            <LabelField label="Waktu dan Tempat">
-                                <p>{this.meetingNote.place}, {dateStringDayMonthYearFromText(this.meetingNote.date)}</p>
+                        <LabelField label="Waktu">
+                                <p>{dateStringDayMonthYearFromText(this.discussionTopic.date)}</p>
                             </LabelField>
                             <LabelField label="Bidang">
-                                <p>{this.meetingNote.departement.name}</p>
+                                <p>{this.discussionTopic.departement.name}</p>
                             </LabelField>
                             <LabelField label="Pembahasan">
-                                <p>{this.meetingNote.content}</p>
+                                <p>{this.discussionTopic.content}</p>
                             </LabelField>
                             <LabelField label="Keputusan">
-                                <p>{this.meetingNote.decision}</p>
+                                <p>{this.discussionTopic.decision}</p>
                             </LabelField>
                             <LabelField label="Deadline">
-                                <p>{dateStringDayMonthYearFromText(this.meetingNote.deadline_date)}</p>
+                                <p>{dateStringDayMonthYearFromText(this.discussionTopic.deadline_date)}</p>
                             </LabelField>
                             <LabelField label="Penganggung Jawab">
-                                <p>{this.meetingNote.person_in_charge}</p>
+                                <p>{this.discussionTopic.person_in_charge}</p>
                             </LabelField>
 
                         </div>
                     </article>
                     :
-                    <a className="button" onClick={this.showDetailNote}>Tampilkan Detail Notulen</a>
+                    <a className="button" onClick={this.showDetailDiscussionTopic}>Tampilkan Detail Tema Pembahasan</a>
                     }
                 </Card>
-                <Card title="Formulir Konfirmasi">
-                    {this.meetingNote.action == null ?
+                <Card title="Formulir Tindak Lanjut">
+                    {this.discussionTopic.discussion_action == null ?
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                             <InputField required={true} label="Tanggal" name="date" type="date" />
                             <InputField required={true} label="Keterangan" name="description" type="textarea" />
@@ -178,14 +179,14 @@ class MeetingNoteActionForm extends BaseComponent {
                     :
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">
-                            <p>Detail Konfirmasi</p>
+                            <p>Detail Tindak Lanjut</p>
                         </div>
                         <div className="message-body has-background-light">
                             <LabelField label="Tanggal">
-                                <p>{this.meetingNote.action.date}</p>
+                                <p>{this.discussionTopic.discussion_action.date}</p>
                             </LabelField>
                             <LabelField label="Keterangan">
-                                <p>{this.meetingNote.action.description}</p>
+                                <p>{this.discussionTopic.discussion_action.description}</p>
                             </LabelField>
                         </div>
                     </article>
@@ -211,10 +212,10 @@ const mapStateToProps = state => {
     }
 }
 const mapDispatchToProps = dispatch => ({
-    //   getMeetingNotes: (request, app) => dispatch(actions.meetingNotesAction.list(request, app)),
+    //   getissues: (request, app) => dispatch(actions.issuesAction.list(request, app)),
 })
 
 export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(MeetingNoteActionForm));
+)(DiscussionActionForm));
