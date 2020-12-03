@@ -64,7 +64,7 @@ class DiscussionActionForm extends BaseComponent {
         }
 
         this.handleSuccessSubmit = (response) => {
-            this.discussionTopic.discussion_action = response.discussion_action;
+            this.discussionTopic.action = response.discussion_action;
             this.discussionTopic.is_closed = true;
             this.showInfo("SUCCESS");
             try {
@@ -170,7 +170,7 @@ class DiscussionActionForm extends BaseComponent {
                     }
                 </Card>
                 <Card title="Formulir Tindak Lanjut">
-                    {this.discussionTopic.discussion_action == null ?
+                    {this.discussionTopic.action == null ?
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                             <InputField required={true} label="Tanggal" name="date" type="date" />
                             <InputField required={true} label="Keterangan" name="description" type="textarea" />
@@ -183,10 +183,10 @@ class DiscussionActionForm extends BaseComponent {
                         </div>
                         <div className="message-body has-background-light">
                             <LabelField label="Tanggal">
-                                <p>{this.discussionTopic.discussion_action.date}</p>
+                                <p>{this.discussionTopic.action.date}</p>
                             </LabelField>
                             <LabelField label="Keterangan">
-                                <p>{this.discussionTopic.discussion_action.description}</p>
+                                <p>{this.discussionTopic.action.description}</p>
                             </LabelField>
                         </div>
                     </article>
