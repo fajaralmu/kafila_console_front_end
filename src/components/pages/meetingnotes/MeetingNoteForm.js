@@ -59,11 +59,12 @@ class MeetingNoteForm extends BaseComponent {
 
         }
 
-        this.handleSuccessSubmit = (response) => {
+        this.recordSaved = (response) => {
             this.showInfo("SUCCESS");
             try {
                 if (this.getRecordId() == null) {
-                    document.getElementById(FORM_ID).reset();
+                    this.handleSuccessGetRecord(response);
+                    this.props.history.push("/meetingnote/"+response.meeting_note.id);
                 }
             } catch (error) { }
         }
@@ -111,7 +112,7 @@ class MeetingNoteForm extends BaseComponent {
 
         this.storeMeetingNote = () => {
             this.commonAjax(this.meetingNoteService.store, this.meetingNote,
-                this.handleSuccessSubmit, this.handleErrorSubmit);
+                this.recordSaved, this.handleErrorSubmit);
         }
         this.loadRecord = () => {
             this.commonAjax(this.meetingNoteService.view, this.getRecordId(),

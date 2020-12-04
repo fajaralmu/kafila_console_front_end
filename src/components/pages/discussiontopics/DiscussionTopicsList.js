@@ -8,6 +8,7 @@ import Columns from '../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons';
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
+import { getDiffDaysToNow } from './../../../utils/DateUtil';
 
 class DiscussionTopicsList extends BaseManagementPage
 {
@@ -98,7 +99,20 @@ class DiscussionTopicsList extends BaseManagementPage
                                 <tbody>
                             {recordList.map((item, i) => {
                                 const indexBegin = (this.page - 1) * this.limit;
-                                return (<tr key={"record_"+i}>
+                                const deadlineDate = Date.parse(item.deadline_date);
+                                const style = {};
+                                try {
+                                    const diffDay = getDiffDaysToNow(new Date(deadlineDate));
+                                    
+                                    if (item.is_closed == false && diffDay <= 3 && diffDay > 0) {
+                                        style.backgroundColor = 'orange';
+                                    } else if (item.is_closed == false && diffDay < 0) {
+                                        style.backgroundColor = 'red';
+                                    }
+                                } catch (e) {
+                                    //
+                                }
+                                return (<tr key={"record_"+i} style={style}>
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>

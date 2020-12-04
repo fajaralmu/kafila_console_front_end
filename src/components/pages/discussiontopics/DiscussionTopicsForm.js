@@ -72,12 +72,21 @@ class DiscussionTopicsForm extends BaseManagementPage {
 
         this.handleSuccessGetRecord = (response) => {
             this.recordData = response;
+            this.discussionTopic = response.discussion_topic;
             this.setState({ isLoadingRecord: false });
+            
             const form = document.getElementById("form-management");
             const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
-                element.value = response.discussion_topic[element.name];
+                element.value = this.discussionTopic[element.name];
+                if (this.isClosed() == false && element.name != "content" && element.name != "decision") {
+                    element.setAttribute("disabled", "disabled");
+                }
+
+                if (this.isClosed() == true) {
+                    element.setAttribute("disabled", "disabled");
+                }
             }
         }
 
@@ -122,15 +131,15 @@ class DiscussionTopicsForm extends BaseManagementPage {
             <div>
                 <CommonTitle>Form Tema Pembahasan</CommonTitle>
                 <Card title={formTitle} >
-                {this.getRecordId() != null && this.recordData.discussion_topic != null ?
+                {this.getRecordId() != null && this.discussionTopic != null ?
                         <div className="level">
                             <div className="level-left">
                                 <div className="tags has-addons are-medium">
                                     <span className="tag is-dark">Status</span>
-                                    <span className="tag is-info">{this.recordData.discussion_topic.is_closed == true ? "Closed" : "Not Closed"}</span>
+                                    <span className="tag is-info">{this.discussionTopic.is_closed == true ? "Closed" : "Not Closed"}</span>
                                 </div></div>
                             <div className="level-right">
-                                <span className="tag is-primary is-medium">{this.recordData.discussion_topic.departement.name}</span>
+                                <span className="tag is-primary is-medium">{this.discussionTopic.departement==null?null:this.discussionTopic.departement.name}</span>
                             </div>
                         </div>
                         :
