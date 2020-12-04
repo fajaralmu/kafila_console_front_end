@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { Route, Switch, withRouter, Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
@@ -183,6 +183,12 @@ class MeetingNoteForm extends BaseComponent {
                                 this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
                         }
                     </form>
+                    <Link to={"/discussiontopics/create"} className="button is-primary" style={{marginTop:'10px', marginBottom:'10px'}}>
+                        <span className="icon">
+                            <i className="fas fa-plus"></i>
+                        </span>
+                        <span>{"Tambah Tema Pembahasan"}</span>
+                    </Link>
                 </Card>
             </div>
         )

@@ -168,7 +168,7 @@ class MeetingNoteActionForm extends BaseComponent {
                     <a className="button" onClick={this.showDetailNote}>Tampilkan Detail Notulen</a>
                     }
                 </Card>
-                <Card title="Formulir Konfirmasi">
+                <Card title="Penyelesaian/Pelaksanaan Kuputusan">
                     {this.meetingNote.action == null ?
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                             <InputField required={true} label="Tanggal" name="date" type="date" />
@@ -178,7 +178,7 @@ class MeetingNoteActionForm extends BaseComponent {
                     :
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">
-                            <p>Detail Konfirmasi</p>
+                            <p>Detail Penyelesaian/Pelaksanaan Kuputusan</p>
                         </div>
                         <div className="message-body has-background-light">
                             <LabelField label="Tanggal">

@@ -9,6 +9,7 @@ import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Loader from './components/widget/Loader';
 import Alert from './components/messages/Alert';
+import SideBar from './components/layout/SideBar';
 const blankFunc = function (e) { };
 
 class App extends Component {
@@ -175,7 +176,10 @@ class App extends Component {
             <Loader show={this.state.loading} />
           </div>
           <div className="columns">
-            <div className="column">
+            <div className="menu-container column is-one-fifth">
+              <SideBar  app={this}/>
+            </div>
+            <div className="column is-four-fifths">
               <Content app={this} />
             </div>
           </div>

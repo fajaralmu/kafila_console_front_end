@@ -12,6 +12,11 @@ class ManagementMenu extends BaseAdminPage {
         super(props);
     }
     componentDidMount() {
+        if (this.isLoggedUserNull() ||
+        this.props.loggedUser.role != 'admin'
+        ) {
+        this.backToLogin();
+    }
         document.title = "Management"
     }
     render() {

@@ -7,8 +7,7 @@ export default class BaseAdminPage extends BaseComponent
     }
 
     componentDidUpdate() {
-        if (this.props.loginStatus == false ||
-            this.props.loggedUser == null ||
+        if (this.isLoggedUserNull() ||
             this.props.loggedUser.role != 'admin'
             ) {
             this.backToLogin();
