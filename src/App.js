@@ -10,7 +10,7 @@ import Content from './components/layout/Content';
 import Loader from './components/widget/Loader';
 import Alert from './components/messages/Alert';
 import SideBar from './components/layout/SideBar';
-const blankFunc = function (e) { };
+import './components/layout/SideBar.css';
 
 class App extends Component {
 
@@ -163,7 +163,7 @@ class App extends Component {
     return (
       <div className="App">
         {this.state.showAlert ?
-          <Alert 
+          <Alert
             isError={this.alertIsError}
             yesOnly={this.alertIsYesOnly}
             title={this.alertTitle}
@@ -171,16 +171,19 @@ class App extends Component {
           >{this.alertBody}</Alert> :
           null}
         <Header app={this} />
-        <section style={{minHeight:'70vh'}}>
+        <section style={{ minHeight: '70vh' }}>
           <div >
             <Loader show={this.state.loading} />
           </div>
-          <div className="columns" style={{minHeight:'70vh', marginBottom:'1px'}}>
-            <div style={{paddingTop:'20px', paddingLeft:'20px'}} className="has-background-light menu-container column is-one-fifth">
-              <SideBar  app={this}/>
+          <div className="columns" style={{ minHeight: '70vh', marginBottom: '1px' }}>
+            <div style={{ paddingTop: '20px', paddingLeft: '20px' }}
+              className="menu-container column is-one-fifth has-background-water-ter">
+              
+                <SideBar app={this} />
+               
             </div>
             <div className="column is-four-fifths">
-              
+
               <Content app={this} />
             </div>
           </div>

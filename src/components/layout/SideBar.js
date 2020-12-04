@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import BaseComponent from './../BaseComponent';
-import './SideBar.css';
+
 import BaseMenus from './BaseMenus';
 
 export const MENUS = [
