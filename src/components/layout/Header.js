@@ -56,7 +56,7 @@ class Header extends BaseMenus {
                                 const iconClassName  = isMenuListShown?"fas fa-angle-up":"fas fa-angle-down";
 
                                 return (
-                                    <>
+                                    <React.Fragment key={"NavMenu_"+menu.name}>
                                         <p style={{ marginLeft: '10px' }} onClick={this.toggleMenuList} menu-name={menu.name} className="menu-label"> 
                                         <i style={{marginRight:'10px'}} className={iconClassName}    />  
                                         {menu.name}  </p>
@@ -66,7 +66,7 @@ class Header extends BaseMenus {
                                                 return <AppLink key={"header-link-" + j +"-"+i} loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
                                             })}
                                         </ul>: null}
-                                    </>)
+                                    </React.Fragment>)
                             })}
                         </div>
                         <div className="navbar-end">

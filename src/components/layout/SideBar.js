@@ -89,23 +89,23 @@ class SideBar extends BaseMenus {
                         const iconClassName  = isMenuListShown?"fas fa-angle-up":"fas fa-angle-down";
 
                         return (
-                            <>
-                            <p menu-name={menu.name} onClick={this.toggleMenuList} className="menu-label"> 
-                            <i style={{marginRight:'10px'}} className={iconClassName}    />                         
-                            {menu.name}
-                            </p>
-                            {isMenuListShown ?
-                                <ul className="menu-list">
-                                    {childs.map((menuChild, j) => {
-                                        return (<li key={"sidebar-menu-child-"+i+"-"+j}>
-                                            <Link to={menuChild.link}>
-                                                {menuChild.name}
-                                            </Link>
-                                        </li>)
-                                    })}
-                                </ul>
-                                :null}
-                            </>
+                            <React.Fragment key={"menu_"+menu.name}>
+                                <p key={menu.name} menu-name={menu.name} onClick={this.toggleMenuList} className="menu-label"> 
+                                    <i style={{marginRight:'10px'}} className={iconClassName}    />                         
+                                    {menu.name}
+                                </p>
+                                {isMenuListShown ?
+                                    <ul className="menu-list">
+                                        {childs.map((menuChild, j) => {
+                                            return (<li key={"sidebar-menu-child-"+i+"-"+j}>
+                                                <Link to={menuChild.link}>
+                                                    {menuChild.name}
+                                                </Link>
+                                            </li>)
+                                        })}
+                                    </ul>
+                                    :null}
+                           </React.Fragment>
                         )
                     })}
                 </aside>
