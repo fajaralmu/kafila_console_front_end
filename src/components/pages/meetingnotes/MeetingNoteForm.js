@@ -48,6 +48,19 @@ class MeetingNoteForm extends BaseComponent {
 
         }
 
+        this.isDiscussionTopicClosed = (id) => {
+            if (null == this.meetingNote || null == this.meetingNote.discussion_topics) {
+                return;
+            }
+            for (let i = 0; i < this.meetingNote.discussion_topics.length; i++) {
+                const element = this.meetingNote.discussion_topics[i];
+                if (element.id == id && element.is_closed) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         this.removeDiscussionTopic = (id) => {
             if (!window.confirm("Remove discussion topic (" + id + ")? ")) {
                 return;
@@ -87,6 +100,10 @@ class MeetingNoteForm extends BaseComponent {
                 } else {
                     element.value = null;
                 }
+
+                if (this.getRecordId() != null) {
+                    element.setAttribute("disabled", "disabled");
+                }
             }
         }
         this.saveFormTemporaryInputs = () => {
@@ -105,6 +122,9 @@ class MeetingNoteForm extends BaseComponent {
 
         this.onSubmit = (e) => {
             e.preventDefault();
+            if (this.getRecordId() != null) {
+                return;
+            }
             this.isSubmitting = true;
             const form = e.target;
             const app = this;
@@ -233,9 +253,6 @@ class MeetingNoteForm extends BaseComponent {
             this.commonAjax(this.meetingNoteService.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
         }
-        this.isClosed = () => {
-            return this.getRecordId() != null && this.meetingNote != null && this.meetingNote.is_closed == true;
-        }
     }
 
     componentWillMount() {
@@ -243,7 +260,7 @@ class MeetingNoteForm extends BaseComponent {
     }
 
     componentDidMount() {
-        document.title = "Meeting Note Form";
+        document.title = "Notulensi";
         if (this.getRecordId() != null) {
             this.loadRecord();
         }
@@ -252,6 +269,12 @@ class MeetingNoteForm extends BaseComponent {
     componentDidUpdate() {
         if (this.getRecordId() == null) {
             this.enableInputs();
+        }
+
+        if (this.getRecordId() == null && this.meetingNote != null) {
+            this.meetingNote = null;
+            this.form_temporary_inputs = {};
+            this.setState({ discussionTopicCount: [1] });
         }
         this.setFormTemporaryInputs();
     }
@@ -266,55 +289,49 @@ class MeetingNoteForm extends BaseComponent {
             return <h3>Please Wait...</h3>
         }
 
-        const loggedUser = this.props.loggedUser;
-        if (null == loggedUser) {
-            return <></>
+        if (null == this.isLoggedUserNull()) {
+            return null;
         }
         return (
             <div>
-                <CommonTitle>Notulensi Rapat Departemen {this.props.loggedUser.departement.name}</CommonTitle>
+                <CommonTitle>Notulensi Rapat {this.getRecordId() == null ?
+                    "Bidang " + this.getLoggedUserDepartementName() : null}</CommonTitle>
                 <Card title="Formulir Notulensi">
                     {this.getRecordId() != null && this.meetingNote != null ?
-                        <div className="level"><div className="level-left"></div>
-                            <div className="level-right">
-                                <span className="tag is-primary is-medium">{this.meetingNote.departement.name}</span>
-                            </div>
-                        </div>
-                        :
-                        null}
+                        <><FormUpperTag meetingNote={this.meetingNote} />
+
+                        </>
+
+                        : null}
+
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                         <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Tempat" name="place" />
-                        <CommonTitle>Tema Pembahasan</CommonTitle>
+                        {/* ---------- discussion topics forms ----------- */}
+                        <CommonTitle>Tema Pembahasan ({this.state.discussionTopicCount.length})</CommonTitle>
                         {this.state.discussionTopicCount.map((id, i) => {
-                            
+
                             return (
                                 <div className="box" key={"disc_topic_field_" + i}>
-                                    <h2>#{i + 1} - id:{id}</h2>
+                                    <h2>#{i + 1} - id:{id}
+
+                                        {this.isDiscussionTopicClosed(id) ?
+                                            <span className="tag is-primary"><i className="fas fa-check" />&nbsp;Closed</span> :
+                                            null
+                                        }
+
+                                    </h2>
                                     {this.getRecordId() == null && this.state.discussionTopicCount.length > 1 ?
                                         <a className="button is-danger" onClick={(e) => this.removeDiscussionTopic(id)}>
                                             Remove
-                                    </a>
+                                        </a>
                                         : null}
                                     <InputField className="discussion-topic" required={true} label="Pembahasan" name={"discussion_topic_" + id + "_content"} type="textarea" />
                                     <InputField className="discussion-topic" required={true} label="Keputusan" name={"discussion_topic_" + id + "_decision"} type="textarea" />
                                     <InputField className="discussion-topic" required={true} label="Deadline" name={"discussion_topic_" + id + "_deadline_date"} type="date" />
                                     <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={"discussion_topic_" + id + "_person_in_charge"} />
-                                
-                                    {this.getRecordId() != null?
-                                    <><Link to={"/discussiontopics/"+id} className="button is-warning">
-                                        <span className="icon">
-                                            <i className="fas fa-edit"></i>
-                                        </span>
-                                        <span>Edit</span>
-                                    </Link>
-                                    <Link to={"/discussiontopics/"+id+"/action"} className="button is-info">
-                                    <span className="icon">
-                                        <i className="fas fa-paper-plane"></i>
-                                    </span>
-                                    <span>Konfirmasi</span>
-                                </Link></>:
-                                    null}
+
+                                    {this.getRecordId() != null ? <LinkEditAndAction id={id} /> : null}
                                 </div>
                             )
                         })}
@@ -326,26 +343,93 @@ class MeetingNoteForm extends BaseComponent {
 
                     </form>
                     {this.getRecordId() == null ?
-                        <div className="has-text-centered">
-                            <a className="button is-primary"
-
-                                onClick={this.addDiscussionTopic}
-                                style={{ marginTop: '10px', marginBottom: '10px' }}>
-                                <span className="icon">
-                                    <i className="fas fa-plus"></i>
-                                </span>
-                                <span>{"Tambah Tema Pembahasan"}</span>
-                            </a>
-                        </div> : null}
+                        <ButtonAddDiscussionTopic addDiscussionTopic={this.addDiscussionTopic} /> : null}
                 </Card>
             </div>
         )
     }
 }
 
+const DiscussionTopicStatusInfo = (props) => {
+    const meetingNote = props.meetingNote;
+    if (null == meetingNote) return null;
+    const discussion_topics = meetingNote.discussion_topics;
+    if (null == discussion_topics) return null;
+    let closed = 0;
+    for (let i = 0; i < discussion_topics.length; i++) {
+        const element = discussion_topics[i];
+        if (element.is_closed) {
+            closed++;
+        }
+    }
+
+    return (
+        <table><tr >
+            <td style={{ border: 'none' }}>
+                <div className="tags has-addons are-medium">
+                    <span className="tag is-light">Closed</span>
+                    <span className="tag is-info">{closed}</span>
+                </div>
+            </td><td style={{ border: 'none' }}>
+                <div className="tags has-addons are-medium">
+                    <span className="tag is-light">Not Closed</span>
+                    <span className="tag is-danger">{discussion_topics.length - closed}</span>
+                </div></td>
+        </tr></table>
+    )
+}
+
+const ButtonAddDiscussionTopic = (props) => {
+    return (
+        <div className="has-text-centered">
+            <a className="button is-primary"
+
+                onClick={props.addDiscussionTopic}
+                style={{ marginTop: '10px', marginBottom: '10px' }}>
+                <span className="icon">
+                    <i className="fas fa-plus"></i>
+                </span>
+                <span>{"Tambah Tema Pembahasan"}</span>
+            </a>
+        </div>
+    )
+}
+
+const LinkEditAndAction = (props) => {
+    const id = props.id;
+    return (
+        <div className="buttons has-addons">
+            <Link to={"/discussiontopics/" + id} className="button is-warning">
+                <i className="fas fa-edit" />&nbsp;Edit
+            </Link>
+            <Link to={"/discussiontopics/" + id + "/action"} className="button is-primary">
+                <i className="fas fa-location-arrow" />&nbsp;Konfirmasi
+            </Link></div>
+    )
+}
 const InputField = (props) => {
 
     return formComponent.InputField(props);
+}
+
+const FormUpperTag = (props) => {
+    const meetingNote = props.meetingNote;
+    return (
+        <div>
+            <h3>
+                Notulen&nbsp;:&nbsp;
+                {meetingNote.user.display_name}
+            </h3>
+        <div className="level">
+            <div className="level-left" >
+                <DiscussionTopicStatusInfo meetingNote={meetingNote} />
+            </div>
+            <div className="level-right">
+                <span className="tag is-primary is-medium">{meetingNote.departement.name}</span>
+            </div>
+        </div>
+        </div>
+    );
 }
 
 

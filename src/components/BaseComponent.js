@@ -23,6 +23,10 @@ export default class BaseComponent extends Component {
         this.getLoggedUser = () => {
             return this.props.loggedUser;
         }
+        this.getLoggedUserDepartementName = () => {
+            if (this.isLoggedUserNull()) return null;
+            return this.getLoggedUser().departement.name;
+        }
         this.isLoggedUserNull = () => {
             return false == this.props.loginStatus || null == this.props.loggedUser;
         }

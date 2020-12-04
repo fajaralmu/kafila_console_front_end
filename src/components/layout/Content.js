@@ -10,7 +10,6 @@ import DepartementManagement from '../pages/management/DepartementManagement';
 import UsersManagementForm from '../pages/management/UsersManagementForm';
 import DepartementManagementForm from '../pages/management/DepartementManagementForm';
 import MeetingNoteForm from '../pages/meetingnotes/MeetingNoteForm';
-import MeetingNoteActionForm from '../pages/meetingnotes/MeetingNoteActionForm';
 import Profile from '../pages/Profile';
 import IssuesList from '../pages/issues/IssuesList';
 import IssuesForm from '../pages/issues/IssuesForm';
@@ -46,10 +45,6 @@ class Content extends Component {
             (props) =>
               <MeetingNoteForm app={this.props.app} />
           } />
-          <Route exact path="/meetingnote/:id/action" render={
-            (props) =>
-              <MeetingNoteActionForm app={this.props.app} />
-          } />
           {/* ======== issues ========= */}
           <Route exact path="/issues" render={
             (props) =>
@@ -71,10 +66,6 @@ class Content extends Component {
           <Route exact path="/discussiontopics" render={
             (props) =>
               <DiscussionTopicsList app={this.props.app} />
-          } />
-          <Route exact path="/discussiontopics/create" render={
-            (props) =>
-              <DiscussionTopicsForm app={this.props.app} />
           } />
           <Route exact path="/discussiontopics/:id" render={
             (props) =>

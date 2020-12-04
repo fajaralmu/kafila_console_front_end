@@ -23,11 +23,11 @@ class DiscussionTopicsForm extends BaseManagementPage {
             e.preventDefault();
             const form = e.target;
             const app = this;
-            this.showConfirmation("Save Data?").then(function(accepted) {
+            this.showConfirmation("Save Data?").then(function (accepted) {
                 if (accepted) {
                     app.storeRecord(form);
                 }
-            });            
+            });
         }
 
         this.storeRecord = (form) => {
@@ -56,7 +56,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
 
             if (this.getRecordId() == null) {
                 this.handleSuccessGetRecord(response);
-                this.props.history.push("/discussiontopics/"+response.discussion_topic.id);
+                this.props.history.push("/discussiontopics/" + response.discussion_topic.id);
             }
         }
         this.recordFailedToSave = (e) => {
@@ -74,7 +74,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
             this.recordData = response;
             this.discussionTopic = response.discussion_topic;
             this.setState({ isLoadingRecord: false });
-            
+
             const form = document.getElementById("form-management");
             const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
@@ -98,13 +98,13 @@ class DiscussionTopicsForm extends BaseManagementPage {
             this.commonAjax(this.discussionTopicService.view, this.getRecordId(),
                 this.handleSuccessGetRecord, this.handleErrorGetRecord);
         }
-        this.isClosed = ()=> {
+        this.isClosed = () => {
             return this.getRecordId() != null && this.discussionTopic != null && this.discussionTopic.is_closed == true;
         }
     }
 
     componentDidMount() {
-        if(!this.validateLoginStatus()){
+        if (!this.validateLoginStatus()) {
             return;
         }
         if (this.getRecordId() != null) {
@@ -132,7 +132,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
             <div>
                 <CommonTitle>Form Tema Pembahasan</CommonTitle>
                 <Card title={formTitle} >
-                {this.getRecordId() != null && this.discussionTopic != null ?
+                    {this.getRecordId() != null && this.discussionTopic != null ?
                         <div className="level">
                             <div className="level-left">
                                 <div className="tags has-addons are-medium">
@@ -140,26 +140,19 @@ class DiscussionTopicsForm extends BaseManagementPage {
                                     <span className="tag is-info">{this.discussionTopic.is_closed == true ? "Closed" : "Not Closed"}</span>
                                 </div></div>
                             <div className="level-right">
-                                <span className="tag is-primary is-medium">{this.discussionTopic.departement==null?null:this.discussionTopic.departement.name}</span>
+                                <span className="tag is-primary is-medium">{this.discussionTopic.departement == null ? null : this.discussionTopic.departement.name}</span>
                             </div>
                         </div>
                         :
                         null}
-                        <div style={{marginBottom:'20px'}}>
-                         <Link to={"/meetingnote/"+this.discussionTopic.note_id} className="button is-info">
-                            <span className="icon">
-                                <i className="fas fa-paper-plane"></i>
-                            </span>
-                            <span>Detail Notulen</span>
-                        </Link>
-                        </div>
+                    <LinkDetailMeetingNote note_id={this.discussionTopic.note_id} />
                     <form onSubmit={this.onSubmit} id="form-management" >
-                    <InputField required={true} label="Tanggal" name="date" type="date" />
+                        <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Pembahasan" name="content" type="textarea" />
                         <InputField required={true} label="Keputusan" name="decision" type="textarea" />
                         <InputField required={true} label="Deadline" name="deadline_date" type="date" />
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
-                        {this.isClosed()? null :
+                        {this.isClosed() ? null :
                             <SubmitResetButton submitText={
                                 this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
                         }
@@ -168,6 +161,20 @@ class DiscussionTopicsForm extends BaseManagementPage {
             </div>
         )
     }
+}
+
+export const LinkDetailMeetingNote = (props) => {
+    const note_id = props.note_id;
+    return (
+        <div style={{ marginBottom: '20px' }}>
+            <Link to={"/meetingnote/" + props.note_id} className="button is-info">
+                <span className="icon">
+                    <i className="fas fa-paper-plane"></i>
+                </span>
+                <span>Detail Notulen</span>
+            </Link>
+        </div>
+    )
 }
 
 const mapStateToProps = state => {

@@ -43,10 +43,6 @@ export const MENUS = [
             name: 'List',
             link: '/discussiontopics',
             authenticated: true,
-        }, {
-            name: 'Tambah',
-            link: '/discussiontopics/create',
-            authenticated: true,
         }]
     }, {
         name: 'Master Data',

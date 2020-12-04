@@ -155,12 +155,11 @@ class Dashboard extends BaseComponent {
                                     { text: 'No' },
                                     { text: 'id', alias:"Id", withFilter: true },
                                     { text: 'date', alias:"Tanggal", withFilter: true },
-                                    { text: 'content', alias:"Pembahasan", withFilter: true },
-                                    { text: 'decision', alias:"Keputusan", withFilter: true },
-                                    { text: 'deadline_date', alias:"Deadline", withFilter: true },
+                                    { text: 'place', alias:"Tempat", withFilter: true },
                                     { text: 'departement', alias:"Bidang", withFilter: true },
                                     { text: 'user', alias:"Notulis", withFilter: true },
                                     { text: 'Topik Diskusi', },
+                                    { text: 'Closed', },
                                     { text: 'action', },
                                 ]} />
                             <tbody>
@@ -183,21 +182,17 @@ class Dashboard extends BaseComponent {
                                     <td>{indexBegin + i + 1}</td>
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>
-                                    <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
-                                    <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td>
-                                    <td>{item.deadline_date}</td>
+                                    <td>{item.place}</td>
                                     <td>{item.departement?item.departement.name:"-"}</td>
                                     <td>{item.user?item.user.name:"-"}</td>
                                     <td>
-                                        {item.discussion_topics.length}
+                                        {item.discussion_topics?item.discussion_topics.length:0}
                                     </td>
                                     <td>
-                                        <Link to={"/meetingnote/" + item.id} className="button is-small" >
-                                            <i className="fas fa-edit"></i>
-                                        </Link>
-                                        <Link to={"/meetingnote/" + item.id+"/action"} className="button is-primary is-small" >
-                                            <i className="fas fa-location-arrow"></i>
-                                        </Link>
+                                        {calculateClosedTopic(item.discussion_topics)}
+                                    </td>
+                                    <td>
+                                        <LinkEditPage id={item.id}/>
                                     </td>
                                 </tr>)
                             })}
@@ -209,6 +204,28 @@ class Dashboard extends BaseComponent {
             </div>
         )
     }
+}
+
+const calculateClosedTopic = (discussion_topics) => {
+    if (null == discussion_topics) {
+        return 0;
+    }
+    let closed = 0;
+    for (let i = 0; i < discussion_topics.length; i++) {
+        const element = discussion_topics[i];
+        if (element.is_closed == true) {
+            closed++;
+        }
+    }   
+    return closed;
+}
+
+const LinkEditPage = (props) => {
+    return (
+        <Link to={"/meetingnote/" + props.id} className="button is-small" >
+        <i className="fas fa-edit"></i>
+    </Link>
+    )
 }
 
 const TableHeadWithFilter = (props) => {

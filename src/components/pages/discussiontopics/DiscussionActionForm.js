@@ -12,6 +12,7 @@ import { LabelField } from '../../forms/commons';
 import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
+import { LinkDetailMeetingNote } from './DiscussionTopicsForm';
 
 const FORM_ID = "form-input-discussion-action";
 class DiscussionActionForm extends BaseComponent {
@@ -133,14 +134,7 @@ class DiscussionActionForm extends BaseComponent {
                         <span className="tag is-dark">Status</span>
                         <span className="tag is-info">{this.discussionTopic.is_closed ? "Closed" : "Not Closed"}</span>
                     </div>
-                    <div style={{marginBottom:'20px'}}>
-                        <Link to={"/meetingnote/"+this.discussionTopic.note_id} className="button is-info">
-                            <span className="icon">
-                                <i className="fas fa-paper-plane"></i>
-                            </span>
-                            <span>Detail Notulen</span>
-                        </Link>
-                    </div>
+                    <LinkDetailMeetingNote note_id={this.discussionTopic.note_id} />
                     {this.state.showDetailDiscussionTopic? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
                         <div className="message-header">
