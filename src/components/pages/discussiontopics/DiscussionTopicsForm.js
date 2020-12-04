@@ -145,6 +145,14 @@ class DiscussionTopicsForm extends BaseManagementPage {
                         </div>
                         :
                         null}
+                        <div style={{marginBottom:'20px'}}>
+                         <Link to={"/meetingnote/"+this.discussionTopic.note_id} className="button is-info">
+                            <span className="icon">
+                                <i className="fas fa-paper-plane"></i>
+                            </span>
+                            <span>Detail Notulen</span>
+                        </Link>
+                        </div>
                     <form onSubmit={this.onSubmit} id="form-management" >
                     <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Pembahasan" name="content" type="textarea" />

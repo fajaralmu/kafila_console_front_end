@@ -160,7 +160,7 @@ class Dashboard extends BaseComponent {
                                     { text: 'deadline_date', alias:"Deadline", withFilter: true },
                                     { text: 'departement', alias:"Bidang", withFilter: true },
                                     { text: 'user', alias:"Notulis", withFilter: true },
-                                    { text: 'status', },
+                                    { text: 'Topik Diskusi', },
                                     { text: 'action', },
                                 ]} />
                             <tbody>
@@ -186,16 +186,12 @@ class Dashboard extends BaseComponent {
                                     <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
                                     <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td>
                                     <td>{item.deadline_date}</td>
-                                    <td>{item.departement.name}</td>
-                                    <td>{item.user.name}</td>
+                                    <td>{item.departement?item.departement.name:"-"}</td>
+                                    <td>{item.user?item.user.name:"-"}</td>
                                     <td>
-                                        {item.is_closed == true? 
-                                        <span className="tag is-info">Closed</span>
-                                        :
-                                        <span className="tag is-warning">Not Closed</span>}
+                                        {item.discussion_topics.length}
                                     </td>
                                     <td>
-                                        
                                         <Link to={"/meetingnote/" + item.id} className="button is-small" >
                                             <i className="fas fa-edit"></i>
                                         </Link>

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { Route, Switch, withRouter, Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import BaseComponent, { CommonTitle } from '../../BaseComponent';
 import Message from '../../messages/Message';
@@ -104,7 +104,7 @@ class DiscussionActionForm extends BaseComponent {
         if(!this.validateLoginStatus()){
             return;
         }
-        document.title = "Follow Up Issue";
+        document.title = "Konfirmasi Tema Pembahasan";
         if (this.getRecordId() == null) {
             this.backToLogin();
         }
@@ -132,6 +132,14 @@ class DiscussionActionForm extends BaseComponent {
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
                         <span className="tag is-info">{this.discussionTopic.is_closed ? "Closed" : "Not Closed"}</span>
+                    </div>
+                    <div style={{marginBottom:'20px'}}>
+                        <Link to={"/meetingnote/"+this.discussionTopic.note_id} className="button is-info">
+                            <span className="icon">
+                                <i className="fas fa-paper-plane"></i>
+                            </span>
+                            <span>Detail Notulen</span>
+                        </Link>
                     </div>
                     {this.state.showDetailDiscussionTopic? 
                     <article style={{ marginBottom: '10px' }} className="is-info">

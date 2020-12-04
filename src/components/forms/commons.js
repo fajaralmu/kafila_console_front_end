@@ -63,7 +63,7 @@ export const ButtonApplyResetFilter = (props) => {
 
 export const InputField = (props) => {
 
-    const className = "input input-form-field";
+    const className = "input input-form-field "+props.className;
     return (
         <div className="field is-horizontal">
             <div className="field-label is-normal">
