@@ -9,14 +9,22 @@ export default class BaseComponent extends Component {
     
         this.validateLoginStatus = () => {
             if (!authenticated) {
-                return;
+                return true;
             }
             if (this.props.loginStatus != true || this.props.loggedUser == null) {
                 this.backToLogin();
+                return false;
             }
+            return true;
         }
         this.getParentApp = () => {
             return this.props.app;
+        }
+        this.getLoggedUser = () => {
+            return this.props.loggedUser;
+        }
+        this.isLoggedUserNull = () => {
+            return false == this.props.loginStatus || null == this.props.loggedUser;
         }
         this.showConfirmation = (body) => {
             return new Promise((resolve, reject) =>{

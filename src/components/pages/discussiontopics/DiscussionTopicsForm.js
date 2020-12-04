@@ -104,14 +104,15 @@ class DiscussionTopicsForm extends BaseManagementPage {
     }
 
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         if (this.getRecordId() != null) {
             this.loadRecord();
         }
         document.title = "Form Tema Pembahasan";
     }
 
-    componentDidUpdate() {
-    }
     render() {
 
         if (this.state.recordNotFound) {

@@ -53,18 +53,24 @@ class DiscussionTopicsList extends BaseManagementPage
     }
 
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         this.loadRecords();
         document.title = "Daftar Tema Pembahasan";
     }
 
     //override baseAdminPage
     componentDidUpdate(){
-        if (this.props.loginStatus == false || this.props.loggedUser == null ) {
+        if (this.props.loginStatus == false || this.isLoggedUserNull() ) {
             this.backToLogin();
         }
     }
 
     render() {
+        if (null == this.props.loggedUser) {
+            return null;
+        }
         const navButtons = this.createNavButton();
         const recordData = this.recordData != null ? this.recordData : null;
         const recordList = recordData == null ||

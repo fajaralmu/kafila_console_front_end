@@ -53,18 +53,23 @@ class IssuesList extends BaseManagementPage
     }
 
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         this.loadRecords();
         document.title = "Daftar Aduan";
     }
 
     //overrid baseAdminPage
     componentDidUpdate(){
-        if (this.props.loginStatus == false || this.props.loggedUser == null ) {
+        if (this.isLoggedUserNull() ) {
             this.backToLogin();
         }
     }
 
     render() {
+        if(this.isLoggedUserNull()) {return null;}
+
         const navButtons = this.createNavButton();
         const recordData = this.recordData != null ? this.recordData : null;
         const recordList = recordData == null ||

@@ -100,21 +100,17 @@ class DiscussionActionForm extends BaseComponent {
         }
     }
 
-    componentWillMount() {
-        this.validateLoginStatus();
-    }
-
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         document.title = "Follow Up Issue";
         if (this.getRecordId() == null) {
             this.backToLogin();
         }
         this.loadRecord();
     }
-
-    componentDidUpdate() {
-    }
-
+ 
     render() {
 
         if (this.state.recordNotFound) {

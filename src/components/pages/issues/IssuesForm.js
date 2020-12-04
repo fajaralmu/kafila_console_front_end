@@ -122,6 +122,9 @@ class IssuesForm extends BaseAdminPage {
     }
 
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         this.loadDepartements();
         document.title = "Form Aduan";
     }

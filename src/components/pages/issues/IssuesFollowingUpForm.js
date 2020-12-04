@@ -97,22 +97,18 @@ class IssuesFollowingUpForm extends BaseComponent {
         this.isClosed = () => {
             return this.getRecordId() != null && this.issue != null && this.issue.is_closed == true;
         }
-    }
-
-    componentWillMount() {
-        this.validateLoginStatus();
-    }
-
+    } 
     componentDidMount() {
+        if(!this.validateLoginStatus()){
+            return;
+        }
         document.title = "Follow Up Issue";
         if (this.getRecordId() == null) {
             this.backToLogin();
         }
         this.loadRecord();
     }
-
-    componentDidUpdate() {
-    }
+ 
 
     render() {
 
@@ -124,9 +120,8 @@ class IssuesFollowingUpForm extends BaseComponent {
             return <h3>Please Wait...</h3>
         }
 
-        const loggedUser = this.props.loggedUser;
-        if (null == loggedUser) {
-            return <></>
+        if(this.isLoggedUserNull()){
+            return null;
         }
         return (
             <div>
