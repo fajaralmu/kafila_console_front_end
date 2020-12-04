@@ -171,15 +171,16 @@ class App extends Component {
           >{this.alertBody}</Alert> :
           null}
         <Header app={this} />
-        <section className="container" style={{minHeight:'70vh'}}>
-          <div style={{height:'50px'}}>
+        <section style={{minHeight:'70vh'}}>
+          <div >
             <Loader show={this.state.loading} />
           </div>
-          <div className="columns">
-            <div className="menu-container column is-one-fifth">
+          <div className="columns" style={{minHeight:'70vh', marginBottom:'1px'}}>
+            <div style={{paddingTop:'20px', paddingLeft:'20px'}} className="has-background-light menu-container column is-one-fifth">
               <SideBar  app={this}/>
             </div>
             <div className="column is-four-fifths">
+              
               <Content app={this} />
             </div>
           </div>

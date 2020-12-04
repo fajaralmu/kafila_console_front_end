@@ -22,8 +22,8 @@ export default class Loader extends Component {
       return null;
     }
     return (
-      <div style={{width:'100%', height:'50px',  color:'#ccc', textAlign:'center'}}>
-        <div style={{position:'fixed', zIndex:10000}}>
+      // <div style={{width:'100%', height:'50px',  color:'#ccc', textAlign:'center'}}>
+        <div style={{position:'fixed', zIndex:10000, color: '#ccc'}}>
           <div className="columns" style={{width:'min-content'}}>
           <div className="column">
             <div className="lds-ring"  ><div></div><div></div><div></div><div></div></div> 
@@ -31,7 +31,7 @@ export default class Loader extends Component {
           <div className="column"><span style={{fontSize:'2em'}}>Loading</span></div>
           </div>
         </div>
-      </div>
+      // </div>
     )
   }
 }
