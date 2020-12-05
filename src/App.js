@@ -176,7 +176,7 @@ class App extends Component {
             <Loader show={this.state.loading} />
           </div>
           <div className="columns" style={{ minHeight: '70vh', marginBottom: '1px' }}>
-            <div style={{ paddingTop: '20px', paddingLeft: '20px' }}
+            <div style={{ paddingTop: '20px', paddingLeft: '20px', borderRight:'solid 2px #ccc' }}
               className="menu-container column is-one-fifth has-background-water-ter">
               
                 <SideBar app={this} />

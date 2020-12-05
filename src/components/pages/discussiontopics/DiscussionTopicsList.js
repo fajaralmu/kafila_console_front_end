@@ -96,7 +96,8 @@ class DiscussionTopicsList extends BaseManagementPage {
                                         { text: 'decision', alias: "Keputusan", withFilter: true },
                                         { text: 'deadline_date', alias: "Deadline", withFilter: true },
                                         { text: 'departement', alias: "Bidang", withFilter: true },
-                                        { text: 'status' },
+                                        { text: 'is_closed', alias: 'Status', withFilter: true },
+                                        { text: 'closed_date', alias: 'Closed', withFilter: true },
                                         { text: 'action' },
                                         { text: 'opsi' },
                                     ]} />
@@ -126,19 +127,20 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             <td>{item.departement.name}</td>
                                             <td>
                                                 {item.is_closed == true ?
-                                                <>
                                                     <span className="tag is-info">Closed</span>
-                                                    {item.closed_date}
-                                                  </>  :
+                                                    :
                                                     <span className="tag is-warning">Not Closed</span>}
+                                            </td>
+                                            <td>
+                                                {item.closed_date}
                                             </td>
                                             <td><LinkEditAndAction id={item.id} />
                                             </td>
                                             <td>
-                                                <Link to={"/meetingnote/"+item.note_id} 
-                                                className="button is-light is-small">
+                                                <Link to={"/meetingnote/" + item.note_id}
+                                                    className="button is-light is-small">
                                                     <span className="icon">
-                                                        <i className="fas fa-clipboard"/>
+                                                        <i className="fas fa-clipboard" />
                                                     </span>
                                                     <span>Notulensi</span>
                                                 </Link>

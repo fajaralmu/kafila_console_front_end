@@ -99,7 +99,8 @@ class IssuesList extends BaseManagementPage
                                     { text: 'email', withFilter: true },
                                     { text: 'departement', withFilter: true },
                                     { text: 'issue_input', withFilter: true },
-                                    { text: 'status'},
+                                    { text: 'is_closed', alias:'Status', withFilter: true},
+                                    { text: 'closed_date', alias:'Closed', withFilter: true},
                                     { text: 'action'}
                                 ]} />
                                 <tbody>
@@ -110,7 +111,7 @@ class IssuesList extends BaseManagementPage
                                     <td>{item.id}</td>
                                     <td>{item.date}</td>
                                     <td>{item.place}</td>
-                                    <td>{item.content}</td>
+                                    <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
                                     <td>{item.issuer}</td>
                                     <td>{item.email}</td>
                                     <td>{item.departement.name}</td>
@@ -120,6 +121,9 @@ class IssuesList extends BaseManagementPage
                                         <span className="tag is-info">Closed</span>
                                         :
                                         <span className="tag is-warning">Not Closed</span>}
+                                    </td>
+                                    <td>
+                                        {item.closed_date}
                                     </td>
                                     <td>
                                         {isAdmin?

@@ -3,14 +3,36 @@ import React, { Component } from 'react';
 import './FormControls.css'
 import { replaceString } from '../../utils/StringUtil';
 
+export const CapitalizeFirstLetter = (rawString) => {
+    if (null == rawString || rawString.length <= 1) {
+        return rawString;
+    }
+    const string = new String(rawString);
+    
+    let splitted = string.split("_");
+    if (splitted.length > 1) {
+        let result = "";
+        for (let i = 0; i < splitted.length; i++) {
+            const element = splitted[i];
+            result+=CapitalizeFirstLetter(element)+ " ";
+        }
+
+        return result;
+    }
+    let result = (string).substring(0,1).toUpperCase();
+    result+= (string).substring(1, string.length);
+
+    return result;
+}
+
 export const TableHeadWithFilter = (props) => {
     const headers = props.headers;
     const onButtonOrderClick = props.onButtonOrderClick;
     return (<thead>
         <tr>
             {headers.map((header, i) => {
-                
-                return <th key={"TH_"+i}>{header.alias == null ?replaceString(header.text.toUpperCase(), "_", " ") : header.alias}
+                const label = header.alias?header.alias:header.text;
+                return <th key={"TH_"+i}>{CapitalizeFirstLetter(label)}
 
                     {header.withFilter ?
                        <div className="field has-addons">

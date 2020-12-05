@@ -54,7 +54,7 @@ class Login extends Component {
 
                 <div className="columns is-centered">
 
-                    <div style={{ marginTop: '10px', marginBottom: '10px' }} className="column is-5-tablet is-4-desktop is-3-widescreen">
+                    <div style={{ marginTop: '10px', marginBottom: '10px' }} className="column is-5-tablet is-5-desktop is-5-widescreen">
                         <form id="formLogin" onSubmit={this.handleSubmit} className="box">
                             <div className="field">
                                 <label   className="label">Email</label>
