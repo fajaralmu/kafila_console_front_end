@@ -23,17 +23,16 @@ export default class Card extends Component {
     }
 
     render() {
+        const iconClassName = this.props.headerIconClassName;
+        const iconOnClick = this.props.headerIconOnClick;
+
         return (
-            <div className="card" style={{ margin: '10px', ...this.props.style}}>
+            <div className="card" style={{ margin: '10px', ...this.props.style }}>
                 <header className="card-header">
                     <p className="card-header-title">
                         {this.props.title ? this.props.title : "Card Title"}
                     </p>
-                    <a className="card-header-icon" aria-label="more options">
-                        <span className="icon">
-                            <i className="fas fa-angle-down" aria-hidden="true"></i>
-                        </span>
-                    </a>
+                    {null == iconClassName ? null : <HeaderIcon className={iconClassName} onClick={iconOnClick} /> }
                 </header>
                 <div className="card-content">
                     <div className="content">
@@ -57,4 +56,14 @@ export default class Card extends Component {
             </div>
         )
     }
+}
+
+const HeaderIcon = (props) => {
+    return (
+        <a className="card-header-icon" aria-label="more options" onClick={props.onClick}>
+            <span className="icon">
+                <i className={props.className} aria-hidden="true"></i>
+            </span>
+        </a>
+    );
 }

@@ -82,13 +82,15 @@ export default class BaseManagementPage extends BaseAdminPage {
                     </Link>
             )
         }
-        this.linkToFormEdit = (link) => {
+        this.linkToFormEdit = (link, withText = true) => {
             return (
                 <Link to={link} className="button is-warning is-small">
                         <span className="icon">
                             <i className="fas fa-edit"></i>
                         </span>
+                        {withText?
                         <span>Edit</span>
+                        :null}
                     </Link>
             )
         }
@@ -96,8 +98,8 @@ export default class BaseManagementPage extends BaseAdminPage {
         this.buttonsModifyAndDelete = (editLink, id) => {
             return (
                 <div className="buttons has-addons">
-                    {this.linkToFormEdit(editLink)}
-                    {this.buttonDeleteRecord(id)}
+                    {this.linkToFormEdit(editLink, false)}
+                    {this.buttonDeleteRecord(id, false)}
                 </div>
             )
         }

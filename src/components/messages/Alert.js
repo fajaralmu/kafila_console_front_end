@@ -42,8 +42,8 @@ class Alert extends Component {
         }
         return (
             <>
-                <Backdrop>
-                    <form onSubmit="return false;">
+                <ModalBackdrop>
+                    <form onSubmit={(e)=>e.preventDefault()}>
                     <div className='modal-card'>
                         <header className={headerClassName}>
                             <p className='modal-card-title has-text-white'>{title}</p>
@@ -54,7 +54,7 @@ class Alert extends Component {
                         <footer className='modal-card-foot'>
                             <div style={{margin:'auto'}}>
                                 <button id="button-alert-yes" type="submit" 
-                                onClick={this.onYes} className={this.props.yesOnly?"button":"button is-link"}>
+                                onClick={this.onYes} className={this.props.yesOnly||this.props.isError?"button" : "button is-link"}>
                                     Yes
                                 </button>
                                 {this.props.yesOnly?null:<button onClick={this.onNo} className="button">No</button>}
@@ -63,13 +63,13 @@ class Alert extends Component {
                     </div>
                     </form>
 
-                </Backdrop>
+                </ModalBackdrop>
             </>
         )
     }
 }
 
-function Backdrop(props) {
+export const ModalBackdrop = (props) => {
     return (
         <div className="modal is-active has-text-centered" style={{ backgroundColor: 'rgba(100,100,100,0.7)' }} >
             <div className="modal-background"></div>

@@ -128,7 +128,7 @@ class DiscussionActionForm extends BaseComponent {
         }
         return (
             <div>
-                <CommonTitle>Konfirmasi Tema Pembahasan</CommonTitle>
+                <CommonTitle>Penyelesaian/Pelaksanaan Keputusan</CommonTitle>
                 <Card title="Detail Tema Pembahasan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
@@ -167,7 +167,7 @@ class DiscussionActionForm extends BaseComponent {
                     <a className="button" onClick={this.showDetailDiscussionTopic}>Tampilkan Detail Tema Pembahasan</a>
                     }
                 </Card>
-                <Card title="Formulir Tindak Lanjut">
+                <Card title="Penyelesaian/Pelaksanaan Keputusan">
                     {this.discussionTopic.action == null ?
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
                             <InputField required={true} label="Tanggal" name="date" type="date" />

@@ -133,9 +133,10 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             <td><LinkEditAndAction id={item.id} />
                                             </td>
                                             <td>
-                                                <Link to={"/meetingnote/"+item.note_id} className="button is-light">
+                                                <Link to={"/meetingnote/"+item.note_id} 
+                                                className="button is-light is-small">
                                                     <span className="icon">
-                                                        <i className="fas fa-list-ul"/>
+                                                        <i className="fas fa-clipboard"/>
                                                     </span>
                                                     <span>Notulensi</span>
                                                 </Link>

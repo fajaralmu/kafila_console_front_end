@@ -64,8 +64,9 @@ export const ButtonApplyResetFilter = (props) => {
 export const InputField = (props) => {
 
     const className = "input input-form-field "+props.className;
+    const orientation = props.orientation?props.orientation:"horizontal";
     return (
-        <div className="field is-horizontal">
+        <div className={"field is-"+orientation}>
             <div className="field-label is-normal">
                 <label className="label">{props.label ? props.label : "Input"}</label>
                   
@@ -148,7 +149,7 @@ export const SubmitResetButton = (props) => {
             <div className="field-label is-normal" />
             <div className="field-body">
                 <div className="field">
-                    <button className="button is-link" type="submit" >
+                    <button className="button is-link" type="submit" style={{marginRight:'10px'}} >
                         <span className="icon"><i className="fas fa-save"></i></span>
                         <span>{submitValue}</span>
                     </button>

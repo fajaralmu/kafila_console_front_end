@@ -17,6 +17,7 @@ import IssuesFollowingUpForm from '../pages/issues/IssuesFollowingUpForm';
 import DiscussionActionForm from '../pages/discussiontopics/DiscussionActionForm';
 import DiscussionTopicsForm from '../pages/discussiontopics/DiscussionTopicsForm';
 import DiscussionTopicsList from '../pages/discussiontopics/DiscussionTopicsList';
+import MeetingNoteList from '../pages/meetingnotes/MeetingNoteList';
 
 class Content extends Component {
 
@@ -37,9 +38,14 @@ class Content extends Component {
             (props) =>
               <Dashboard app={this.props.app} />
           } />
+          {/* ========= meeting notes ========= */}
           <Route exact path="/meetingnote/create" render={
             (props) =>
               <MeetingNoteForm app={this.props.app} />
+          } />
+          <Route exact path="/meetingnote" render={
+            (props) =>
+              <MeetingNoteList app={this.props.app} />
           } />
           <Route exact path="/meetingnote/:id" render={
             (props) =>

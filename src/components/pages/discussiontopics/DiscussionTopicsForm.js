@@ -169,9 +169,9 @@ export const LinkDetailMeetingNote = (props) => {
         <div style={{ marginBottom: '20px' }}>
             <Link to={"/meetingnote/" + props.note_id} className="button is-info">
                 <span className="icon">
-                    <i className="fas fa-paper-plane"></i>
+                    <i className="fas fa-clipboard"></i>
                 </span>
-                <span>Detail Notulen</span>
+                <span>Detail Notulensi</span>
             </Link>
         </div>
     )

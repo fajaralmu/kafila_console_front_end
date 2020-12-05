@@ -20,6 +20,10 @@ export const MENUS = [
     }, {
         name: 'Notulensi',
         children: [{
+            name: 'List',
+            link: '/meetingnote',
+            authenticated: true,
+        },{
             name: 'Tambah Notulensi',
             link: '/meetingnote/create',
             authenticated: true,

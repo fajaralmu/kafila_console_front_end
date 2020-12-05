@@ -42,6 +42,18 @@ export default class BaseComponent extends Component {
             });
             
         }
+        this.showConfirmationDanger = (body) => {
+            return new Promise((resolve, reject) =>{
+                const onYes = function(e) {
+                    resolve(true);
+                }
+                const onNo = function(e) {
+                    resolve(false);
+                }
+                this.parentApp.showAlertError("Confirmation", body, false, onYes, onNo);
+            });
+            
+        }
         this.showInfo = (body) => {
             this.parentApp.showAlert("Info", body, true, function(){});
         }
@@ -127,5 +139,5 @@ export default class BaseComponent extends Component {
 }
 
 export const CommonTitle = (props) => {
-    return <h2 style={{ textAlign: 'center' }}>{props.children}</h2>
+    return <h2 style={{ textAlign: 'left', marginLeft:'10px' }}>{props.children}</h2>
 }
