@@ -31,7 +31,7 @@ class Header extends BaseMenus {
                 }
             });
         }
-    } 
+    }
     render() {
 
         return (
@@ -53,19 +53,19 @@ class Header extends BaseMenus {
                                 const childs = this.extractChildren(menu.children);
                                 if (childs == null || childs.length == 0) { return null; }
                                 const isMenuListShown = this.isMenuListShown(menu.name);
-                                const iconClassName  = isMenuListShown?"fas fa-angle-up":"fas fa-angle-down";
+                                const iconClassName = isMenuListShown ? "fas fa-angle-up" : "fas fa-angle-down";
 
                                 return (
-                                    <React.Fragment key={"NavMenu_"+menu.name}>
-                                        <p style={{ marginLeft: '10px' }} onClick={this.toggleMenuList} menu-name={menu.name} className="menu-label"> 
-                                        <i style={{marginRight:'10px'}} className={iconClassName}    />  
-                                        {menu.name}  </p>
+                                    <React.Fragment key={"NavMenu_" + menu.name}>
+                                        <p style={{ marginLeft: '10px' }} onClick={this.toggleMenuList} menu-name={menu.name} className="menu-label">
+                                            <i style={{ marginRight: '10px' }} className={iconClassName} />
+                                            {menu.name}  </p>
                                         {isMenuListShown ?
-                                        <ul className="menu-list">
-                                            {childs.map((linkProperty, j) => {
-                                                return <AppLink key={"header-link-" + j +"-"+i} loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
-                                            })}
-                                        </ul>: null}
+                                            <ul className="menu-list">
+                                                {childs.map((linkProperty, j) => {
+                                                    return <AppLink key={"header-link-" + j + "-" + i} loginStatus={this.props.loginStatus} loggedUser={this.props.loggedUser} linkProperty={linkProperty} />
+                                                })}
+                                            </ul> : null}
                                     </React.Fragment>)
                             })}
                         </div>
@@ -108,6 +108,7 @@ const AppLink = (props) => {
     const linkProperty = props.linkProperty;
     const loginStatus = props.loginStatus;
     const loggedUser = props.loggedUser
+    const iconClassName = linkProperty.iconClassName ? linkProperty.iconClassName : 'fas fa-folder';
     if (null == linkProperty.link) {
         return null;
     }
@@ -120,7 +121,12 @@ const AppLink = (props) => {
     }
     return (
         <Link key={linkProperty.name + "LINK"} className="navbar-item"
-            to={linkProperty.link} >{linkProperty.name}</Link>
+            to={linkProperty.link} >
+            <span className="icon"><i className={iconClassName} /></span>
+            <span>
+                {linkProperty.name}
+            </span>
+        </Link>
     )
 }
 

@@ -11,10 +11,12 @@ export const MENUS = [
         children: [
             {
                 name: 'Home',
-                link: '/home'
+                link: '/home',
+                iconClassName: 'fas fa-home',
             }, {
                 name: 'Dashboard',
                 link: '/dashboard',
+                iconClassName: 'fas fa-tachometer-alt',
                 authenticated: true,
             }]
     }, {
@@ -23,10 +25,12 @@ export const MENUS = [
             name: 'List',
             link: '/meetingnote',
             authenticated: true,
+            iconClassName:'fas fa-list',
         },{
             name: 'Tambah Notulensi',
             link: '/meetingnote/create',
             authenticated: true,
+            iconClassName: 'fas fa-plus-square',
         }]
     }, {
         name: 'Aduan',
@@ -34,11 +38,13 @@ export const MENUS = [
             name: 'List',
             link: '/issues',
             authenticated: true,
+            iconClassName:'fas fa-list',
         },
         {
             name: 'Tambah',
             link: '/issues/create',
             authenticated: true,
+            iconClassName: 'fas fa-plus-square',
             role: 'admin'
         }]
     }, {
@@ -47,6 +53,7 @@ export const MENUS = [
             name: 'List',
             link: '/discussiontopics',
             authenticated: true,
+            iconClassName:'fas fa-list',
         }]
     }, {
         name: 'Master Data',
@@ -55,18 +62,21 @@ export const MENUS = [
                 name: 'Menu',
                 link: '/management',
                 authenticated: true,
-                role: 'admin'
+                role: 'admin',
+                // iconClassName: 'fas fa-database'
             },
             {
                 name: 'User',
                 link: '/management/users',
                 authenticated: true,
-                role: 'admin'
+                role: 'admin',
+                iconClassName:'fas fa-users',
             }, {
                 name: 'Bidang',
                 link: '/management/departements',
                 authenticated: true,
-                role: 'admin'
+                role: 'admin',
+                iconClassName:'fas fa-object-group',
             }]
     }
 ]
@@ -99,7 +109,12 @@ class SideBar extends BaseMenus {
                                         {childs.map((menuChild, j) => {
                                             return (<li key={"sidebar-menu-child-"+i+"-"+j}>
                                                 <Link to={menuChild.link}>
-                                                    {menuChild.name}
+                                                    <span className="icon">
+                                                        <i className={menuChild.iconClassName?menuChild.iconClassName:"fas fa-folder"}/>
+                                                    </span>
+                                                    <spam>
+                                                        {menuChild.name}
+                                                    </spam>
                                                 </Link>
                                             </li>)
                                         })}
