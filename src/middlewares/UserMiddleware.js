@@ -71,7 +71,9 @@ export const requestAppIdMiddleware = store => next => action => {
                 let newAction = Object.assign({}, action, { payload: {loginStatus: false, loginKey:null, requestId:requestId, ...responseJson }});
                 delete newAction.meta;
                 store.dispatch(newAction);
-            })
+            }).catch((error)=>{
+                alert("Error requesting application: "+error);
+            });
          })
         .finally(param => action.meta.app.endLoading());
 }

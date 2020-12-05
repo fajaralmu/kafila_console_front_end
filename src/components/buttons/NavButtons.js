@@ -29,7 +29,7 @@ class NavButtons extends Component
                     const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
                     return (
                         <a key={"nav_btn_"+i} onClick={()=>{this.onClick(data.index)}} className={className}>{data.index}</a>
-                    )
+                    )  
                 })}
             </div>
         )

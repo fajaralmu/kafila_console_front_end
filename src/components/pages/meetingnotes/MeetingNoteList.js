@@ -116,10 +116,10 @@ class MeetingNoteList extends BaseManagementPage {
                                     <td>{item.departement?item.departement.name:"-"}</td>
                                     <td>{item.user?item.user.name:"-"}</td>
                                     <td>
-                                        {item.discussion_topics?item.discussion_topics.length:0}
+                                        {item.discussion_topics_count}
                                     </td>
                                     <td>
-                                        {calculateClosedTopic(item.discussion_topics)}
+                                        {item.discussion_topics_closed_count}
                                     </td>
                                     <td>
                                         <LinkEditPage id={item.id}/>
@@ -135,20 +135,7 @@ class MeetingNoteList extends BaseManagementPage {
         )
     }
 }
-
-const calculateClosedTopic = (discussion_topics) => {
-    if (null == discussion_topics) {
-        return 0;
-    }
-    let closed = 0;
-    for (let i = 0; i < discussion_topics.length; i++) {
-        const element = discussion_topics[i];
-        if (element.is_closed == true) {
-            closed++;
-        }
-    }   
-    return closed;
-}
+ 
 
 const LinkEditPage = (props) => {
     return (
