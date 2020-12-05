@@ -77,57 +77,57 @@ class MeetingNoteList extends BaseManagementPage {
                         <Columns cells={[
                             ButtonApplyResetFilter(), navButtons
                         ]} />
-                        <div style={{overflow:'scroll'}}>
-                        <table style={{   }} className="table">
-                            <TableHeadWithFilter
-                                onButtonOrderClick={this.onButtonOrderClick}
-                                headers={[
-                                    { text: 'No' },
-                                    { text: 'id', alias:"Id", withFilter: true },
-                                    { text: 'date', alias:"Tanggal", withFilter: true },
-                                    { text: 'place', alias:"Tempat", withFilter: true },
-                                    { text: 'departement', alias:"Bidang", withFilter: true },
-                                    { text: 'user', alias:"Notulis", withFilter: true },
-                                    { text: 'Topik Diskusi', },
-                                    { text: 'Closed', },
-                                    { text: 'action', },
-                                ]} />
-                            <tbody>
-                            {recordList.map((item, i) => {
-                                const indexBegin = (this.page - 1) * this.limit;
-                                const deadlineDate = Date.parse(item.deadline_date);
-                                const style = {};
-                                try {
-                                    const diffDay = getDiffDaysToNow(new Date(deadlineDate));
-                                    
-                                    if (item.is_closed == false && diffDay <= 3 && diffDay > 0) {
-                                        style.backgroundColor = 'orange';
-                                    } else if (item.is_closed == false && diffDay < 0) {
-                                        style.backgroundColor = 'red';
-                                    }
-                                } catch (e) {
-                                    //
-                                }
-                                return (<tr key={"record-meeting-note-"+i} style={style}>
-                                    <td>{indexBegin + i + 1}</td>
-                                    <td>{item.id}</td>
-                                    <td>{item.date}</td>
-                                    <td>{item.place}</td>
-                                    <td>{item.departement?item.departement.name:"-"}</td>
-                                    <td>{item.user?item.user.name:"-"}</td>
-                                    <td>
-                                        {item.discussion_topics_count}
-                                    </td>
-                                    <td>
-                                        {item.discussion_topics_closed_count}
-                                    </td>
-                                    <td>
-                                        <LinkEditPage id={item.id}/>
-                                    </td>
-                                </tr>)
-                            })}
-                            </tbody>
-                        </table>
+                        <div style={{ overflow: 'scroll' }}>
+                            <table style={{}} className="table">
+                                <TableHeadWithFilter
+                                    onButtonOrderClick={this.onButtonOrderClick}
+                                    headers={[
+                                        { text: 'No' },
+                                        { text: 'id', alias: "Id", withFilter: true },
+                                        { text: 'date', alias: "Tanggal", withFilter: true },
+                                        { text: 'place', alias: "Tempat", withFilter: true },
+                                        { text: 'departement', alias: "Bidang", withFilter: true },
+                                        { text: 'user', alias: "Notulis", withFilter: true },
+                                        { text: 'Topik Diskusi', },
+                                        { text: 'Closed', },
+                                        { text: 'action', },
+                                    ]} />
+                                <tbody>
+                                    {recordList.map((item, i) => {
+                                        const indexBegin = (this.page - 1) * this.limit;
+                                        const deadlineDate = Date.parse(item.deadline_date);
+                                        const style = {};
+                                        try {
+                                            const diffDay = getDiffDaysToNow(new Date(deadlineDate));
+
+                                            if (item.is_closed == false && diffDay <= 3 && diffDay > 0) {
+                                                style.backgroundColor = 'orange';
+                                            } else if (item.is_closed == false && diffDay < 0) {
+                                                style.backgroundColor = 'red';
+                                            }
+                                        } catch (e) {
+                                            //
+                                        }
+                                        return (<tr key={"record-meeting-note-" + i} style={style}>
+                                            <td>{indexBegin + i + 1}</td>
+                                            <td>{item.id}</td>
+                                            <td>{item.date}</td>
+                                            <td>{item.place}</td>
+                                            <td>{item.departement ? item.departement.name : "-"}</td>
+                                            <td>{item.user ? item.user.name : "-"}</td>
+                                            <td>
+                                                {item.discussion_topics_count}
+                                            </td>
+                                            <td>
+                                                {item.discussion_topics_closed_count}
+                                            </td>
+                                            <td>
+                                                <LinkEditPage id={item.id} />
+                                            </td>
+                                        </tr>)
+                                    })}
+                                </tbody>
+                            </table>
                         </div>
                     </form>
                 </Card>
@@ -135,23 +135,23 @@ class MeetingNoteList extends BaseManagementPage {
         )
     }
 }
- 
+
 const LinkToFormCreate = (props) => {
     return (
-        <Link to={props.to} className="button is-primary" style={{marginBottom:'10px'}}>
-                <span className="icon">
-                    <i className="fas fa-plus"></i>
-                </span>
-                <span>{props.children}</span>
-            </Link>
+        <Link to={props.to} className="button is-primary" style={{ marginBottom: '10px' }}>
+            <span className="icon">
+                <i className="fas fa-plus"></i>
+            </span>
+            <span>{props.children}</span>
+        </Link>
     )
 }
 
 const LinkEditPage = (props) => {
     return (
         <Link to={"/meetingnote/" + props.id} className="button is-small" >
-        <i className="fas fa-edit"></i>
-    </Link>
+            <i className="fas fa-edit"></i>
+        </Link>
     )
 }
 

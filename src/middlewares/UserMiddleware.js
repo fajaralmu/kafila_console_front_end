@@ -72,7 +72,7 @@ export const requestAppIdMiddleware = store => next => action => {
                 delete newAction.meta;
                 store.dispatch(newAction);
             }).catch((error)=>{
-                alert("Error requesting application: "+error);
+                alert("Error requesting application: "+error+". Try to reload the page");
             });
          })
         .finally(param => action.meta.app.endLoading());
