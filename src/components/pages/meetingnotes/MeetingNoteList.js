@@ -72,7 +72,7 @@ class MeetingNoteList extends BaseManagementPage {
             <div>
                 <CommonTitle>Daftar Notulensi</CommonTitle>
                 <Card title="Daftar Notulensi">
-
+                    <LinkToFormCreate to="meetingnote/create">Tambah Notulensi</LinkToFormCreate>
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <Columns cells={[
                             ButtonApplyResetFilter(), navButtons
@@ -136,6 +136,16 @@ class MeetingNoteList extends BaseManagementPage {
     }
 }
  
+const LinkToFormCreate = (props) => {
+    return (
+        <Link to={props.to} className="button is-primary" style={{marginBottom:'10px'}}>
+                <span className="icon">
+                    <i className="fas fa-plus"></i>
+                </span>
+                <span>{props.children}</span>
+            </Link>
+    )
+}
 
 const LinkEditPage = (props) => {
     return (
