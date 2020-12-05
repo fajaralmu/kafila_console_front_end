@@ -115,13 +115,13 @@ class DiscussionTopicsForm extends BaseManagementPage {
 
     render() {
 
+        const title = this.title("Form Tema Pembahasan");
         if (this.state.recordNotFound) {
-            return <Message className="is-danger" body="Record Not Found" />
+            return <div>{title}<Message className="is-danger" body="Record Not Found" /></div>
         }
 
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
-            return <div>
-                <h2 style={{ textAlign: 'center' }}>Form Aduan</h2><h3>Please Wait...</h3>
+            return <div>{title}<h3>Please Wait...</h3>
             </div>
         }
 
@@ -130,7 +130,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
         </>
         return (
             <div>
-                <CommonTitle>Form Tema Pembahasan</CommonTitle>
+                {title}
                 <Card title={formTitle} >
                     {this.getRecordId() != null && this.discussionTopic != null ?
                         <div className="level">

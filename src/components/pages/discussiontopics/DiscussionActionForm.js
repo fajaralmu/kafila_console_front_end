@@ -113,22 +113,24 @@ class DiscussionActionForm extends BaseComponent {
     }
  
     render() {
-
+        
+        const loggedUser = this.props.loggedUser;
+        if (null == loggedUser) {
+            return null;
+        }
+        
+        const title = this.title("Penyelesaian/Pelaksanaan Keputusan");
         if (this.state.recordNotFound) {
-            return <Message className="is-danger" body="Record Not Found" />
+            return <div>{title}<Message className="is-danger" body="Record Not Found" /></div>
         }
 
         if (this.state.isLoadingRecord) {
-            return <h3>Please Wait...</h3>
+            return <div>{title}<h3>Please Wait...</h3></div>
         }
 
-        const loggedUser = this.props.loggedUser;
-        if (null == loggedUser) {
-            return <></>
-        }
         return (
             <div>
-                <CommonTitle>Penyelesaian/Pelaksanaan Keputusan</CommonTitle>
+                {title}
                 <Card title="Detail Tema Pembahasan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>

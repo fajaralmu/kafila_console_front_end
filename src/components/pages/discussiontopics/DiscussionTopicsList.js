@@ -126,8 +126,10 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             <td>{item.departement.name}</td>
                                             <td>
                                                 {item.is_closed == true ?
+                                                <>
                                                     <span className="tag is-info">Closed</span>
-                                                    :
+                                                    {item.action==null?"-":item.action.date}
+                                                  </>  :
                                                     <span className="tag is-warning">Not Closed</span>}
                                             </td>
                                             <td><LinkEditAndAction id={item.id} />

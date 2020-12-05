@@ -129,6 +129,10 @@ export default class BaseComponent extends Component {
         this.commonAjaxWithProgress = (method, params, successCallback, errorCallback) => {
             this.doAjax(method, params, true, successCallback, errorCallback);
         }
+
+        this.title = (title) => {
+            return <CommonTitle>{title}</CommonTitle>
+        }
     }
 
     componentDidUpdate() {

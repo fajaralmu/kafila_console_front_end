@@ -8,6 +8,7 @@ import Columns from '../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons';
 import { getDiffDaysToNow } from '../../../utils/DateUtil';
 import MeetingNoteSerivce from './../../../services/MeetingNoteSerivce';
+import { CommonTitle } from '../../BaseComponent';
 
 class MeetingNoteList extends BaseManagementPage {
     constructor(props) {
@@ -69,7 +70,7 @@ class MeetingNoteList extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Daftar Notulensi</h2>
+                <CommonTitle>Daftar Notulensi</CommonTitle>
                 <Card title="Daftar Notulensi">
 
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>

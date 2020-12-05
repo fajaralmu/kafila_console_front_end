@@ -11,6 +11,7 @@ import Card from '../../container/Card';
 import { SubmitResetButton } from '../../forms/commons';
 import { ModalBackdrop } from './../../messages/Alert';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
+import { LabelField } from './../../forms/commons';
 
 const FORM_ID = "form-input-meeting-note";
 const TOPIC_PREFIX = "discussion_topic_";
@@ -260,10 +261,10 @@ class MeetingNoteForm extends BaseComponent {
                     }
                 }
             }
-            console.debug("FORM INPUTS: ", this.form_temporary_inputs);
+            // console.debug("FORM INPUTS: ", this.form_temporary_inputs);
             this.setState({ discussionTopicCount: discussionTopicCount, isLoadingRecord: false });
             
-            console.debug("FORM INPUTS == : ", this.form_temporary_inputs);
+            // console.debug("FORM INPUTS == : ", this.form_temporary_inputs);
         }
         this.enableInputs = () => {
             const form = document.getElementById(FORM_ID);
@@ -315,6 +316,7 @@ class MeetingNoteForm extends BaseComponent {
     }
 
     componentDidUpdate() {
+        this.validateLoginStatus();
         if (this.getRecordId() == null) {
             this.enableInputs();
         }
@@ -332,12 +334,14 @@ class MeetingNoteForm extends BaseComponent {
             return null;
         }
 
+        const title = this.title("Notulensi Rapat");
+        
         if (this.state.recordNotFound) {
-            return <Message className="is-danger" body="Record Not Found" />
+            return <div>{title}<Message className="is-danger" body="Record Not Found" /></div>
         }
 
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
-            return <h3>Please Wait...</h3>
+            return <div>{title}<h3>Please Wait...</h3></div>
         }
         let notulis = "";
         if (this.meetingNote != null && this.meetingNote.user != null) {
@@ -346,8 +350,7 @@ class MeetingNoteForm extends BaseComponent {
 
         return (
             <div>
-                <CommonTitle>Notulensi Rapat {this.getRecordId() == null ?
-                    "Bidang " + this.getLoggedUserDepartementName() : null}</CommonTitle>
+                {title}
                 {this.state.showFormDiscussionTopicInEditMode ?
                     <FormAddDiscussionTopic onSubmit={this.onSubmitDiscussionTopic}
                         onClose={(e) => this.setState({ showFormDiscussionTopicInEditMode: false })}
@@ -357,12 +360,13 @@ class MeetingNoteForm extends BaseComponent {
                     <Card title={"Formulir Notulensi" + notulis}>
                         {this.getRecordId() != null && this.meetingNote != null ?
                             <FormUpperTag meetingNote={this.meetingNote} /> : null}
+                        
                         <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Tempat" name="place" />
-                        <formComponent.LabelField label="Tema Pembahasan" >
+                        <LabelField label="Tema Pembahasan" >
                             <span className="tag is-dark">
                                 <b>{this.state.discussionTopicCount.length}</b></span>
-                        </formComponent.LabelField>
+                        </LabelField>
                     </Card>
 
                     {/* ---------- discussion topics forms ----------- */}
