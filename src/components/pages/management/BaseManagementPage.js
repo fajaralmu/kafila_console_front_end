@@ -47,7 +47,7 @@ export default class BaseManagementPage extends BaseAdminPage {
 
         this.delete = (id) => {
             const app = this;
-            this.showConfirmation("Delete "+this.name+"?")
+            this.showConfirmationDanger("Delete "+this.name+"?")
             .then(function(accepted) {
                 if(accepted) {
                     app.deleteRecord(id);

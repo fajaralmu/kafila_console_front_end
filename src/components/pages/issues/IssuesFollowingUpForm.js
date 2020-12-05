@@ -11,6 +11,7 @@ import { SubmitResetButton } from '../../forms/commons';
 import { LabelField } from '../../forms/commons';
 import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from './../../../services/IssuesService';
+import { AnchorWithIcon } from './../../buttons/buttons';
 
 const FORM_ID = "form-input-follow-up-issue";
 class IssuesFollowingUpForm extends BaseComponent {
@@ -123,6 +124,7 @@ class IssuesFollowingUpForm extends BaseComponent {
         if(this.isLoggedUserNull()){
             return null;
         }
+        const isClosed = this.issue.is_closed;
         return (
             <div>
                 <CommonTitle>Tindak Lanjut Aduan</CommonTitle>
@@ -130,7 +132,7 @@ class IssuesFollowingUpForm extends BaseComponent {
                 <Card title="Detail Aduan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
-                        <span className="tag is-info">{this.issue.is_closed ? "Closed" : "Not Closed"}</span>
+                        <span className={"tag "+(isClosed?"is-info":"is-warning")}>{isClosed ? "Closed" : "Not Closed"}</span>
                     </div>
                     {this.state.showDetailIssue? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
@@ -158,7 +160,9 @@ class IssuesFollowingUpForm extends BaseComponent {
                         </div>
                     </article>
                     :
-                    <a className="button" onClick={this.showDetailIssue}>Tampilkan Detail Aduan</a>
+                    <AnchorWithIcon iconClassName="fas fa-angle-down" onClick={this.showDetailIssue}>
+                        Detail Aduan
+                    </AnchorWithIcon>
                     }
                 </Card>
                 <Card title="Formulir Tindak Lanjut">

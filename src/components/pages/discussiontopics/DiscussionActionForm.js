@@ -13,6 +13,7 @@ import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { LinkDetailMeetingNote } from './DiscussionTopicsForm';
+import { AnchorWithIcon } from '../../buttons/buttons';
 
 const FORM_ID = "form-input-discussion-action";
 class DiscussionActionForm extends BaseComponent {
@@ -127,14 +128,16 @@ class DiscussionActionForm extends BaseComponent {
         if (this.state.isLoadingRecord) {
             return <div>{title}<h3>Please Wait...</h3></div>
         }
-
+        const isClosed = this.discussionTopic.is_closed;
         return (
             <div>
                 {title}
                 <Card title="Detail Tema Pembahasan">
                     <div className="tags has-addons are-medium">
                         <span className="tag is-dark">Status</span>
-                        <span className="tag is-info">{this.discussionTopic.is_closed ? "Closed" : "Not Closed"}</span>
+                        <span className={"tag "+(isClosed? "is-info":"is-warning")}>
+                            {isClosed ? "Closed" : "Not Closed"}
+                        </span>
                     </div>
                     <LinkDetailMeetingNote note_id={this.discussionTopic.note_id} />
                     {this.state.showDetailDiscussionTopic? 
@@ -166,7 +169,9 @@ class DiscussionActionForm extends BaseComponent {
                         </div>
                     </article>
                     :
-                    <a className="button" onClick={this.showDetailDiscussionTopic}>Tampilkan Detail Tema Pembahasan</a>
+                    <AnchorWithIcon onClick={this.showDetailDiscussionTopic} iconClassName="fas fa-angle-down">
+                        Detail Tema Pembahasan
+                    </AnchorWithIcon>
                     }
                 </Card>
                 <Card title="Penyelesaian/Pelaksanaan Keputusan">

@@ -128,6 +128,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
         const formTitle = <>
             <Link to="/discussiontopics">Tema Pembahasan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
         </>
+        const isClosed = this.discussionTopic.is_closed;
         return (
             <div>
                 {title}
@@ -137,7 +138,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
                             <div className="level-left">
                                 <div className="tags has-addons are-medium">
                                     <span className="tag is-dark">Status</span>
-                                    <span className="tag is-info">{this.discussionTopic.is_closed == true ? "Closed" : "Not Closed"}</span>
+                                    <span className={"tag "+(isClosed?"is-info":"is-warning")}>{isClosed == true ? "Closed" : "Not Closed"}</span>
                                 </div></div>
                             <div className="level-right">
                                 <span className="tag is-primary is-medium">{this.discussionTopic.departement == null ? null : this.discussionTopic.departement.name}</span>

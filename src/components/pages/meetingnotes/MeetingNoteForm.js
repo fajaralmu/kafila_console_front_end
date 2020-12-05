@@ -345,8 +345,13 @@ class MeetingNoteForm extends BaseComponent {
         }
         let notulis = "";
         if (this.meetingNote != null && this.meetingNote.user != null) {
-            notulis = ", Notulis: "+this.meetingNote.user.display_name;
+            notulis = this.meetingNote.user.display_name;
+        } else {
+           notulis = this.getLoggedUser().display_name;
         }
+        const formTitle = <>
+            <Link to="/meetingnote">Notulensi</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
+        </>
 
         return (
             <div>
@@ -357,7 +362,7 @@ class MeetingNoteForm extends BaseComponent {
                     /> : null
                 }
                 <form id={FORM_ID} onSubmit={this.onSubmit} style={{ marginTop: '20px' }}>
-                    <Card title={"Formulir Notulensi" + notulis}>
+                    <Card title={formTitle}>
                         {this.getRecordId() != null && this.meetingNote != null ?
                             <FormUpperTag meetingNote={this.meetingNote} /> : null}
                         
@@ -367,6 +372,7 @@ class MeetingNoteForm extends BaseComponent {
                             <span className="tag is-dark">
                                 <b>{this.state.discussionTopicCount.length}</b></span>
                         </LabelField>
+                        <LabelField label="Notulis" >{notulis}</LabelField>
                     </Card>
 
                     {/* ---------- discussion topics forms ----------- */}
@@ -419,6 +425,12 @@ const FormAddDiscussionTopic = (props) => {
                         <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={"person_in_charge"} />
                         <SubmitResetButton />
                     </form>
+                    <div className="level">
+                        <div className="level-left">
+                        <a className="button" onClick={props.onClose}>Close</a>
+                        </div>
+                    </div>
+                    
                 </Card>
             </div>
         </ModalBackdrop>
@@ -463,12 +475,12 @@ const DiscussionTopicStatusInfo = (props) => {
     return (
         <table><tbody><tr >
             <td style={{ border: 'none' }}>
-                <div className="tags has-addons are-medium">
+                <div className="tags has-addons are-small">
                     <span className="tag is-light">Closed</span>
                     <span className="tag is-info">{closed}</span>
                 </div>
             </td><td style={{ border: 'none' }}>
-                <div className="tags has-addons are-medium">
+                <div className="tags has-addons are-small">
                     <span className="tag is-light">Not Closed</span>
                     <span className="tag is-danger">{discussion_topics.length - closed}</span>
                 </div></td>
