@@ -136,7 +136,7 @@ export default class BaseComponent extends Component {
     }
 
     componentDidUpdate() {
-        if (null == this.props.loggedUser) {
+        if (this.authenticated && null == this.props.loggedUser) {
             this.backToLogin();
         }
     }

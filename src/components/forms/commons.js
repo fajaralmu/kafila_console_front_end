@@ -87,10 +87,11 @@ export const InputField = (props) => {
 
     const className = "input input-form-field "+props.className;
     const orientation = props.orientation?props.orientation:"horizontal";
+    const label = props.label ? props.label : props.name;
     return (
         <div className={"field is-"+orientation}>
             <div className="field-label is-normal">
-                <label className="label">{props.label ? props.label : "Input"}</label>
+                <label className="label">{CapitalizeFirstLetter(label)}</label>
                   
             </div>
             <div className="field-body">
@@ -123,9 +124,10 @@ export const SelectField = (props) => {
     const options = optionValues.map((option, i) => {
         return <option key={"select-option-"+i} value={option.value} >{option.text}</option>
     })
+    const label = props.label?props.label:props.name;
     return (
         <div className="field is-horizontal">
-            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Select"}</label></div>
+            <div className="field-label is-normal"><label className="label">{CapitalizeFirstLetter(label)}</label></div>
             <div className="field-body">
                 <div className="field">
                     <div className="control">

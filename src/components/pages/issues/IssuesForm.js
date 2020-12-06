@@ -9,7 +9,7 @@ import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
 import BaseAdminPage from './../BaseAdminPage';
 
-const issue_sources = [
+export const issue_sources = [
     'Yayasan', 'Orang Tua', 'Santri', 'Tamu'
 ]
 

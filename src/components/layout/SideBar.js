@@ -18,6 +18,12 @@ export const MENUS = [
                 link: '/dashboard',
                 iconClassName: 'fas fa-tachometer-alt',
                 authenticated: true,
+
+            }, {
+                name: 'Aduan',
+                link: '/issues-public',
+                iconClassName: 'fas fa-envelope-open-text',
+                // authenticated: true,
             }]
     }, {
         name: 'Notulensi',
@@ -25,8 +31,8 @@ export const MENUS = [
             name: 'List',
             link: '/meetingnote',
             authenticated: true,
-            iconClassName:'fas fa-list',
-        },{
+            iconClassName: 'fas fa-list',
+        }, {
             name: 'Tambah Notulensi',
             link: '/meetingnote/create',
             authenticated: true,
@@ -38,7 +44,7 @@ export const MENUS = [
             name: 'List',
             link: '/issues',
             authenticated: true,
-            iconClassName:'fas fa-list',
+            iconClassName: 'fas fa-list',
         },
         {
             name: 'Tambah',
@@ -53,7 +59,7 @@ export const MENUS = [
             name: 'List',
             link: '/discussiontopics',
             authenticated: true,
-            iconClassName:'fas fa-list',
+            iconClassName: 'fas fa-list',
         }]
     }, {
         name: 'Master Data',
@@ -70,22 +76,22 @@ export const MENUS = [
                 link: '/management/users',
                 authenticated: true,
                 role: 'admin',
-                iconClassName:'fas fa-users',
+                iconClassName: 'fas fa-users',
             }, {
                 name: 'Bidang',
                 link: '/management/departements',
                 authenticated: true,
                 role: 'admin',
-                iconClassName:'fas fa-object-group',
+                iconClassName: 'fas fa-object-group',
             }]
     }
 ]
 
 class SideBar extends BaseMenus {
     constructor(props) {
-        super(props); 
-        
-    } 
+        super(props);
+
+    }
 
     render() {
         const user = this.getLoggedUser();
@@ -96,21 +102,21 @@ class SideBar extends BaseMenus {
                         const childs = this.extractChildren(menu.children);
                         if (childs == null || childs.length == 0) { return null; }
                         const isMenuListShown = this.isMenuListShown(menu.name);
-                        const iconClassName  = isMenuListShown?"fas fa-angle-up":"fas fa-angle-down";
+                        const iconClassName = isMenuListShown ? "fas fa-angle-up" : "fas fa-angle-down";
 
                         return (
-                            <React.Fragment key={"menu_"+menu.name}>
-                                <p key={menu.name} menu-name={menu.name} onClick={this.toggleMenuList} className="menu-label"> 
-                                    <i style={{marginRight:'10px'}} className={iconClassName}    />                         
+                            <React.Fragment key={"menu_" + menu.name}>
+                                <p key={menu.name} menu-name={menu.name} onClick={this.toggleMenuList} className="menu-label">
+                                    <i style={{ marginRight: '10px' }} className={iconClassName} />
                                     {menu.name}
                                 </p>
                                 {isMenuListShown ?
                                     <ul className="menu-list">
                                         {childs.map((menuChild, j) => {
-                                            return (<li key={"sidebar-menu-child-"+i+"-"+j}>
+                                            return (<li key={"sidebar-menu-child-" + i + "-" + j}>
                                                 <Link to={menuChild.link}>
                                                     <span className="icon">
-                                                        <i className={menuChild.iconClassName?menuChild.iconClassName:"fas fa-folder"}/>
+                                                        <i className={menuChild.iconClassName ? menuChild.iconClassName : "fas fa-folder"} />
                                                     </span>
                                                     <spam>
                                                         {menuChild.name}
@@ -119,8 +125,8 @@ class SideBar extends BaseMenus {
                                             </li>)
                                         })}
                                     </ul>
-                                    :null}
-                           </React.Fragment>
+                                    : null}
+                            </React.Fragment>
                         )
                     })}
                 </aside>

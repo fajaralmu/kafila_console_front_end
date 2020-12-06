@@ -18,6 +18,8 @@ import DiscussionActionForm from '../pages/discussiontopics/DiscussionActionForm
 import DiscussionTopicsForm from '../pages/discussiontopics/DiscussionTopicsForm';
 import DiscussionTopicsList from '../pages/discussiontopics/DiscussionTopicsList';
 import MeetingNoteList from '../pages/meetingnotes/MeetingNoteList';
+import NotFound from './../pages/errors/NotFound';
+import IssueFormPublic from './../pages/issues/IssueFormPublic';
 
 class Content extends Component {
 
@@ -63,6 +65,9 @@ class Content extends Component {
           <Route exact path="/issues/:id" render={
             (props) =>
               <IssuesForm app={this.props.app} />
+          } />
+          <Route exact path="/issues-public" render={
+            (props) => <IssueFormPublic app={this.props.app} />
           } />
           <Route exact path="/issues/:id/followup" render={
             (props) =>
@@ -121,6 +126,9 @@ class Content extends Component {
             (props) =>
               <Profile app={this.props.app} />
           } />
+
+          {/* ////////////404///////////////// */}
+          <Route path="" component={NotFound} />
         </Switch></div>
     );
   }

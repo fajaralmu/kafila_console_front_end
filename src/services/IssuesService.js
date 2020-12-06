@@ -10,6 +10,11 @@ export default class IssuesService
 
     }
 
+    departementList = () => {
+        const endpoint = contextPath().concat("api/public/issues/departements");
+        return commonAjaxPostCalls(endpoint, {});
+    }
+
     list = (filter) => {
         const request = {
             code: 'issue',
