@@ -8,7 +8,7 @@ const circleX = 200, circleY = 200;
 export default class PieChart extends Component {
     constructor(props) {
         super(props);
-        this.proportions = this.props.proportions?this.props.proportions:[];
+        this.proportions = this.props.proportions ? this.props.proportions : [];
         this.state = {
         }
 
@@ -16,7 +16,7 @@ export default class PieChart extends Component {
 
         this.updatePie = () => {
             this.accumulationDegree = 0;
-            const proportions  =this.proportions;
+            const proportions = this.proportions;
 
             const canvas = document.getElementById("pie_chart_canvas");
             const ctx = canvas.getContext("2d");
@@ -43,8 +43,9 @@ export default class PieChart extends Component {
 
                 currentDegree = element.value * MAX_DEG;
                 this.accumulationDegree += currentDegree;
-                const coord = this.calculateCoordinate(endAngle, ctx);
+                const coord = this.calculatePosition(endAngle, element.value, ctx);
 
+                ctx.fillStyle = element.color;
                 //drawLine
                 if (element.value < 0.5) {
                     ctx.beginPath();
@@ -52,8 +53,15 @@ export default class PieChart extends Component {
                     ctx.lineTo(x, y);
 
                     ctx.lineTo(coord.x, coord.y);
+                    // ctx.stroke();
                     ctx.fill();
                 }
+
+                //drawLabel
+                const labelCoord = coord.labelCoord;
+                ctx.font = "15px Arial";
+                ctx.fillStyle = '#000';
+                ctx.fillText(element.label + " "+(100*element.value)+"%", labelCoord.x, labelCoord.y);
 
                 x = coord.x;
                 y = coord.y;
@@ -62,13 +70,24 @@ export default class PieChart extends Component {
             }
         }
 
-        this.calculateCoordinate = (radians, ctx) => {
+        this.calculatePosition = (radians, value, ctx) => {
+            const mainCoord = this.calculateCoordinate(radians,
+                this.accumulationDegree, PIE_W);
+            //for label
+            const rad = value * RAD / 2;
+            const deg = value * MAX_DEG / 2;
+            const labelCoord = this.calculateCoordinate(radians - rad,
+                this.accumulationDegree - deg, PIE_W / 2);
+            return {...mainCoord, labelCoord: labelCoord};
+        }
+
+        this.calculateCoordinate = (radians, accDegree, radius) => {
 
             let newX = 0, newY = 0;
-            const quad = this.getQuadrant(this.accumulationDegree);
+            const quad = this.getQuadrant(accDegree);
 
-            const adjustedX = Math.abs(PIE_W * Math.cos(radians));
-            const adjuxtedY = Math.abs(PIE_W * Math.sin(radians));
+            const adjustedX = Math.abs(radius * Math.cos(radians));
+            const adjuxtedY = Math.abs(radius * Math.sin(radians));
             if (quad == 1) {
                 newX = circleX + adjustedX;
                 newY = circleY - adjuxtedY;
@@ -113,9 +132,9 @@ export default class PieChart extends Component {
 
         return (
             <div style={{ height: 'auto' }} className="columns">
-                
+
                 <div className="column">
-                <canvas id="pie_chart_canvas" className="has-background-light" width="400" height="400"></canvas>
+                    <canvas id="pie_chart_canvas" className="has-background-light" width="400" height="400"></canvas>
                 </div>
                 <div className="column">
                     <DetailPie proportions={this.proportions} />
@@ -127,30 +146,30 @@ export default class PieChart extends Component {
 
 const DetailPie = (props) => {
     return (<article className="message">
-    <div className="message-body">
-        <table>
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Warna</th>
-                    <th>Keterangan</th>
-                    <th>Presentase</th>
-                </tr>
-            </thead>
-            <tbody>
-                {props.proportions.map((proportion, i)=>{
-                    return (
-                        <tr>
-                            <td style={{width:'20px'}}>{i+1}</td>
-                            <td style={{padding:'5px',width:'50px'}}>
-                                <div style={{width:'40px', height:'40px',backgroundColor:proportion.color, }}/>                            </td>
-                            <td>{proportion.label}</td>
-                            <td>{(100*proportion.value)}%</td>
-                        </tr>
-                    )
-                })}
-            </tbody>
-        </table>
-    </div>
-</article>)
+        <div className="message-body">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Warna</th>
+                        <th>Keterangan</th>
+                        <th>Presentase</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {props.proportions.map((proportion, i) => {
+                        return (
+                            <tr>
+                                <td style={{ width: '20px' }}>{i + 1}</td>
+                                <td style={{ padding: '5px', width: '50px' }}>
+                                    <div style={{ width: '40px', height: '40px', backgroundColor: proportion.color, }} />                            </td>
+                                <td>{proportion.label}</td>
+                                <td>{(100 * proportion.value)}%</td>
+                            </tr>
+                        )
+                    })}
+                </tbody>
+            </table>
+        </div>
+    </article>)
 }
