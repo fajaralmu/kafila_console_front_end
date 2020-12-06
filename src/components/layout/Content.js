@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 import Login from '../pages/Login';
-import Dashboard from '../pages/Dashboard';
+import Dashboard from '../pages/dashboard/Dashboard';
 import ManagementMenu from './../pages/management/ManagementMenu';
 import UsersManagement from '../pages/management/UsersManagement';
 import DepartementManagement from '../pages/management/DepartementManagement';
