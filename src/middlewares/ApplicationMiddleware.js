@@ -14,3 +14,16 @@ export const storeApplicationData = store => next => action => {
     store.dispatch(newAction);
 
 }
+
+export const removeApplicationData = store => next => action => {
+    if (!action.meta || action.meta.type !== types.REMOVE_APPLICTION_DATA) {
+        return next(action);
+    }
+
+    let newAction = Object.assign({}, action, {
+        payload:  action.payload
+    });
+    delete newAction.meta;
+    store.dispatch(newAction);
+
+}

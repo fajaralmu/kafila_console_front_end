@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
-import * as actions from './redux/actionCreators'
+import { Route, Switch, withRouter } from 'react-router-dom'
+import * as actions from './redux/actions/actionCreators'
 import { connect } from 'react-redux'
 import Footer from './components/layout/Footer';
 import Header from './components/layout/Header';

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
-import * as actions from '../../redux/actionCreators'
+import * as actions from '../../redux/actions/actionCreators'
 import { connect } from 'react-redux'
 import * as formComponent from '../forms/commons';
 import NavButtons from './../buttons/NavButtons';

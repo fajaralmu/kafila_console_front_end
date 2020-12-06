@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Card from './../container/Card';
-import * as actions from '../../redux/actionCreators'
+import * as actions from '../../redux/actions/actionCreators'
 import { InputField, LabelField, SubmitResetButton } from './../forms/commons';
 import UserService from './../../services/UserService';
 class Profile extends BaseComponent {

@@ -1,5 +1,5 @@
-import * as types from './types'
-import * as url from '../constant/Url'
+import * as types from '../types'
+import * as url from '../../constant/Url'
 
 const usedHost = url.contextPath();
 const apiEntityBaseUrl = usedHost + "api/entity/"
@@ -59,6 +59,19 @@ export const applicationAction = {
             },
             meta: {
                 type: types.STORE_APPLICTION_DATA,
+            }
+        };
+        return requested;
+    },
+    removeApplicationData: (key) => {
+        
+        let requested = {
+            type: types.STORE_APPLICTION_DATA,
+            payload: {
+                key:key   
+            },
+            meta: {
+                type: types.REMOVE_APPLICTION_DATA,
             }
         };
         return requested;

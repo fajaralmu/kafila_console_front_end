@@ -36,9 +36,9 @@ class SideBar extends BaseMenus {
                                                     <span className="icon">
                                                         <i className={menuChild.iconClassName ? menuChild.iconClassName : "fas fa-folder"} />
                                                     </span>
-                                                    <spam>
+                                                    <span>
                                                         {menuChild.name}
-                                                    </spam>
+                                                    </span>
                                                 </Link>
                                             </li>)
                                         })}

@@ -7,6 +7,8 @@ import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
+import { applicationAction } from '../../../redux/actions/actionCreators';
+import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 
 class DepartementManagementForm extends BaseComponent {
     constructor(props) {
@@ -50,9 +52,29 @@ class DepartementManagementForm extends BaseComponent {
             return this.props.match.params.id;
         }
 
+        this.updateLocallyStoredDepartements = (departement) => {
+            const appData = this.props.applicationData;
+            const departementList = appData[DATA_KEY_DEPARTEMENTS];
+            if (null == departementList) {return;}
+            const exist = departementList.find(dep => dep.id == departement.id) != null;
+            if (exist) {
+                for (let i = 0; i < departementList.length; i++) {
+                    const element = departementList[i];
+                    if (element.id == departement.id) {
+                        departementList[i] = departement;
+                        break;
+                    }
+                }
+                
+            } else {
+                departementList.push(departement);
+            }
+            this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, departementList);
+        }
+
         this.recordSaved = (response) => {
             this.showInfo("SUCCESS SAVING RECORD");
-
+            this.updateLocallyStoredDepartements(response.departement);
             if (this.getRecordId() == null) {
                 this.handleSuccessGetRecord(response);
                 this.props.history.push("/management/departements/"+response.departement.id);
@@ -130,12 +152,17 @@ class DepartementManagementForm extends BaseComponent {
     }
 }
 
+
 const mapStateToProps = state => {
 
     return {
         loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus
+        loginStatus: state.userState.loginStatus,
+        applicationData: state.applicationState.applicationData
     }
 }
+const mapDispatchToProps = dispatch => ({
+    storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
+})
 export default withRouter(
-    connect(mapStateToProps)(DepartementManagementForm));
+    connect(mapStateToProps, mapDispatchToProps)(DepartementManagementForm));

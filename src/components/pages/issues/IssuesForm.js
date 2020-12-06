@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
 import BaseAdminPage from './../BaseAdminPage';
-import { applicationAction } from '../../../redux/actionCreators';
+import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 
 export const issue_sources = [

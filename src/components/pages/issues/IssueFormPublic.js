@@ -10,7 +10,7 @@ import IssuesService from './../../../services/IssuesService';
 import { AnchorWithIcon } from './../../buttons/buttons';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { applicationAction } from '../../../redux/actionCreators';
+import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
@@ -99,7 +99,7 @@ class IssueFormPublic extends BaseComponent {
         }
 
         this.recordFailedToSave = (e) => {
-            this.showError("Gagal menyimpan aduan: " + e);
+            this.showError("Gagal menyimpan aduan: " + e + " Silakan muat ulang halaman dan coba lagi");
         }
 
         this.loadDepartements = () => {
@@ -160,7 +160,7 @@ class IssueFormPublic extends BaseComponent {
                 <Card title="Form">
                     <form onSubmit={this.onSubmit}>
                         <InputField name="date" label="tanggal" type="date" required={true} />
-                        
+
                         <InputField name="place" label="tempat" required={true} />
                         <InputField name="content" label="permasalahan" type="textarea" required={true} />
                         <InputField name="email" type="email" note="Kosongkan jika berstatus anonim" />
@@ -176,7 +176,7 @@ class IssueFormPublic extends BaseComponent {
                                 text: item.name
                             }
                         })} name="departement_id" required={true} />
-                        
+
                         <div className="field is-horizontal">
                             <div className="field-label"></div>
                             <div className="field-body">
