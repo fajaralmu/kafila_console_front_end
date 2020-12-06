@@ -14,6 +14,7 @@ import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { LinkDetailMeetingNote } from './DiscussionTopicsForm';
 import { AnchorWithIcon } from '../../buttons/buttons';
+import ClosedStatus from './../../messages/ClosedStatus';
 
 const FORM_ID = "form-input-discussion-action";
 class DiscussionActionForm extends BaseComponent {
@@ -133,12 +134,7 @@ class DiscussionActionForm extends BaseComponent {
             <div>
                 {title}
                 <Card title="Detail Tema Pembahasan">
-                    <div className="tags has-addons are-medium">
-                        <span className="tag is-dark">Status</span>
-                        <span className={"tag "+(isClosed? "is-info":"is-warning")}>
-                            {isClosed ? "Closed" : "Not Closed"}
-                        </span>
-                    </div>
+                    <ClosedStatus closed={isClosed} />
                     <LinkDetailMeetingNote note_id={this.discussionTopic.note_id} />
                     {this.state.showDetailDiscussionTopic? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
@@ -177,8 +173,8 @@ class DiscussionActionForm extends BaseComponent {
                 <Card title="Penyelesaian/Pelaksanaan Keputusan">
                     {this.discussionTopic.action == null ?
                     <form id={FORM_ID} onSubmit={this.onSubmit}>
-                            <InputField required={true} label="Tanggal" name="date" type="date" />
-                            <InputField required={true} label="Keterangan" name="description" type="textarea" />
+                            <formComponent.InputField required={true} label="Tanggal" name="date" type="date" />
+                            <formComponent.InputField required={true} label="Keterangan" name="description" type="textarea" />
                             <SubmitResetButton submitText={"Submit"} withReset={true} />
                     </form>
                     :
@@ -202,12 +198,7 @@ class DiscussionActionForm extends BaseComponent {
     }
 }
 
-
-const InputField = (props) => {
-
-    return formComponent.InputField(props);
-}
-
+ 
 
 const mapStateToProps = state => {
 

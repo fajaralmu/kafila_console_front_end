@@ -9,6 +9,7 @@ import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { getDiffDaysToNow } from './../../../utils/DateUtil';
+import { CommonTitle } from '../../BaseComponent';
 
 class DiscussionTopicsList extends BaseManagementPage {
     constructor(props) {
@@ -77,7 +78,7 @@ class DiscussionTopicsList extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <h2 style={{ textAlign: 'center' }}>Daftar Tema Pembahasan</h2>
+                <CommonTitle>Daftar Tema Pembahasan</CommonTitle>
                 <Card title="Daftar Tema Pembahasan">
 
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>

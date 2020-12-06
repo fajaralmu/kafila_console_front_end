@@ -9,6 +9,7 @@ import { SubmitResetButton } from '../../forms/commons';
 import { CommonTitle } from '../../BaseComponent';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import BaseManagementPage from './../management/BaseManagementPage';
+import ClosedStatus from '../../messages/ClosedStatus';
 
 class DiscussionTopicsForm extends BaseManagementPage {
     constructor(props) {
@@ -136,10 +137,8 @@ class DiscussionTopicsForm extends BaseManagementPage {
                     {this.getRecordId() != null && this.discussionTopic != null ?
                         <div className="level">
                             <div className="level-left">
-                                <div className="tags has-addons are-medium">
-                                    <span className="tag is-dark">Status</span>
-                                    <span className={"tag "+(isClosed?"is-info":"is-warning")}>{isClosed == true ? "Closed" : "Not Closed"}</span>
-                                </div></div>
+                                <ClosedStatus closed={isClosed} />
+                            </div>
                             <div className="level-right">
                                 <span className="tag is-primary is-medium">{this.discussionTopic.departement == null ? null : this.discussionTopic.departement.name}</span>
                             </div>

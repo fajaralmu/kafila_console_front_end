@@ -361,7 +361,7 @@ class MeetingNoteForm extends BaseComponent {
                         onClose={(e) => this.setState({ showFormDiscussionTopicInEditMode: false })}
                     /> : null
                 }
-                <form id={FORM_ID} onSubmit={this.onSubmit} style={{ marginTop: '20px' }}>
+                <form id={FORM_ID} onSubmit={this.onSubmit}>
                     <Card title={formTitle}>
                         {this.getRecordId() != null && this.meetingNote != null ?
                             <FormUpperTag meetingNote={this.meetingNote} /> : null}

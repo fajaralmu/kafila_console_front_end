@@ -12,6 +12,7 @@ import { LabelField } from '../../forms/commons';
 import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from './../../../services/IssuesService';
 import { AnchorWithIcon } from './../../buttons/buttons';
+import ClosedStatus from './../../messages/ClosedStatus';
 
 const FORM_ID = "form-input-follow-up-issue";
 class IssuesFollowingUpForm extends BaseComponent {
@@ -28,10 +29,10 @@ class IssuesFollowingUpForm extends BaseComponent {
             return this.props.match.params.id;
         }
         this.hideDetailIssue = () => {
-            this.setState({showDetailIssue:false});
+            this.setState({ showDetailIssue: false });
         }
         this.showDetailIssue = () => {
-            this.setState({showDetailIssue:true});
+            this.setState({ showDetailIssue: true });
         }
         this.onSubmit = (e) => {
             e.preventDefault();
@@ -49,7 +50,7 @@ class IssuesFollowingUpForm extends BaseComponent {
             const inputs = form.getElementsByClassName("input-form-field");
 
             const action = {
-                issue_id : this.issue.id
+                issue_id: this.issue.id
             };
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
@@ -98,9 +99,9 @@ class IssuesFollowingUpForm extends BaseComponent {
         this.isClosed = () => {
             return this.getRecordId() != null && this.issue != null && this.issue.is_closed == true;
         }
-    } 
+    }
     componentDidMount() {
-        if(!this.validateLoginStatus()){
+        if (!this.validateLoginStatus()) {
             return;
         }
         document.title = "Follow Up Issue";
@@ -109,7 +110,7 @@ class IssuesFollowingUpForm extends BaseComponent {
         }
         this.loadRecord();
     }
- 
+
 
     render() {
 
@@ -121,71 +122,68 @@ class IssuesFollowingUpForm extends BaseComponent {
             return <h3>Please Wait...</h3>
         }
 
-        if(this.isLoggedUserNull()){
+        if (this.isLoggedUserNull()) {
             return null;
         }
         const isClosed = this.issue.is_closed;
         return (
             <div>
                 <CommonTitle>Tindak Lanjut Aduan</CommonTitle>
-                
-                <Card title="Detail Aduan">
-                    <div className="tags has-addons are-medium">
-                        <span className="tag is-dark">Status</span>
-                        <span className={"tag "+(isClosed?"is-info":"is-warning")}>{isClosed ? "Closed" : "Not Closed"}</span>
-                    </div>
-                    {this.state.showDetailIssue? 
-                    <article style={{ marginBottom: '10px' }} className="is-info">
-                        <div className="message-header">
-                            <p>Detail Aduan</p>
-                            <button onClick={this.hideDetailIssue} className="delete" aria-label="delete"></button>
-                        </div>
-                        <div className="message-body has-background-light">
-                            <LabelField label="Waktu dan Tempat">
-                                <p>{this.issue.place}, {dateStringDayMonthYearFromText(this.issue.date)}</p>
-                            </LabelField>
-                            <LabelField label="Bidang">
-                                <p>{this.issue.departement.name}</p>
-                            </LabelField>
-                            <LabelField label="Permasalahan">
-                                <p>{this.issue.content}</p>
-                            </LabelField>
-                            <LabelField label="Pengadu">
-                                <p>{this.issue.email}, {this.issue.issuer}</p>
-                            </LabelField>
-                            <LabelField label="Sumber Input">
-                                <p>{this.issue.issue_input}</p>
-                            </LabelField>
 
-                        </div>
-                    </article>
-                    :
-                    <AnchorWithIcon iconClassName="fas fa-angle-down" onClick={this.showDetailIssue}>
-                        Detail Aduan
+                <Card title="Detail Aduan">
+                    <ClosedStatus closed={isClosed} />
+                    {this.state.showDetailIssue ?
+                        <article style={{ marginBottom: '10px' }} className="is-info">
+                            <div className="message-header">
+                                <p>Detail Aduan</p>
+                                <button onClick={this.hideDetailIssue} className="delete" aria-label="delete"></button>
+                            </div>
+                            <div className="message-body has-background-light">
+                                <LabelField label="Waktu dan Tempat">
+                                    <p>{this.issue.place}, {dateStringDayMonthYearFromText(this.issue.date)}</p>
+                                </LabelField>
+                                <LabelField label="Bidang">
+                                    <p>{this.issue.departement.name}</p>
+                                </LabelField>
+                                <LabelField label="Permasalahan">
+                                    <p>{this.issue.content}</p>
+                                </LabelField>
+                                <LabelField label="Pengadu">
+                                    <p>{this.issue.email}, {this.issue.issuer}</p>
+                                </LabelField>
+                                <LabelField label="Sumber Input">
+                                    <p>{this.issue.issue_input}</p>
+                                </LabelField>
+
+                            </div>
+                        </article>
+                        :
+                        <AnchorWithIcon iconClassName="fas fa-angle-down" onClick={this.showDetailIssue}>
+                            Detail Aduan
                     </AnchorWithIcon>
                     }
                 </Card>
                 <Card title="Formulir Tindak Lanjut">
                     {this.issue.follow_up == null ?
-                    <form id={FORM_ID} onSubmit={this.onSubmit}>
+                        <form id={FORM_ID} onSubmit={this.onSubmit}>
                             <InputField required={true} label="Tanggal" name="date" type="date" />
                             <InputField required={true} label="Keterangan" name="description" type="textarea" />
                             <SubmitResetButton submitText={"Submit"} withReset={true} />
-                    </form>
-                    :
-                    <article style={{ marginBottom: '10px' }} className="is-info">
-                        <div className="message-header">
-                            <p>Detail Tindak Lanjut</p>
-                        </div>
-                        <div className="message-body has-background-light">
-                            <LabelField label="Tanggal">
-                                <p>{this.issue.follow_up.date}</p>
-                            </LabelField>
-                            <LabelField label="Keterangan">
-                                <p>{this.issue.follow_up.description}</p>
-                            </LabelField>
-                        </div>
-                    </article>
+                        </form>
+                        :
+                        <article style={{ marginBottom: '10px' }} className="is-info">
+                            <div className="message-header">
+                                <p>Detail Tindak Lanjut</p>
+                            </div>
+                            <div className="message-body has-background-light">
+                                <LabelField label="Tanggal">
+                                    <p>{this.issue.follow_up.date}</p>
+                                </LabelField>
+                                <LabelField label="Keterangan">
+                                    <p>{this.issue.follow_up.description}</p>
+                                </LabelField>
+                            </div>
+                        </article>
                     }
                 </Card>
             </div>
