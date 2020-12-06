@@ -10,7 +10,9 @@ class Message extends Component {
         }
 
         this.hide = ()=> {
-            this.setState({show:false});
+            if (this.props.enableHidden){
+                this.setState({show:false});
+            }
         }
         this.show = ()=> {
             this.setState({show:true});
@@ -29,6 +31,7 @@ class Message extends Component {
                 </div>
                 <div className="message-body">
                     {this.props.body}
+                    {this.props.children}
                 </div>
             </article>
         )

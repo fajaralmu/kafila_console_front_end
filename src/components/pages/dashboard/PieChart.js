@@ -9,14 +9,19 @@ export default class PieChart extends Component {
     constructor(props) {
         super(props);
         this.proportions = this.props.proportions ? this.props.proportions : [];
+        this.
+            proportions.sort(function (a, b) {
+                return b.value - a.value;
+            });
         this.state = {
+            proportions: []
         }
 
         this.accumulationDegree = 0;
 
         this.updatePie = () => {
             this.accumulationDegree = 0;
-            const proportions = this.proportions;
+            const proportions = this.state.proportions;
 
             const canvas = document.getElementById("pie_chart_canvas");
             const ctx = canvas.getContext("2d");
@@ -26,9 +31,6 @@ export default class PieChart extends Component {
             let currentDegree = 0;
             let x = circleX + PIE_W, y = circleY;
 
-            proportions.sort(function (a, b) {
-                return b.value - a.value;
-            });
 
             for (let i = 0; i < proportions.length; i++) {
 
@@ -61,7 +63,7 @@ export default class PieChart extends Component {
                 const labelCoord = coord.labelCoord;
                 ctx.font = "15px Arial";
                 ctx.fillStyle = '#000';
-                ctx.fillText(element.label + " "+(100*element.value)+"%", labelCoord.x, labelCoord.y);
+                ctx.fillText(element.label + " " + parseFloat(100 * element.value).toFixed(2) + "%", labelCoord.x, labelCoord.y);
 
                 x = coord.x;
                 y = coord.y;
@@ -78,7 +80,7 @@ export default class PieChart extends Component {
             const deg = value * MAX_DEG / 2;
             const labelCoord = this.calculateCoordinate(radians - rad,
                 this.accumulationDegree - deg, PIE_W / 2);
-            return {...mainCoord, labelCoord: labelCoord};
+            return { ...mainCoord, labelCoord: labelCoord };
         }
 
         this.calculateCoordinate = (radians, accDegree, radius) => {
@@ -119,9 +121,58 @@ export default class PieChart extends Component {
             return 4;
         }
 
+        this.proportionIsFixed = () => {
+            const stateProp = this.state.proportions;
+            const prop = this.proportions;
+            const fixed = this.sumValues(stateProp) >= this.sumValues(prop);
+            return fixed;
+        }
+
+        this.animate = () => {
+            const proportions = this.proportions;
+            // while (this.proportionIsFixed() == false) {
+
+            const stateProp = this.state.proportions;
+            for (let i = 0; i < proportions.length; i++) {
+                const element = proportions[i];
+                if (stateProp[i] == null) {
+                    stateProp.push({
+                        value: 0,
+                        label: element.label,
+                        color: element.color
+                    })
+                }
+                if (stateProp[i].value < element.value) {
+                    stateProp[i].value += 0.015;
+                }
+                if (stateProp[i].value >= element.value) {
+                    stateProp[i].value = element.value;
+                }
+            }
+            this.setState({ proportions: stateProp });
+            if (this.proportionIsFixed() == false) {
+                this.requestAnimation();
+            }
+        }
+        // }
+
+        this.requestAnimation = () => {
+            setTimeout(this.animate, 5);
+        }
+
+    }
+
+    sumValues(proportions) {
+        let val = 0;
+        for (let i = 0; i < proportions.length; i++) {
+            const element = proportions[i];
+            val += element.value;
+        }
+        return val;
     }
 
     componentDidMount() {
+        this.requestAnimation();
         this.updatePie();
     }
     componentDidUpdate() {
@@ -137,7 +188,8 @@ export default class PieChart extends Component {
                     <canvas id="pie_chart_canvas" className="has-background-light" width="400" height="400"></canvas>
                 </div>
                 <div className="column">
-                    <DetailPie proportions={this.proportions} />
+                    updated: {this.props.updated.toString()}
+                    <DetailPie proportions={this.state.proportions} />
                 </div>
             </div>
         )
@@ -159,12 +211,12 @@ const DetailPie = (props) => {
                 <tbody>
                     {props.proportions.map((proportion, i) => {
                         return (
-                            <tr>
+                            <tr key={"PIE_PROP_"+i}>
                                 <td style={{ width: '20px' }}>{i + 1}</td>
                                 <td style={{ padding: '5px', width: '50px' }}>
                                     <div style={{ width: '40px', height: '40px', backgroundColor: proportion.color, }} />                            </td>
                                 <td>{proportion.label}</td>
-                                <td>{(100 * proportion.value)}%</td>
+                                <td>{parseFloat(100 * proportion.value).toFixed(2)}%</td>
                             </tr>
                         )
                     })}
