@@ -10,7 +10,7 @@ import { SubmitResetButton } from '../../forms/commons';
 import BaseAdminPage from './../BaseAdminPage';
 
 export const issue_sources = [
-    'Yayasan', 'Orang Tua', 'Santri', 'Tamu'
+    'Yayasan', 'Orang Tua', 'Santri', 'Pegawa', 'Tamu', 
 ]
 
 class IssuesForm extends BaseAdminPage {

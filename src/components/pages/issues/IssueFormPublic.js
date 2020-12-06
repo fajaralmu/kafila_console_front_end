@@ -89,6 +89,7 @@ export default class IssueFormPublic extends BaseComponent {
         }
 
         this.recordSaved = (response) => {
+            this.resetCaptcha();
             this.setState({ recordSaved: true });
         }
 
@@ -113,7 +114,7 @@ export default class IssueFormPublic extends BaseComponent {
         }
 
         this.showForm = () => {
-            this.setState({recordSaved:false});
+            this.setState({ recordSaved: false });
         }
     }
 
@@ -130,14 +131,14 @@ export default class IssueFormPublic extends BaseComponent {
         if (this.state.recordSaved == true) {
 
             return (
-            <div>
-                {title}
-                <div className="box has-text-success" style={{textAlign:'center', margin:'10px'}}>
-                    <span className="icon" style={{fontSize:'4em', marginTop:'30px'}}><i className="fas fa-check" /></span>
-                    <h2>Aduan Anda berhasil disimpan!</h2>
-                    <AnchorWithIcon onClick={this.showForm} >Kirim Tanggapan Lain</AnchorWithIcon>
-                </div>
-            </div>);
+                <div>
+                    {title}
+                    <div className="box has-text-success" style={{ textAlign: 'center', margin: '10px' }}>
+                        <span className="icon" style={{ fontSize: '4em', marginTop: '30px' }}><i className="fas fa-check" /></span>
+                        <h2>Aduan Anda berhasil disimpan!</h2>
+                        <AnchorWithIcon onClick={this.showForm} >Kirim Tanggapan Lain</AnchorWithIcon>
+                    </div>
+                </div>);
         }
 
         return (
@@ -145,7 +146,7 @@ export default class IssueFormPublic extends BaseComponent {
                 {title}
                 <Card title="Formulir">
                     <form onSubmit={this.onSubmit}>
-                        <InputField name="date" type="date" required={true} />
+                        <InputField name="date" label="tanggal" type="date" required={true} />
                         <InputField name="email" type="email" note="Kosongkan jika berstatus anonim" />
                         <SelectField label="status_pengadu" options={issue_sources.map(source => {
                             return {
@@ -153,14 +154,14 @@ export default class IssueFormPublic extends BaseComponent {
                                 text: source
                             }
                         })} name="issuer" required={true} />
-                        <InputField name="place" required={true} />
-                        <SelectField label="Bidang" options={this.departementList.map(item => {
+                        <InputField name="place" label="lokasi" required={true} />
+                        <SelectField label="bidang" options={this.departementList.map(item => {
                             return {
                                 value: item.id,
                                 text: item.name
                             }
                         })} name="departement_id" required={true} />
-                        <InputField name="content" type="textarea" required={true} />
+                        <InputField name="content" label="aduan" type="textarea" required={true} />
                         <div className="field is-horizontal">
                             <div className="field-label"></div>
                             <div className="field-body">
@@ -175,19 +176,45 @@ export default class IssueFormPublic extends BaseComponent {
     }
 }
 
-const CaptCha = (props) => {
-    const captcha = props.captcha;
-    return (
+class CaptCha extends Component {
+    constructor(props) {
+        super(props);
+        this.canvas_id = "captcha_canvas_"+new Date().getTime();
+    }
+    getCaptchaText() {
+        const captcha = this.props.captcha;
+        const text = captcha.firstNumber + " " + captcha.operator + " " + captcha.secordNumber;
+        return text;
+    }
+    drawCanvas() {
+        const canvas = document.getElementById(this.canvas_id);
+        const context = canvas.getContext('2d');
 
-        <article style={{ width: '100%' }} className="message is-link">
-            <div className="message-header">
-                <p>Captcha</p>
-                <a onClick={props.reset} className="button"><i className="fas fa-sync" /></a>
-            </div>
-            <div className="message-body has-background-grey-lighter">
-                <h2>{captcha.firstNumber} {captcha.operator} {captcha.secordNumber} = </h2>
-                <input className="input" name="captcha_result" required />
-            </div>
-        </article>
-    );
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.fillStyle = '#000';
+        context.font = '70px Arial';
+        context.fillText(this.getCaptchaText(), 10, 50);
+    }
+    componentDidUpdate() {
+        this.drawCanvas();
+    }
+    componentDidMount() {
+        this.drawCanvas();
+    }
+    render() {
+        const captcha = this.props.captcha;
+        return (
+
+            <article style={{ width: '100%' }} className="message ">
+                <div className="message-header has-background-grey-lighter">
+                    <p className="has-text-dark">Captcha</p>
+                    <a onClick={this.props.reset} className="button"><i className="fas fa-sync" /></a>
+                </div>
+                <div className="message-body has-background-light">
+                    <canvas id={this.canvas_id} className="has-background-light" style={{ width: '100px', height: 'auto' }} />
+                    <input className="input" name="captcha_result" required />
+                </div>
+            </article>
+        );
+    }
 }
