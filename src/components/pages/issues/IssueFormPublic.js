@@ -49,6 +49,7 @@ export default class IssueFormPublic extends BaseComponent {
             const form = e.target;
             const capchaResult = document.getElementsByName("captcha_result")[0].value;
             const captchaValidated = this.validateCaptcha(capchaResult);
+            const app = this;
             if (!captchaValidated) {
                 
                 this.showError("Invalid Captcha");
@@ -56,9 +57,20 @@ export default class IssueFormPublic extends BaseComponent {
             }
             this.showConfirmation("Submit Data?").then(function (ok) {
                 if (ok) {
-
+                    app.fillDataAndStore(form);
                 }
             });
+        }
+
+        this.fillDataAndStore = (form) => {
+            const issue = {};
+            const inputs = form.getElementsByClassName("input-form-field");
+            for (let i = 0; i < inputs.length; i++) {
+                const element = inputs[i];
+                issue[element.name] = element.value
+            }
+            console.debug("Issue: ", issue);
+            this.storeIssue(issue);
         }
 
         this.departementListLoaded = (response) => {
@@ -74,11 +86,27 @@ export default class IssueFormPublic extends BaseComponent {
                 })
         }
 
+        this.recordSaved = (response) => {
+            this.showInfo("Berhasil menyimpan aduan");
+        }
+
+        this.recordFailedToSave = (e) => {
+            this.showError("Gagal menyimpan aduan: "+e);
+        }
+
         this.loadDepartements = () => {
             this.commonAjax(
                 this.issueService.departementList, {},
                 this.departementListLoaded,
                 this.departementListNotLoaded
+            );
+        }
+
+        this.storeIssue = (issue) => {
+            this.commonAjax(
+                this.issueService.storePublicIssue, issue,
+                this.recordSaved,
+                this.recordFailedToSave
             );
         }
     }
