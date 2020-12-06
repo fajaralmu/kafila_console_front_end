@@ -5,10 +5,9 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 
 import * as actions from '../../redux/actionCreators'
 import { connect } from 'react-redux'
-import BaseComponent from './../BaseComponent';
 import './SideBar.css'
-import { MENUS } from './SideBar';
 import BaseMenus from './BaseMenus';
+import { MENUS } from './../../constant/Menus';
 
 
 class Header extends BaseMenus {
@@ -137,9 +136,6 @@ const mapStateToProps = state => {
         //user
         loginStatus: state.userState.loginStatus,
         loggedUser: state.userState.loggedUser,
-        menus: state.userState.menus,
-        requestId: state.userState.requestId,
-        applicationProfile: state.userState.applicationProfile,
     }
 }
 
