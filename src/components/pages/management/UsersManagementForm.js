@@ -130,7 +130,8 @@ class UserManagementForm extends BaseComponent {
 
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
             return <div>
-                <h2 style={{ textAlign: 'center' }}>Users Management</h2><h3>Please Wait...</h3>
+                <CommonTitle>Users Management</CommonTitle>
+                <h3>Please Wait...</h3>
             </div>
         }
 

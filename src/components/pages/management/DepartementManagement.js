@@ -88,7 +88,7 @@ class DeparementManagement extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <CommonTitle>Departement Management</CommonTitle>
+                <CommonTitle>Departements Management</CommonTitle>
                 <Card title="Departement">
                     {this.linkToFormCreate("/management/departements/create", "Tambah Data")}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
