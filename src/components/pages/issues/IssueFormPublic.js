@@ -115,6 +115,7 @@ class IssueFormPublic extends BaseComponent {
             } else {
                 this.departementList = appData[DATA_KEY_DEPARTEMENTS];
             }
+            this.refresh();
         }
 
         this.storeIssue = (issue) => {
@@ -159,21 +160,23 @@ class IssueFormPublic extends BaseComponent {
                 <Card title="Formulir">
                     <form onSubmit={this.onSubmit}>
                         <InputField name="date" label="tanggal" type="date" required={true} />
+                        
+                        <InputField name="place" label="tempat" required={true} />
+                        <InputField name="content" label="permasalahan" type="textarea" required={true} />
                         <InputField name="email" type="email" note="Kosongkan jika berstatus anonim" />
-                        <SelectField label="status_pengadu" options={issue_sources.map(source => {
+                        <SelectField label="pengadu" options={issue_sources.map(source => {
                             return {
                                 value: source,
                                 text: source
                             }
                         })} name="issuer" required={true} />
-                        <InputField name="place" label="lokasi" required={true} />
                         <SelectField label="bidang" options={this.departementList.map(item => {
                             return {
                                 value: item.id,
                                 text: item.name
                             }
                         })} name="departement_id" required={true} />
-                        <InputField name="content" label="aduan" type="textarea" required={true} />
+                        
                         <div className="field is-horizontal">
                             <div className="field-label"></div>
                             <div className="field-body">

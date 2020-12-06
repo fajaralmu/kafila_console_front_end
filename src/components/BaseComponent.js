@@ -4,6 +4,9 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
 export default class BaseComponent extends Component {
     constructor(props, authenticated = true){
         super(props);
+        this.state = {
+            updated:new Date()
+        }
         this.parentApp = props.app;
         this.authenticated =  authenticated;
     
@@ -132,6 +135,9 @@ export default class BaseComponent extends Component {
 
         this.title = (title) => {
             return <CommonTitle>{title}</CommonTitle>
+        }
+        this.refresh = () => {
+            this.setState({updated:new Date()});
         }
     }
 

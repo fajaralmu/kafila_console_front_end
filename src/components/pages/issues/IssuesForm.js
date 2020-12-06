@@ -8,9 +8,11 @@ import { connect } from 'react-redux';
 import Message from '../../messages/Message';
 import { SubmitResetButton } from '../../forms/commons';
 import BaseAdminPage from './../BaseAdminPage';
+import { applicationAction } from '../../../redux/actionCreators';
+import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 
 export const issue_sources = [
-    'Yayasan', 'Orang Tua', 'Santri', 'Pegawa', 'Tamu', 
+    'Yayasan', 'Orang Tua', 'Santri', 'Pegawa', 'Tamu',
 ]
 
 class IssuesForm extends BaseAdminPage {
@@ -19,19 +21,19 @@ class IssuesForm extends BaseAdminPage {
         this.state = {
             recordNotFound: false,
             isLoadingRecord: true,
-            departementList: []
         };
+        this.departementList = [];
         this.masterDataService = MasterManagementService.instance;
 
         this.onSubmit = (e) => {
             e.preventDefault();
             const form = e.target;
             const app = this;
-            this.showConfirmation("Save Data?").then(function(accepted) {
+            this.showConfirmation("Save Data?").then(function (accepted) {
                 if (accepted) {
                     app.storeRecord(form);
                 }
-            });            
+            });
         }
 
         this.storeRecord = (form) => {
@@ -61,11 +63,11 @@ class IssuesForm extends BaseAdminPage {
         }
 
         this.departementListLoaded = (response) => {
-            this.setState({ departementList: response.result_list });
+            this.departementList= response.result_list;
             if (null != this.getRecordId()) {
                 this.loadRecord();
             }
-            console.log("departementListLoaded: ", response);
+            this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, this.departementList);
         }
 
         this.recordSaved = (response) => {
@@ -73,7 +75,7 @@ class IssuesForm extends BaseAdminPage {
 
             if (this.getRecordId() == null) {
                 this.handleSuccessGetRecord(response);
-                this.props.history.push("/issues/"+response.issue.id);
+                this.props.history.push("/issues/" + response.issue.id);
             }
         }
         this.recordFailedToSave = (e) => {
@@ -88,11 +90,19 @@ class IssuesForm extends BaseAdminPage {
         }
 
         this.loadDepartements = () => {
-            this.commonAjax(
-                this.masterDataService.departementList, {},
-                this.departementListLoaded,
-                (error) => { }
-            );
+            const appData = this.props.applicationData;
+            if (appData[DATA_KEY_DEPARTEMENTS] == null ||
+                appData[DATA_KEY_DEPARTEMENTS].length == 0) {
+                this.commonAjax(
+                    this.masterDataService.departementList, {},
+                    this.departementListLoaded,
+                    (error) => { }
+                );
+            } else {
+                this.departementList = appData[DATA_KEY_DEPARTEMENTS];
+               
+            }
+            this.refresh();
         }
 
         this.handleSuccessGetRecord = (response) => {
@@ -122,7 +132,7 @@ class IssuesForm extends BaseAdminPage {
     }
 
     componentDidMount() {
-        if(!this.validateLoginStatus()){
+        if (!this.validateLoginStatus()) {
             return;
         }
         this.loadDepartements();
@@ -160,7 +170,7 @@ class IssuesForm extends BaseAdminPage {
                                 text: source
                             }
                         })} name="issuer" required={true} />
-                        <SelectField label="Departement" options={this.state.departementList.map(dep => {
+                        <SelectField label="Departement" options={this.departementList.map(dep => {
                             return {
                                 value: dep.id,
                                 text: dep.name
@@ -180,8 +190,13 @@ const mapStateToProps = state => {
 
     return {
         loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus
+        loginStatus: state.userState.loginStatus,
+        applicationData: state.applicationState.applicationData
     }
 }
+
+const mapDispatchToProps = dispatch => ({
+    storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
+})
 export default withRouter(
-    connect(mapStateToProps)(IssuesForm));
+    connect(mapStateToProps, mapDispatchToProps)(IssuesForm));
