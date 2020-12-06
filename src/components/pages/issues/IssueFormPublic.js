@@ -140,7 +140,7 @@ class IssueFormPublic extends BaseComponent {
     componentDidUpdate() { }
 
     render() {
-        const title = this.title("Form Pengaduan Publik");
+        const title = this.title("Form Aduan Publik");
         if (this.state.recordSaved == true) {
 
             return (
@@ -148,8 +148,8 @@ class IssueFormPublic extends BaseComponent {
                     {title}
                     <div className="box has-text-success" style={{ textAlign: 'center', margin: '10px' }}>
                         <span className="icon" style={{ fontSize: '4em', marginTop: '30px' }}><i className="fas fa-check" /></span>
-                        <h2>Aduan Anda berhasil disimpan!</h2>
-                        <AnchorWithIcon onClick={this.showForm} >Kirim Tanggapan Lain</AnchorWithIcon>
+                        <h2>Terimakasih. Aduan Anda berhasil disimpan!</h2>
+                        <AnchorWithIcon iconClassName="fas fa-angle-right" onClick={this.showForm} >Kirim Tanggapan Lain</AnchorWithIcon>
                     </div>
                 </div>);
         }
@@ -157,7 +157,7 @@ class IssueFormPublic extends BaseComponent {
         return (
             <div >
                 {title}
-                <Card title="Formulir">
+                <Card title="Form">
                     <form onSubmit={this.onSubmit}>
                         <InputField name="date" label="tanggal" type="date" required={true} />
                         

@@ -12,7 +12,7 @@ import { applicationAction } from '../../../redux/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 
 export const issue_sources = [
-    'Yayasan', 'Orang Tua', 'Santri', 'Pegawa', 'Tamu',
+    'Yayasan', 'Orang Tua', 'Santri', 'Pegawai', 'Tamu',
 ]
 
 class IssuesForm extends BaseAdminPage {
