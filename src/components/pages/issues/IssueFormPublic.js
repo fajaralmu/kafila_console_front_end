@@ -7,6 +7,7 @@ import { InputField, SubmitResetButton } from '../../forms/commons';
 import { issue_sources } from './IssuesForm';
 import { SelectField } from './../../forms/commons';
 import IssuesService from './../../../services/IssuesService';
+import { AnchorWithIcon } from './../../buttons/buttons';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
 export default class IssueFormPublic extends BaseComponent {
@@ -14,7 +15,8 @@ export default class IssueFormPublic extends BaseComponent {
         super(props, false);
         this.state = {
             ...this.state,
-            captchaUpdate: new Date()
+            captchaUpdate: new Date(),
+            recordSave: false,
         }
         this.issueService = IssuesService.instance;
         this.departementList = [];
@@ -51,7 +53,7 @@ export default class IssueFormPublic extends BaseComponent {
             const captchaValidated = this.validateCaptcha(capchaResult);
             const app = this;
             if (!captchaValidated) {
-                
+
                 this.showError("Invalid Captcha");
                 return;
             }
@@ -87,11 +89,11 @@ export default class IssueFormPublic extends BaseComponent {
         }
 
         this.recordSaved = (response) => {
-            this.showInfo("Berhasil menyimpan aduan");
+            this.setState({ recordSaved: true });
         }
 
         this.recordFailedToSave = (e) => {
-            this.showError("Gagal menyimpan aduan: "+e);
+            this.showError("Gagal menyimpan aduan: " + e);
         }
 
         this.loadDepartements = () => {
@@ -109,6 +111,10 @@ export default class IssueFormPublic extends BaseComponent {
                 this.recordFailedToSave
             );
         }
+
+        this.showForm = () => {
+            this.setState({recordSaved:false});
+        }
     }
 
     componentDidMount() {
@@ -120,9 +126,23 @@ export default class IssueFormPublic extends BaseComponent {
     componentDidUpdate() { }
 
     render() {
-        return (
+        const title = this.title("Form Pengaduan Publik");
+        if (this.state.recordSaved == true) {
+
+            return (
             <div>
-                <CommonTitle>Form Pengaduan Publik</CommonTitle>
+                {title}
+                <div className="box has-text-success" style={{textAlign:'center', margin:'10px'}}>
+                    <span className="icon" style={{fontSize:'4em', marginTop:'30px'}}><i className="fas fa-check" /></span>
+                    <h2>Aduan Anda berhasil disimpan!</h2>
+                    <AnchorWithIcon onClick={this.showForm} >Kirim Tanggapan Lain</AnchorWithIcon>
+                </div>
+            </div>);
+        }
+
+        return (
+            <div >
+                {title}
                 <Card title="Formulir">
                     <form onSubmit={this.onSubmit}>
                         <InputField name="date" type="date" required={true} />
@@ -158,8 +178,8 @@ export default class IssueFormPublic extends BaseComponent {
 const CaptCha = (props) => {
     const captcha = props.captcha;
     return (
-        
-        <article style={{width:'100%'}} className="message is-link">
+
+        <article style={{ width: '100%' }} className="message is-link">
             <div className="message-header">
                 <p>Captcha</p>
                 <a onClick={props.reset} className="button"><i className="fas fa-sync" /></a>
