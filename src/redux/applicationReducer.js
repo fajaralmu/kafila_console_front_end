@@ -1,18 +1,18 @@
 import * as types from './types' 
 
 export const initState = {
-    meetingNoteData: null,
+    applicationData: {},
 };
 
 export const reducer = (state = initState, action) => {
     
     switch (action.type) { 
-        case types.GET_MEETING_NOTES:
-            let result = {
-                ...state,
-                meetingNoteData: action.payload
-            };
-            console.debug("action.meetingNoteData: ", result.meetingNoteData);
+        case types.STORE_APPLICTION_DATA:
+            const key = action.payload.key;
+            const data = action.payload.data;
+            const result = state;
+            result.applicationData[key] = data
+            
             return result;
         
         default:

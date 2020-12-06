@@ -78,14 +78,6 @@ export const requestAppIdMiddleware = store => next => action => {
         .finally(param => action.meta.app.endLoading());
 }
 
-
-export const refreshLoginStatusMiddleware = store => next => action => {
-    if (!action.meta || action.meta.type !== types.REFRESH_LOGIN) {
-        return next(action);
-    } 
-
-}
-
 export const performLogoutMiddleware = store => next => action => {
     if (!action.meta || action.meta.type !== types.DO_LOGOUT) {
         return next(action);

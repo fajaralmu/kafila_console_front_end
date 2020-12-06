@@ -125,8 +125,7 @@ class App extends Component {
   componentDidUpdate() {
     if (this.props.requestId != this.state.requestId) {
       this.setState({ requestId: this.props.requestId });
-      this.props.refreshLogin();
-
+      
     }
   }
 
@@ -205,16 +204,13 @@ const mapStateToProps = state => {
 
     //user
     loginStatus: state.userState.loginStatus,
-    menus: state.userState.menus,
     requestId: state.userState.requestId,
-    applicationProfile: state.userState.applicationProfile,
   }
 }
 
 const mapDispatchToProps = dispatch => ({
   performLogout: (app) => dispatch(actions.accountAction.performLogout(app)),
   requestAppId: (app) => dispatch(actions.accountAction.requestAppId(app)),
-  refreshLogin: () => dispatch(actions.refreshLoginStatus()),
 })
 
 export default withRouter(connect(

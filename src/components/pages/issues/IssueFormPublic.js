@@ -8,9 +8,13 @@ import { issue_sources } from './IssuesForm';
 import { SelectField } from './../../forms/commons';
 import IssuesService from './../../../services/IssuesService';
 import { AnchorWithIcon } from './../../buttons/buttons';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { applicationAction } from '../../../redux/actionCreators';
+import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
-export default class IssueFormPublic extends BaseComponent {
+class IssueFormPublic extends BaseComponent {
     constructor(props) {
         super(props, false);
         this.state = {
@@ -77,6 +81,7 @@ export default class IssueFormPublic extends BaseComponent {
 
         this.departementListLoaded = (response) => {
             this.departementList = response.result_list;
+            this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, this.departementList);
         }
         this.departementListNotLoaded = (error) => {
             const app = this;
@@ -98,11 +103,18 @@ export default class IssueFormPublic extends BaseComponent {
         }
 
         this.loadDepartements = () => {
-            this.commonAjax(
-                this.issueService.departementList, {},
-                this.departementListLoaded,
-                this.departementListNotLoaded
-            );
+            const appData = this.props.applicationData;
+            if (appData[DATA_KEY_DEPARTEMENTS] == null ||
+                appData[DATA_KEY_DEPARTEMENTS].length == 0) {
+
+                this.commonAjax(
+                    this.issueService.departementList, {},
+                    this.departementListLoaded,
+                    this.departementListNotLoaded
+                );
+            } else {
+                this.departementList = appData[DATA_KEY_DEPARTEMENTS];
+            }
         }
 
         this.storeIssue = (issue) => {
@@ -179,7 +191,7 @@ export default class IssueFormPublic extends BaseComponent {
 class CaptCha extends Component {
     constructor(props) {
         super(props);
-        this.canvas_id = "captcha_canvas_"+new Date().getTime();
+        this.canvas_id = "captcha_canvas_" + new Date().getTime();
     }
     getCaptchaText() {
         const captcha = this.props.captcha;
@@ -218,3 +230,21 @@ class CaptCha extends Component {
         );
     }
 }
+
+
+const mapStateToProps = state => {
+
+    return {
+        loggedUser: state.userState.loggedUser,
+        loginStatus: state.userState.loginStatus,
+        applicationData: state.applicationState.applicationData
+    }
+}
+const mapDispatchToProps = dispatch => ({
+    storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
+})
+
+export default withRouter(connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(IssueFormPublic));

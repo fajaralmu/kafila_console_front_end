@@ -21,10 +21,7 @@ class Dashboard extends BaseComponent {
         this.validateLoginStatus();
     }
     componentDidMount() {
-        // if (null == this.props.meetingNoteData) {
-        //     this.getMeetingNotes();
         document.title = "Dashboard";
-        // this.populateDefaultInputs();
     }
 
     render() {
@@ -47,11 +44,10 @@ const mapStateToProps = state => {
     return {
         loggedUser: state.userState.loggedUser,
         loginStatus: state.userState.loginStatus,
-        meetingNoteData: state.meetingNoteState.meetingNoteData
     }
 }
 const mapDispatchToProps = dispatch => ({
-    getMeetingNotes: (request, app) => dispatch(actions.meetingNotesAction.list(request, app)),
+    
 })
 
 export default withRouter(connect(
