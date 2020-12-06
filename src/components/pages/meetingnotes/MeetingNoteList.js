@@ -88,8 +88,8 @@ class MeetingNoteList extends BaseManagementPage {
                                         { text: 'place', alias: "Tempat", withFilter: true },
                                         { text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'user', alias: "Notulis", withFilter: true },
-                                        { text: 'Topik Diskusi', },
-                                        { text: 'Closed', },
+                                        { text: 'discussion_topics_count', alias:"Topik", withFilter:true},
+                                        { text: 'discussion_topics_closed_count', alias:"closed", withFilter:true},
                                         { text: 'action', },
                                     ]} />
                                 <tbody>
