@@ -168,13 +168,15 @@ export const LabelField = (props) => {
 
 export const SubmitResetButton = (props) => {
     const submitValue = props.submitText ? props.submitText : "Submit";
+    const submitIconClassName = props.submitIconClassName ? props.submitIconClassName : "fas fa-save";
+    const submitButtonClassName = props.submitButtonClassName ? "button "+ props.submitButtonClassName : "button is-link";
     return (
         <div className="field is-horizontal">
             <div className="field-label is-normal" />
             <div className="field-body">
                 <div className="field">
-                    <button className="button is-link" type="submit" style={{marginRight:'10px'}} >
-                        <span className="icon"><i className="fas fa-save"></i></span>
+                    <button className={submitButtonClassName} type="submit" style={{marginRight:'10px'}} >
+                        <span className="icon"><i className={submitIconClassName}></i></span>
                         <span>{submitValue}</span>
                     </button>
                     {props.withReset == true ?

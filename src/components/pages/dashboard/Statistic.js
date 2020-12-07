@@ -108,22 +108,21 @@ class Statistic extends BaseComponent {
                 text: d.name
             }
         });
-        const departementOptions = [{value:'all', text: '-- Semua --'},...departementListMapped];
+        const departementOptions = [{ value: 'all', text: '-- Semua --' }, ...departementListMapped];
         return (
 
             <Card title="Statistik">
-                {this.isLoggedUserAdmin() ?
-                    <form onSubmit={this.loadStatisticWithDepartement}>
-                        <SelectField name="departement" options={
-                            departementOptions} />
-                        <SubmitResetButton />
-                    </form> :
-                    null}
                 <div id="pie_chart_discussion_topics">
                     <PieChart title="Tema Pembahasan" ref={this.pieChartChild} proportions={proportions} />
-                    <AnchorWithIcon style={{ marginTop: '20px' }} iconClassName="fas fa-sync" onClick={this.loadStatistic}>
-                        Reload
-                                </AnchorWithIcon>
+                    {this.isLoggedUserAdmin() ?
+
+                        <form style={{ marginTop: '20px' }} onSubmit={this.loadStatisticWithDepartement}>
+                            <SelectField name="departement" options={
+                                departementOptions} />
+                            <SubmitResetButton submitButtonClassName="no" submitIconClassName="fas fa-sync" submitText="Reload" />
+                        </form>
+                        : <AnchorWithIcon style={{ marginTop: '20px' }} iconClassName="fas fa-sync"
+                            onClick={(e) => this.loadStatistic(null)}>Reload</AnchorWithIcon>}
                     <p>updated at: {this.statisticData.date}</p>
                 </div>
             </Card>
