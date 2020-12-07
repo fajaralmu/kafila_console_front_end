@@ -212,7 +212,7 @@ export default class PieChart extends Component {
                 <div style={{ height: 'auto' }} className="columns">
 
                     <div className="column has-text-centered " style={{ overflowX: 'scroll' }}>
-                        {this.proportionIsEmpty() ? <h2>Tidak ada data</h2> :
+                        {this.proportionIsEmpty() ? <h2 style={{height:PIE_CANVAS_SIZE}}>Tidak ada data</h2> :
                             <canvas id="pie_chart_canvas" className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
                         }
                     </div>
