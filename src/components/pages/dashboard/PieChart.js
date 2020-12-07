@@ -1,5 +1,7 @@
 
 import React, { Component } from 'react';
+import { AnchorWithIcon } from '../../buttons/buttons';
+import { uniqueId } from './../../../utils/StringUtil';
 
 const PIE_W = 100, RAD = 2 * Math.PI;
 const MAX_DEG = 360;
@@ -8,9 +10,10 @@ const circleX = 150, circleY = 150;
 export default class PieChart extends Component {
     constructor(props) {
         super(props);
-
+        this.id = uniqueId() + "_" + (new Date().getTime()) + ("_pie_chart_canvas");
         this.state = {
-            proportions: []
+            proportions: [],
+            showDetail: true
         }
         this.timeoutId = null;
         this.accumulationDegree = 0;
@@ -19,7 +22,7 @@ export default class PieChart extends Component {
             this.accumulationDegree = 0;
             const proportions = this.state.proportions;
 
-            const canvas = document.getElementById("pie_chart_canvas");
+            const canvas = document.getElementById(this.id);
             if (null == canvas) {
                 return;
             }
@@ -123,6 +126,10 @@ export default class PieChart extends Component {
             return 4;
         }
 
+        this.toggleDetail = () => {
+            this.setState({ showDetail: !this.state.showDetail });
+        }
+
         this.proportionIsFixed = () => {
             const stateProp = this.state.proportions;
             const prop = this.getPropsProportion();
@@ -134,7 +141,7 @@ export default class PieChart extends Component {
             const stateProp = this.state.proportions;
             const prop = this.getPropsProportion();
 
-            return this.sumValues(prop) == 0 || 0==this.sumValues(stateProp);
+            return this.sumValues(prop) == 0 || 0 == this.sumValues(stateProp);
         }
 
         this.getPropsProportion = () => {
@@ -208,16 +215,18 @@ export default class PieChart extends Component {
     render() {
 
         return (
-            <div ><h3>{this.props.title ? this.props.title : "Grafik"}</h3>
+            <div style={{ marginBottom: '20px' }}><h3>{this.props.title ? this.props.title : "Grafik"}</h3>
                 <div style={{ height: 'auto' }} className="columns">
 
                     <div className="column has-text-centered " style={{ overflowX: 'scroll' }}>
-                        {this.proportionIsEmpty() ? <h2 style={{height:PIE_CANVAS_SIZE}}>Tidak ada data</h2> :
-                            <canvas id="pie_chart_canvas" className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
+                        {this.proportionIsEmpty() ? <h2 style={{ height: PIE_CANVAS_SIZE }}>Tidak ada data</h2> :
+                            <canvas id={this.id} className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
                         }
                     </div>
                     <div className="column ">
-                        <DetailPie proportions={this.state.proportions} />
+                        <AnchorWithIcon style={{ marginBottom: '10px' }} onClick={this.toggleDetail}
+                            iconClassName={this.state.showDetail ? "fas fa-angle-up" : "fas fa-angle-down"}>{this.state.showDetail ? "Close" : "Show"} Detail</AnchorWithIcon>
+                        {this.state.showDetail ? <DetailPie proportions={this.state.proportions} /> : null}
                     </div>
                 </div></div>
         )

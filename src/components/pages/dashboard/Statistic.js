@@ -24,7 +24,9 @@ class Statistic extends BaseComponent {
             ...this.state,
             errorLoadingStatistic: false
         };
-        this.pieChartChild = React.createRef();
+        this.pieChartChildTopic = React.createRef();
+        this.pieChartChildIssue = React.createRef();
+
         this.historiesService = RecordHistoriesService.instance;
         this.statisticData = null;
         this.departementList = [];
@@ -42,8 +44,11 @@ class Statistic extends BaseComponent {
 
         this.statisticLoaded = (response) => {
             this.statisticData = response;
-            if (this.pieChartChild.current) {
-                this.pieChartChild.current.resetProportion();
+            if (this.pieChartChildTopic.current) {
+                this.pieChartChildTopic.current.resetProportion();
+            }
+            if (this.pieChartChildIssue.current) {
+                this.pieChartChildIssue.current.resetProportion();
             }
 
             if (this.isLoggedUserAdmin()) {
@@ -86,6 +91,26 @@ class Statistic extends BaseComponent {
         ]
         return proportions;
     }
+    getIssueProportion = () => {
+        if (this.statisticData == null) { return null }
+        const statistic = this.statisticData.statistic;
+        const total_issue = statistic.issue_count;
+        const proportions = [
+            {
+                proportion: statistic.issue_closed_count / total_issue,
+                label: 'Closed',
+                color: COLOR_CLOSED,
+                value: statistic.issue_closed_count
+            },
+            {
+                proportion: statistic.issue_not_closed_count / total_issue,
+                label: 'Not Closed',
+                color: COLOR_NOT_CLOSED,
+                value: statistic.issue_not_closed_count
+            }
+        ]
+        return proportions;
+    }
 
     componentDidMount() {
         if (null == this.state.statisticData) {
@@ -102,7 +127,8 @@ class Statistic extends BaseComponent {
                 <ErrorInfo onClick={this.loadStatistic} /></Card>);
         }
         const discussionTopicProportions = this.getDiscussionTopicProportion();
-        if (null == discussionTopicProportions) {
+        const issueProportions = this.getIssueProportion();
+        if (null == discussionTopicProportions || null == issueProportions) {
             return <Card title="Statistik"><p>Please Wait</p></Card>
         }
         const departementListMapped = this.departementList.map(function (d) {
@@ -116,7 +142,8 @@ class Statistic extends BaseComponent {
 
             <Card title="Statistik">
                 <div id="pie_chart_discussion_topics">
-                    <PieChart title="Tema Pembahasan" ref={this.pieChartChild} proportions={discussionTopicProportions} />
+                    <PieChart title="Tema Pembahasan" ref={this.pieChartChildTopic} proportions={discussionTopicProportions} />
+                    <PieChart title="Aduan" ref={this.pieChartChildIssue} proportions={issueProportions} />
 
 
                     <form style={{ marginTop: '20px' }} onSubmit={
