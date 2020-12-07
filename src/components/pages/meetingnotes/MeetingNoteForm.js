@@ -268,6 +268,9 @@ class MeetingNoteForm extends BaseComponent {
         }
         this.enableInputs = () => {
             const form = document.getElementById(FORM_ID);
+            if (null == form) {
+                return;
+            }
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
