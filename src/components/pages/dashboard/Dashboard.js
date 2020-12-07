@@ -19,15 +19,19 @@ class Dashboard extends BaseComponent {
             ...this.state,
             errorLoadingStatistic: false
         };
+        this.pieChartChild = React.createRef();
         this.historiesService = RecordHistoriesService.instance;
         this.statisticData = null;
 
         this.statisticLoaded = (response) => {
             this.statisticData = response;
-            this.refresh();
+            if (this.pieChartChild.current){
+                this.pieChartChild.current.resetProportion();
+            }
         }
 
         this.statisticFailedToLoad = (e) => {
+            console.error(e);
             this.setState({ errorLoadingStatistic: true });
         }
         this.loadStatistic = () => {
@@ -46,14 +50,16 @@ class Dashboard extends BaseComponent {
         const total_topic = statistic.topic_count;
         const proportions = [
             {
-                value: statistic.topic_closed_count / total_topic,
+                proportion: statistic.topic_closed_count / total_topic,
                 label: 'Closed',
-                color: 'green'
+                color: 'green',
+                value: statistic.topic_closed_count
             },
             {
-                value: statistic.topic_not_closed_count / total_topic,
+                proportion: statistic.topic_not_closed_count / total_topic,
                 label: 'Not Closed',
-                color: 'orange'
+                color: 'orange',
+                value: statistic.topic_not_closed_count 
             }
         ]
         return proportions;
@@ -87,10 +93,11 @@ class Dashboard extends BaseComponent {
                         <ErrorInfo onClick={(e) => this.loadStatistic()} />
                         : null == proportions ? <p>Please wait..</p> :
                             <div>
-                                <PieChart updated={this.state.updated} proportions={proportions} />
+                                <PieChart ref={this.pieChartChild}  proportions={proportions} />
                                 <AnchorWithIcon iconClassName="fas fa-sync" onClick={this.loadStatistic}>
                                     Reload
                                 </AnchorWithIcon>
+                                <p>updated at: {this.statisticData.date}</p>
                             </div>
                     }
                 </Card>
