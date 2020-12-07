@@ -11,7 +11,10 @@ import RecordHistoriesService from './../../../services/RecordHistoriesService';
 import { AnchorWithIcon } from './../../buttons/buttons';
 import Message from './../../messages/Message';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
-import { SubmitResetButton, SelectField } from '../../forms/commons';
+import { SubmitResetButton, SelectField, LabelField } from '../../forms/commons';
+const COLOR_CLOSED = 'rgb(180,230,30)';
+const COLOR_NOT_CLOSED = 'rgb(255,170,200)';
+
 
 class Statistic extends BaseComponent {
 
@@ -63,7 +66,7 @@ class Statistic extends BaseComponent {
         }
     }
 
-    getProportionData = () => {
+    getDiscussionTopicProportion = () => {
         if (this.statisticData == null) { return null }
         const statistic = this.statisticData.statistic;
         const total_topic = statistic.topic_count;
@@ -71,13 +74,13 @@ class Statistic extends BaseComponent {
             {
                 proportion: statistic.topic_closed_count / total_topic,
                 label: 'Closed',
-                color: 'green',
+                color: COLOR_CLOSED,
                 value: statistic.topic_closed_count
             },
             {
                 proportion: statistic.topic_not_closed_count / total_topic,
                 label: 'Not Closed',
-                color: 'orange',
+                color: COLOR_NOT_CLOSED,
                 value: statistic.topic_not_closed_count
             }
         ]
@@ -98,8 +101,8 @@ class Statistic extends BaseComponent {
             return (<Card title="Statistik">
                 <ErrorInfo onClick={this.loadStatistic} /></Card>);
         }
-        const proportions = this.getProportionData();
-        if (null == proportions) {
+        const discussionTopicProportions = this.getDiscussionTopicProportion();
+        if (null == discussionTopicProportions) {
             return <Card title="Statistik"><p>Please Wait</p></Card>
         }
         const departementListMapped = this.departementList.map(function (d) {
@@ -113,17 +116,21 @@ class Statistic extends BaseComponent {
 
             <Card title="Statistik">
                 <div id="pie_chart_discussion_topics">
-                    <PieChart title="Tema Pembahasan" ref={this.pieChartChild} proportions={proportions} />
-                    {this.isLoggedUserAdmin() ?
+                    <PieChart title="Tema Pembahasan" ref={this.pieChartChild} proportions={discussionTopicProportions} />
 
-                        <form style={{ marginTop: '20px' }} onSubmit={this.loadStatisticWithDepartement}>
+
+                    <form style={{ marginTop: '20px' }} onSubmit={
+                        this.isLoggedUserAdmin() ? (e) => this.loadStatisticWithDepartement(e) : (e) => {
+                            e.preventDefault();
+                            this.loadStatistic(null)
+                        }}>
+                        {this.isLoggedUserAdmin() ?
                             <SelectField name="departement" options={
-                                departementOptions} />
-                            <SubmitResetButton submitButtonClassName="no" submitIconClassName="fas fa-sync" submitText="Reload" />
-                        </form>
-                        : <AnchorWithIcon style={{ marginTop: '20px' }} iconClassName="fas fa-sync"
-                            onClick={(e) => this.loadStatistic(null)}>Reload</AnchorWithIcon>}
-                    <p>updated at: {this.statisticData.date}</p>
+                                departementOptions} /> : null}
+                        <LabelField label="updated_at" value={new Date(this.statisticData.date).toString()} />
+                        <SubmitResetButton submitButtonClassName="no" submitIconClassName="fas fa-sync" submitText="Reload" />
+
+                    </form>
                 </div>
             </Card>
         )

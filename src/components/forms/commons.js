@@ -154,10 +154,11 @@ export const LabelField = (props) => {
     const className = "input";
     return (
         <div className="field is-horizontal">
-            <div className="field-label is-normal"><label className="label">{props.label ? props.label : "Label"}</label></div>
+            <div className="field-label is-normal"><label className="label">{props.label ? CapitalizeFirstLetter(props.label) : "Label"}</label></div>
             <div className="field-body">
                 <div className="field">
                     <div className="control">
+                        {props.value}
                     {props.children}
                     </div>
                 </div>
