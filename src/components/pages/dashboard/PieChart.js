@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
 
-const PIE_W = 150, RAD = 2 * Math.PI;
+const PIE_W = 100, RAD = 2 * Math.PI;
 const MAX_DEG = 360;
-
-const circleX = 200, circleY = 200;
+const PIE_CANVAS_SIZE = 300;
+const circleX = 150, circleY = 150;
 export default class PieChart extends Component {
     constructor(props) {
         super(props);
@@ -188,14 +188,14 @@ export default class PieChart extends Component {
     render() {
 
         return (
-            <div><h3>{this.props.title? this.props.title:"Grafik"}</h3>
+            <div ><h3>{this.props.title? this.props.title:"Grafik"}</h3>
             <div style={{ height: 'auto' }} className="columns">
 
-                <div className="column">
-                    <canvas id="pie_chart_canvas" className="has-background-light" width="400" height="400"></canvas>
+                <div className="column has-text-centered "  style={{overflowX:'scroll'}}>
+                    <canvas id="pie_chart_canvas" className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
                     
                 </div>
-                <div className="column">
+                <div className="column ">
                     <DetailPie proportions={this.state.proportions} />
                 </div>
             </div></div>
@@ -205,7 +205,7 @@ export default class PieChart extends Component {
 
 const DetailPie = (props) => {
     return (<article className="message">
-        <div className="message-body">
+        <div className="message-body" style={{overflowX:'scroll'}}>
             <table>
                 <thead>
                     <tr>

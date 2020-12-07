@@ -94,7 +94,7 @@ class Dashboard extends BaseComponent {
                         : null == proportions ? <p>Please wait..</p> :
                             <div>
                                 <PieChart title="Tema Pembahasan" ref={this.pieChartChild}  proportions={proportions} />
-                                <AnchorWithIcon iconClassName="fas fa-sync" onClick={this.loadStatistic}>
+                                <AnchorWithIcon style={{marginTop:'20px'}} iconClassName="fas fa-sync" onClick={this.loadStatistic}>
                                     Reload
                                 </AnchorWithIcon>
                                 <p>updated at: {this.statisticData.date}</p>
