@@ -16,7 +16,7 @@ export default class PieChart extends Component {
         this.state = {
             proportions: []
         }
-
+        this.timeoutId = null;
         this.accumulationDegree = 0;
 
         this.updatePie = () => {
@@ -158,7 +158,10 @@ export default class PieChart extends Component {
         // }
 
         this.requestAnimation = () => {
-            setTimeout(this.animate, 10);
+            if (null != this.timeoutId) {
+                clearTimeout(this.timeoutId);
+            }
+            this.timeoutId = setTimeout(this.animate, 1);
         }
 
         this.resetProportion = () => {
