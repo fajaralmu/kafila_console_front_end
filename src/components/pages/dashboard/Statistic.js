@@ -119,7 +119,7 @@ class Statistic extends BaseComponent {
     }
 
     render() {
-        if (null == this.isLoggedUserNull()) {
+        if (this.isLoggedUserNull()) {
             return null;
         }
         if (this.state.errorLoadingStatistic) {

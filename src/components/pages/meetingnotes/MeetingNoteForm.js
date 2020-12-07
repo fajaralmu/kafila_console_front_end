@@ -330,7 +330,7 @@ class MeetingNoteForm extends BaseComponent {
     }
 
     render() {
-        if (null == this.isLoggedUserNull()) {
+        if (this.isLoggedUserNull()) {
             return null;
         }
 
