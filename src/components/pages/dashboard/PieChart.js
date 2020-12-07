@@ -8,11 +8,7 @@ const circleX = 150, circleY = 150;
 export default class PieChart extends Component {
     constructor(props) {
         super(props);
-        this.proportions = this.props.proportions ? this.props.proportions : [];
-        this.
-            proportions.sort(function (a, b) {
-                return b.proportion - a.proportion;
-            });
+
         this.state = {
             proportions: []
         }
@@ -24,6 +20,9 @@ export default class PieChart extends Component {
             const proportions = this.state.proportions;
 
             const canvas = document.getElementById("pie_chart_canvas");
+            if (null == canvas) {
+                return;
+            }
             const ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#ccc';
@@ -35,6 +34,9 @@ export default class PieChart extends Component {
             for (let i = 0; i < proportions.length; i++) {
 
                 const element = proportions[i];
+
+                if (element.proportion <= 0) { continue; }
+
                 const endAngle = currentRad - element.proportion * RAD;
                 ctx.fillStyle = element.color;
                 ctx.strokeStyle = element.color;
@@ -123,13 +125,28 @@ export default class PieChart extends Component {
 
         this.proportionIsFixed = () => {
             const stateProp = this.state.proportions;
-            const prop = this.proportions;
+            const prop = this.getPropsProportion();
             const fixed = this.sumValues(stateProp) >= this.sumValues(prop);
             return fixed;
         }
 
+        this.proportionIsEmpty = () => {
+            const stateProp = this.state.proportions;
+            const prop = this.getPropsProportion();
+
+            return this.sumValues(prop) == 0 || 0==this.sumValues(stateProp);
+        }
+
+        this.getPropsProportion = () => {
+            const proportions = this.props.proportions;
+            proportions.sort(function (a, b) {
+                return b.proportion - a.proportion;
+            });
+            return proportions;
+        }
+
         this.animate = () => {
-            const proportions = this.proportions;
+            const proportions = this.getPropsProportion();
             // while (this.proportionIsFixed() == false) {
 
             const stateProp = this.state.proportions;
@@ -165,7 +182,7 @@ export default class PieChart extends Component {
         }
 
         this.resetProportion = () => {
-            this.setState({proportions:[]});
+            this.setState({ proportions: [] });
         }
 
     }
@@ -191,24 +208,25 @@ export default class PieChart extends Component {
     render() {
 
         return (
-            <div ><h3>{this.props.title? this.props.title:"Grafik"}</h3>
-            <div style={{ height: 'auto' }} className="columns">
+            <div ><h3>{this.props.title ? this.props.title : "Grafik"}</h3>
+                <div style={{ height: 'auto' }} className="columns">
 
-                <div className="column has-text-centered "  style={{overflowX:'scroll'}}>
-                    <canvas id="pie_chart_canvas" className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
-                    
-                </div>
-                <div className="column ">
-                    <DetailPie proportions={this.state.proportions} />
-                </div>
-            </div></div>
+                    <div className="column has-text-centered " style={{ overflowX: 'scroll' }}>
+                        {this.proportionIsEmpty() ? <h2>Tidak ada data</h2> :
+                            <canvas id="pie_chart_canvas" className="has-background-light" width={PIE_CANVAS_SIZE} height={PIE_CANVAS_SIZE}></canvas>
+                        }
+                    </div>
+                    <div className="column ">
+                        <DetailPie proportions={this.state.proportions} />
+                    </div>
+                </div></div>
         )
     }
 }
 
 const DetailPie = (props) => {
     return (<article className="message">
-        <div className="message-body" style={{overflowX:'scroll'}}>
+        <div className="message-body" style={{ overflowX: 'scroll' }}>
             <table>
                 <thead>
                     <tr>
@@ -222,7 +240,7 @@ const DetailPie = (props) => {
                 <tbody>
                     {props.proportions.map((proportion, i) => {
                         return (
-                            <tr key={"PIE_PROP_"+i}>
+                            <tr key={"PIE_PROP_" + i}>
                                 <td style={{ width: '20px' }}>{i + 1}</td>
                                 <td style={{ padding: '5px', width: '50px' }}>
                                     <div style={{ width: '40px', height: '40px', backgroundColor: proportion.color, }} />                            </td>

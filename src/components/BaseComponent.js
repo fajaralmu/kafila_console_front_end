@@ -26,6 +26,9 @@ export default class BaseComponent extends Component {
         this.getLoggedUser = () => {
             return this.props.loggedUser;
         }
+        this.isLoggedUserAdmin = () => {
+            return this.isLoggedUserNull() == false && this.getLoggedUser().role == 'admin';
+        }
         this.getLoggedUserDepartementName = () => {
             if (this.isLoggedUserNull()) return null;
             return this.getLoggedUser().departement.name;
