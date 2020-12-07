@@ -188,15 +188,17 @@ export default class PieChart extends Component {
     render() {
 
         return (
+            <div><h3>{this.props.title? this.props.title:"Grafik"}</h3>
             <div style={{ height: 'auto' }} className="columns">
 
                 <div className="column">
                     <canvas id="pie_chart_canvas" className="has-background-light" width="400" height="400"></canvas>
+                    
                 </div>
                 <div className="column">
                     <DetailPie proportions={this.state.proportions} />
                 </div>
-            </div>
+            </div></div>
         )
     }
 }

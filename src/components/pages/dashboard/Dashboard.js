@@ -93,7 +93,7 @@ class Dashboard extends BaseComponent {
                         <ErrorInfo onClick={(e) => this.loadStatistic()} />
                         : null == proportions ? <p>Please wait..</p> :
                             <div>
-                                <PieChart ref={this.pieChartChild}  proportions={proportions} />
+                                <PieChart title="Tema Pembahasan" ref={this.pieChartChild}  proportions={proportions} />
                                 <AnchorWithIcon iconClassName="fas fa-sync" onClick={this.loadStatistic}>
                                     Reload
                                 </AnchorWithIcon>
