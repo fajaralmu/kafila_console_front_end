@@ -353,7 +353,9 @@ class MeetingNoteForm extends BaseComponent {
            notulis = this.getLoggedUser().display_name;
         }
         const formTitle = <>
-            <Link to="/meetingnote">Notulensi</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
+            {/* <Link to="/meetingnote">Notulensi</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp; */}
+            <Link to="/discussiontopics">Tema Pembahasan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;
+            Form
         </>
 
         return (

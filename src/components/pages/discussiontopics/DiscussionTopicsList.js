@@ -10,7 +10,10 @@ import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { getDiffDaysToNow } from './../../../utils/DateUtil';
 import { CommonTitle } from '../../BaseComponent';
-
+import { LinkToFormCreate } from './../meetingnotes/MeetingNoteList';
+// const title = "Daftar Tema Pembahasan";
+const title = "Daftar Topik";
+        
 class DiscussionTopicsList extends BaseManagementPage {
     constructor(props) {
         super(props, "Topik Pembahasan", "discussiontopic");
@@ -57,7 +60,7 @@ class DiscussionTopicsList extends BaseManagementPage {
             return;
         }
         this.loadRecords();
-        document.title = "Daftar Tema Pembahasan";
+        document.title = title;
     }
 
     //override baseAdminPage
@@ -78,9 +81,9 @@ class DiscussionTopicsList extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <CommonTitle>Daftar Tema Pembahasan</CommonTitle>
-                <Card title="Daftar Tema Pembahasan">
-
+                <CommonTitle>{title}</CommonTitle>
+                <Card title={title}>
+                <LinkToFormCreate to="meetingnote/create">Tambah Notulensi</LinkToFormCreate>
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <Columns cells={[
                             ButtonApplyResetFilter(), navButtons
@@ -91,14 +94,15 @@ class DiscussionTopicsList extends BaseManagementPage {
                                     onButtonOrderClick={this.onButtonOrderClick}
                                     headers={[
                                         { text: 'No' },
-                                        { text: 'id', alias: "Id", withFilter: true },
-                                        { text: 'date', alias: "Tanggal", withFilter: true },
-                                        { text: 'content', alias: "Pembahasan", withFilter: true },
-                                        { text: 'decision', alias: "Keputusan", withFilter: true },
+                                        // { text: 'id', alias: "Id", withFilter: true },
+                                        // { text: 'date', alias: "Tanggal", withFilter: true },
+                                        { text: 'content', alias: "Topik", withFilter: true },
+                                        // { text: 'decision', alias: "Keputusan", withFilter: true },
+                                        { text: 'person_in_charge', alias: "PIC", withFilter: true },
                                         { text: 'deadline_date', alias: "Deadline", withFilter: true },
-                                        { text: 'departement', alias: "Bidang", withFilter: true },
+                                        // { text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'is_closed', alias: 'Status', withFilter: true },
-                                        { text: 'closed_date', alias: 'Closed', withFilter: true },
+                                        // { text: 'closed_date', alias: 'Closed', withFilter: true },
                                         { text: 'action' },
                                         { text: 'opsi' },
                                     ]} />
@@ -120,21 +124,22 @@ class DiscussionTopicsList extends BaseManagementPage {
                                         }
                                         return (<tr key={"record_" + i} style={style}>
                                             <td>{indexBegin + i + 1}</td>
-                                            <td>{item.id}</td>
-                                            <td>{item.date}</td>
+                                            {/* <td>{item.id}</td> */}
+                                            {/* <td>{item.date}</td> */}
                                             <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
-                                            <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td>
-                                            <td>{item.deadline_date}</td>
-                                            <td>{item.departement.name}</td>
+                                            {/* <td>{item.decision && item.decision.length > 10 ? item.decision.substring(0, 10) + '...' : item.decision}</td> */}
+                                            <td>{item.person_in_charge}</td>
+                                             <td>{item.deadline_date}</td>
+                                            {/* <td>{item.departement.name}</td> */}
                                             <td>
                                                 {item.is_closed == true ?
                                                     <span className="tag is-info">Closed</span>
                                                     :
                                                     <span className="tag is-warning">Not Closed</span>}
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 {item.closed_date}
-                                            </td>
+                                            </td> */}
                                             <td><LinkEditAndAction id={item.id} />
                                             </td>
                                             <td>

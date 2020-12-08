@@ -136,7 +136,7 @@ class MeetingNoteList extends BaseManagementPage {
     }
 }
 
-const LinkToFormCreate = (props) => {
+export const LinkToFormCreate = (props) => {
     return (
         <Link to={props.to} className="button is-primary" style={{ marginBottom: '10px' }}>
             <span className="icon">

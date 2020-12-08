@@ -23,7 +23,7 @@ export const MENUS = [
         name: 'Notulensi',
         children: [{
             name: 'List',
-            link: '/meetingnote',
+            link: '/discussiontopics',
             authenticated: true,
             iconClassName: 'fas fa-list',
         }, {
@@ -47,14 +47,14 @@ export const MENUS = [
             iconClassName: 'fas fa-plus-square',
             role: 'admin'
         }]
-    }, {
-        name: 'Tema Pembahasan',
-        children: [{
-            name: 'List',
-            link: '/discussiontopics',
-            authenticated: true,
-            iconClassName: 'fas fa-list',
-        }]
+    // }, {
+    //     name: 'Tema Pembahasan',
+    //     children: [{
+    //         name: 'List',
+    //         link: '/discussiontopics',
+    //         authenticated: true,
+    //         iconClassName: 'fas fa-list',
+    //     }]
     }, {
         name: 'Master Data',
         children: [
