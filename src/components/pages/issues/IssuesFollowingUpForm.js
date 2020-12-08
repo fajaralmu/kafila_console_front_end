@@ -176,12 +176,8 @@ class IssuesFollowingUpForm extends BaseComponent {
                                 <p>Detail Tindak Lanjut</p>
                             </div>
                             <div className="message-body has-background-light">
-                                <LabelField label="Tanggal">
-                                    <p>{this.issue.follow_up.date}</p>
-                                </LabelField>
-                                <LabelField label="Keterangan">
-                                    <p>{this.issue.follow_up.description}</p>
-                                </LabelField>
+                                <LabelField label="Tanggal"><p>{this.issue.follow_up.date}</p></LabelField>
+                                <LabelField label="Keterangan"><p>{this.issue.follow_up.description}</p></LabelField>
                             </div>
                         </article>
                     }

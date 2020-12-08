@@ -59,7 +59,7 @@ class Login extends Component {
                             <div className="field">
                                 <label   className="label">Email</label>
                                 <div className="control has-icons-left">
-                                    <input nam="email" type="email" placeholder="e.g. bobsmith@gmail.com" className="input" required />
+                                    <input nam="email" type="email" placeholder="e.g. user@gmail.com" className="input" required />
                                     <span className="icon is-small is-left">
                                         <i className="fa fa-envelope"></i>
                                     </span>

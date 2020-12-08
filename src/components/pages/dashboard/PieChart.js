@@ -13,7 +13,7 @@ export default class PieChart extends Component {
         this.id = uniqueId() + "_" + (new Date().getTime()) + ("_pie_chart_canvas");
         this.state = {
             proportions: [],
-            showDetail: true
+            showDetail: false
         }
         this.timeoutId = null;
         this.accumulationDegree = 0;

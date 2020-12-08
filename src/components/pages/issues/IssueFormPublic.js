@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import { CommonTitle } from '../../BaseComponent';
 import BaseComponent from '../../BaseComponent';
 import Card from '../../container/Card';
 import { InputField, SubmitResetButton } from '../../forms/commons';
@@ -165,16 +164,10 @@ class IssueFormPublic extends BaseComponent {
                         <InputField name="content" label="permasalahan" type="textarea" required={true} />
                         <InputField name="email" type="email" note="Kosongkan jika berstatus anonim" />
                         <SelectField label="pengadu" options={issue_sources.map(source => {
-                            return {
-                                value: source,
-                                text: source
-                            }
+                            return { value: source, text: source };
                         })} name="issuer" required={true} />
                         <SelectField label="bidang" options={this.departementList.map(item => {
-                            return {
-                                value: item.id,
-                                text: item.name
-                            }
+                            return { value: item.id, text: item.name };
                         })} name="departement_id" required={true} />
 
                         <div className="field is-horizontal">

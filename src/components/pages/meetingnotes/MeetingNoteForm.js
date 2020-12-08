@@ -282,7 +282,7 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.discussionTopicSaved = (response) => {
-            alert("SUCCESSS");
+            alert("SUCCESS");
             this.setState({ showFormDiscussionTopicInEditMode: false });
             this.loadRecord();
 
