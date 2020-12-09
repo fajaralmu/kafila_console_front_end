@@ -138,7 +138,7 @@ class DiscussionActionForm extends BaseComponent {
                     <LinkDetailMeetingNote note_id={this.discussionTopic.note_id} />
                     {this.state.showDetailDiscussionTopic? 
                     <article style={{ marginBottom: '10px' }} className="is-info">
-                        <div className="message-header">
+                        <div className="message-header has-background-link">
                             <p>Detail Tema Pembahasan</p>
                             <button onClick={this.hideDetailIssue} className="delete" aria-label="delete"></button>
                         </div>
@@ -179,7 +179,7 @@ class DiscussionActionForm extends BaseComponent {
                     </form>
                     :
                     <article style={{ marginBottom: '10px' }} className="is-info">
-                        <div className="message-header">
+                        <div className="message-header has-background-link">
                             <p>Detail Tindak Lanjut</p>
                         </div>
                         <div className="message-body has-background-light">

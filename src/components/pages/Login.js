@@ -56,6 +56,10 @@ class Login extends Component {
 
                     <div style={{ marginTop: '10px', marginBottom: '10px' }} className="column is-5-tablet is-5-desktop is-5-widescreen">
                         <form id="formLogin" onSubmit={this.handleSubmit} className="box">
+                            <div className="field has-text-centered">
+                            <span style={{fontSize:'70px'}}><i className="fas fa-user-circle"/></span>
+                            <p>Sign In</p>
+                            </div>
                             <div className="field">
                                 <label   className="label">Email</label>
                                 <div className="control has-icons-left">
