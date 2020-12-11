@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
+import { toBase64v2 } from './../../../utils/ComponentUtil';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
 class IssueFormPublic extends BaseComponent {
@@ -23,12 +24,33 @@ class IssueFormPublic extends BaseComponent {
         }
         this.issueService = IssuesService.instance;
         this.departementList = [];
+        this.attachmentData = null;
         this.captcha = {
             firstNumber: 1,
             secordNumber: 2,
             operator: ADDITION,
             updatedAt: new Date()
         };
+
+        this.updateAttachmentData = (e) => {
+            const app = this;
+            const input = e.target;
+            const file = input.files[0];
+            const name = file.name;
+            const lastDot = name.lastIndexOf('.');
+            const fileName = name.substring(0, lastDot);
+            const ext = name.substring(lastDot + 1);
+            const size = file.size;
+            console.debug("FileName: ", fileName, "ext: ", ext, "FILE:", file);
+            toBase64v2(input).then(function(data){
+                app.attachmentData = {
+                    data:data,
+                    name:name,
+                    extension:ext,
+                    size:size
+                };
+            }).catch(console.error);
+        }
 
         this.resetCaptcha = () => {
             this.captcha.firstNumber = Math.floor(Math.random() * 10) + 1;
@@ -72,7 +94,11 @@ class IssueFormPublic extends BaseComponent {
             const inputs = form.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
-                issue[element.name] = element.value
+                if (element.name == "attachment") {
+                    issue[element.name+"_info"] = this.attachmentData
+                } else {
+                    issue[element.name] = element.value
+                }
             }
             console.debug("Issue: ", issue);
             this.storeIssue(issue);
@@ -95,6 +121,7 @@ class IssueFormPublic extends BaseComponent {
         this.recordSaved = (response) => {
             this.resetCaptcha();
             this.setState({ recordSaved: true });
+            this.attachmentData = null;
         }
 
         this.recordFailedToSave = (e) => {
@@ -169,9 +196,9 @@ class IssueFormPublic extends BaseComponent {
                         <SelectField label="bidang" options={this.departementList.map(item => {
                             return { value: item.id, text: item.name };
                         })} name="departement_id" required={true} />
-
+                        <InputField name="attachment" attributes={{accept:'image/*', onChange:this.updateAttachmentData}} type="file" note="Kosongkan jika tidak ada dokumen" />
                         <div className="field is-horizontal">
-                            <div className="field-label"></div>
+                            <div className="field-label">Verifikasi</div>
                             <div className="field-body">
                                 <CaptCha reset={this.resetCaptcha} captcha={this.captcha} />
                             </div>

@@ -1,4 +1,5 @@
 import  React  from 'react';
+import { contextPath } from './../../constant/Url';
 
 export const AnchorWithIcon = (props) => {
     const className = props.className;
@@ -8,7 +9,19 @@ export const AnchorWithIcon = (props) => {
             <span className="icon">
                 <i className={iconClassName}></i>
             </span>
-            <spam>{props.children}</spam>
+            <span>{props.children}</span>
+        </a>
+    )
+}
+
+export const AttachmentLink = (props) => {
+    const link = contextPath()+ props.to;
+    return (
+        <a href={link} target="_blank" className={"button is-small"} style={props.style}  >
+            <span className="icon">
+                <i className="fas fa-link"></i>
+            </span>
+            <span>Open</span>
         </a>
     )
 }

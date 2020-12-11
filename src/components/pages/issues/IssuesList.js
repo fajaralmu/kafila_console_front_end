@@ -9,6 +9,7 @@ import NavButtons from './../../buttons/NavButtons';
 import Columns from './../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from './../../forms/commons';
 import IssuesService from './../../../services/IssuesService';
+import { AttachmentLink } from '../../buttons/buttons';
 
 class IssuesList extends BaseManagementPage
 {
@@ -99,6 +100,7 @@ class IssuesList extends BaseManagementPage
                                     { text: 'email', withFilter: true },
                                     { text: 'departement', withFilter: true },
                                     { text: 'issue_input', withFilter: true },
+                                    { text: 'attachment', withFilter: true },
                                     { text: 'is_closed', alias:'Status', withFilter: true},
                                     { text: 'closed_date', alias:'Closed', withFilter: true},
                                     { text: 'action'}
@@ -116,6 +118,7 @@ class IssuesList extends BaseManagementPage
                                     <td>{item.email}</td>
                                     <td>{item.departement.name}</td>
                                     <td>{item.issue_input}</td>
+                                    <td>{item.attachment == null ? null : <AttachmentLink to={"upload/issue/"+item.attachment} />}</td>
                                     <td>
                                         {item.is_closed == true? 
                                         <span className="tag is-info">Closed</span>
