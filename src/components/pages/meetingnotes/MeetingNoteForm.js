@@ -18,7 +18,8 @@ import {
     enableAllInputs,
     populateInputs,
     mergeObject,
-    getArrayIndexWithValue
+    getArrayIndexWithValue,
+    getDiscussionTopic
 } from './logicHelper';
 import {
     ButtonRemoveTopic, LinkEditAndAction, ButtonAddTopic,
@@ -26,6 +27,7 @@ import {
     MeetingNoteSubmitResetField, LabelDiscussionTopicCount,
     ClosedInfoTag, AttachmentInfo, DiscussionTopicCommonInputs
 } from './componentHelper';
+import { AttachmentLink } from '../../buttons/buttons';
 
 const FORM_ID = "form-input-meeting-note";
 const CLASS_INPUT_FIELD = "input-form-field";
@@ -68,9 +70,8 @@ class MeetingNoteForm extends BaseComponent {
             const app = this;
             this.showConfirmationDanger("Remove discussion topic (" + id + ")? ")
                 .then(function (ok) {
-                    if (ok) {
+                    if (ok) 
                         app.doRemoveDiscussionTopic(id);
-                    }
                 });
         }
 
@@ -115,9 +116,8 @@ class MeetingNoteForm extends BaseComponent {
             const app = this;
             const form = e.target;
             this.showConfirmation("Submit Data?").then(function (accepted) {
-                if (accepted) {
+                if (accepted) 
                     app.fillDataAndStore(form);
-                }
                 app.isSubmitting = false;
             });
         }
@@ -227,8 +227,7 @@ class MeetingNoteForm extends BaseComponent {
 
         if (this.getRecordId() == null && this.meetingNote != null) {
             this.meetingNote = null;
-            this.form_temporary_inputs = {};
-           
+            this.form_temporary_inputs = {};           
             this.setState({ discussionTopicCount: [1] });
         }
         this.setInputsFromTemporaryData();
@@ -273,6 +272,7 @@ class MeetingNoteForm extends BaseComponent {
                     {/* ---------- discussion topics forms ----------- */}
                     {discussionTopicCount.map((id, i) => {
                         const isClosed = isDiscussionTopicClosed(this.meetingNote, id);
+                        const discussionTopic = getDiscussionTopic(this.meetingNote, id);
                         const title = "Tema Pembahasan #" + (i + 1);// +", id:"+id;
                         const inputPrefix = TOPIC_PREFIX + id;
                         return (
@@ -286,6 +286,8 @@ class MeetingNoteForm extends BaseComponent {
                                     name={this.attachmentsData[inputPrefix + "_attachment"] == null ? null : this.attachmentsData[inputPrefix + "_attachment"].name}
                                     onRemoveClick={(e) => this.removeAttachment(inputPrefix + "_attachment")} />
                                 <LinkEditAndAction show={this.getRecordId() != null} id={id} />
+                                <AttachmentLink showExtension={true} show={discussionTopic!=null} 
+                                    to={discussionTopic==null?null:"upload/topic/"+discussionTopic.attachment} />
                             </Card>
                         )
                     })}

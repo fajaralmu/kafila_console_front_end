@@ -162,9 +162,7 @@ class DiscussionActionForm extends BaseComponent {
                                 <p>{this.discussionTopic.person_in_charge}</p>
                             </LabelField>
                             <LabelField label="Attachment">
-                                {this.discussionTopic.attachment?
-                                <AttachmentLink to={"upload/topic/"+this.discussionTopic.attachment} />
-                                :null}
+                                <AttachmentLink show={this.discussionTopic.attachment!=null} showExtension={true} to={"upload/topic/"+this.discussionTopic.attachment} />
                             </LabelField>
 
                         </div>

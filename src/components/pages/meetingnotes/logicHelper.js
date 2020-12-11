@@ -94,18 +94,25 @@ export const getMaxDiscussionTopicID = (discussionTopicCount) => {
     return max;
 }
 
-
-export const isDiscussionTopicClosed = (meetingNote, id) => {
+export const getDiscussionTopic = (meetingNote, id) => {
     if (null == meetingNote || null == meetingNote.discussion_topics) {
-        return false;
+        return null;
     }
     for (let i = 0; i < meetingNote.discussion_topics.length; i++) {
         const element = meetingNote.discussion_topics[i];
-        if (element.id == id && element.is_closed) {
-            return true;
+        if (element.id == id) {
+            return element;
         }
     }
-    return false;
+    return null;
+}
+
+export const isDiscussionTopicClosed = (meetingNote, id) => {
+    const discussionTopic = getDiscussionTopic(meetingNote, id);
+    if (null == discussionTopic) {
+        return null;
+    }
+    return discussionTopic.is_closed;
 }
 
 

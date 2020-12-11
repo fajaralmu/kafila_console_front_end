@@ -16,13 +16,23 @@ export const AnchorWithIcon = (props) => {
 }
 
 export const AttachmentLink = (props) => {
+    if (props.show == false) {return null}
     const link = contextPath()+ props.to;
+    const getExtension = function(link) {
+        const splitted = link.split(".");
+        try {
+            return splitted[splitted.length-1];
+        } catch (error) {
+            return null;
+        }
+    }
+    const extension = props.showExtension && getExtension(link) ? " | "+getExtension(link) : null;
     return (
         <a href={link} target="_blank" className={"button is-small"} style={props.style}  >
             <span className="icon">
                 <i className="fas fa-link"></i>
             </span>
-            <span>Open</span>
+            <span>attachment {extension}</span>
         </a>
     )
 }

@@ -155,7 +155,7 @@ class DiscussionTopicsForm extends BaseManagementPage {
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
                         <LabelField label="Attachment">
                             {this.discussionTopic.attachment? 
-                            <AttachmentLink to={"upload/topic/"+this.discussionTopic.attachment}/>:
+                            <AttachmentLink showExtension={true} to={"upload/topic/"+this.discussionTopic.attachment}/>:
                             null
                             }
                         </LabelField>
