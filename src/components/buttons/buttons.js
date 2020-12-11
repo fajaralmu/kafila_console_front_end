@@ -4,6 +4,7 @@ import { contextPath } from './../../constant/Url';
 export const AnchorWithIcon = (props) => {
     const className = props.className;
     const iconClassName = props.iconClassName;
+    if (props.show == false)  return null;
     return (
         <a className={"button " +className} style={props.style} onClick={props.onClick}>
             <span className="icon">
