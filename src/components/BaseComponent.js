@@ -122,7 +122,8 @@ export default class BaseComponent extends Component {
          * @param {Function} successCallback 
          * @param {Function} errorCallback 
          */
-        this.commonAjax = (method, params, successCallback, errorCallback) => {
+        this.commonAjax = (method, params, successCallback, errorCallback = null) => {
+            if (null == errorCallback) errorCallback = this.commonErrorCallback;
             this.doAjax(method, params, false, successCallback, errorCallback);
         }
          /**
@@ -134,6 +135,11 @@ export default class BaseComponent extends Component {
          */
         this.commonAjaxWithProgress = (method, params, successCallback, errorCallback) => {
             this.doAjax(method, params, true, successCallback, errorCallback);
+        }
+
+        this.commonErrorCallback = (e) => {
+            console.error(e);
+            this.showError("Operation Failed: "+e);
         }
 
         this.title = (title) => {

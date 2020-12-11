@@ -1,59 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from './../../container/Card';
-import { SubmitResetButton, LabelField } from './../../forms/commons';
+import Card from '../../container/Card';
+import { SubmitResetButton, LabelField, InputField } from '../../forms/commons';
 export const TOPIC_PREFIX = "discussion_topic_";
 
-export const deleteArrayValueWithKeyStartedWith = (object, prefix) => {
-    for (const key in object) {
-        if (object.hasOwnProperty(key)) {
-            if (key.startsWith(prefix)) {
-                delete object[key];
-            }
-        }
-    }
+export const DiscussionTopicCommonInputs = (props) => {
+    const inputPrefix = props.inputPrefix;
+    return <React.Fragment>
+        <InputField className="discussion-topic" required={true} label="Pembahasan" name={inputPrefix + "_content"} type="textarea" />
+        <InputField className="discussion-topic" required={true} label="Keputusan" name={inputPrefix + "_decision"} type="textarea" />
+        <InputField className="discussion-topic" required={true} label="Deadline" name={inputPrefix + "_deadline_date"} type="date" />
+        <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={inputPrefix + "_person_in_charge"} />
+
+    </React.Fragment>
 }
+
 export const FormTitle = (props) => {
 
     return (<><Link to="/discussiontopics">Tema Pembahasan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;
     Form
     </>)
 }
-export const isDiscussionTopicClosed = (meetingNote, id) => {
-    if (null == meetingNote || null == meetingNote.discussion_topics) {
-        return false;
-    }
-    for (let i = 0; i < meetingNote.discussion_topics.length; i++) {
-        const element = meetingNote.discussion_topics[i];
-        if (element.id == id && element.is_closed) {
-            return true;
-        }
-    }
-    return false;
-}
-export const getMaxDiscussionTopicID = (discussionTopicCount) => {
-    let max = 0;
-    for (let i = 0; i < discussionTopicCount.length; i++) {
-        const element = discussionTopicCount[i];
-        if (element > max) {
-            max = element;
-        }
-    }
-    return max;
-}
-
-export const extractTopicDiscussionIndexAndName = (elementName) => {
-    const result = {
-        index: 0,
-        name: null,
-    }
-    let elementNameSplitKey = elementName.split(TOPIC_PREFIX);
-    let elementNameSplitIndex = elementNameSplitKey[1].split("_");
-    result.index = parseInt(elementNameSplitIndex[0]);
-    result.name = elementName.split(TOPIC_PREFIX + result.index + "_")[1];
-    return result;
-}
-
 export const ButtonRemoveTopic = (props) => {
     if (props.show == false) { return null; }
     return (
@@ -113,7 +80,7 @@ export const AttachmentInfo = (props) => {
         <span className="tag is-info">
             Attachment : {props.name}
         </span>
-        <span className="tag is-warning" style={{cursor:'pointer'}} 
+        <span className="tag is-warning" style={{ cursor: 'pointer' }}
             onClick={props.onRemoveClick}>remove</span>
     </div>)
 }
