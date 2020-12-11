@@ -11,6 +11,7 @@ import DiscussionTopicsService from './../../../services/DiscussionTopicsService
 import { getDiffDaysToNow } from './../../../utils/DateUtil';
 import { CommonTitle } from '../../BaseComponent';
 import { LinkToFormCreate } from './../meetingnotes/MeetingNoteList';
+import { AttachmentLink } from '../../buttons/buttons';
 // const title = "Daftar Tema Pembahasan";
 const title = "Daftar Topik";
         
@@ -103,6 +104,7 @@ class DiscussionTopicsList extends BaseManagementPage {
                                         // { text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'is_closed', alias: 'Status', withFilter: true },
                                         // { text: 'closed_date', alias: 'Closed', withFilter: true },
+                                        { text: 'attachment' },
                                         { text: 'action' },
                                         { text: 'opsi' },
                                     ]} />
@@ -140,6 +142,11 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             {/* <td>
                                                 {item.closed_date}
                                             </td> */}
+                                            <td>
+                                                {item.attachment? 
+                                                    <AttachmentLink to={"upload/topic/"+item.attachment}/>:null    
+                                                }
+                                            </td>
                                             <td><LinkEditAndAction id={item.id} />
                                             </td>
                                             <td>

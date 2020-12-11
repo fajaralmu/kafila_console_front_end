@@ -460,6 +460,7 @@ class MeetingNoteForm extends BaseComponent {
                                     <span className="tag is-warning" style={{cursor:'pointer'}} onClick={(e)=>this.removeAttachment(inputPrefix + "_attachment")}>remove</span>
                                 </div>
                                 :null}
+                                {/* {this.getRecordId() != null? } */}
                                 {this.getRecordId() != null ? <LinkEditAndAction id={id} /> : null}
                             </Card>
                         )

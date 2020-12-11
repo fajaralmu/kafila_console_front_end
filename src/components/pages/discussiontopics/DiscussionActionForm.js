@@ -13,7 +13,7 @@ import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { LinkDetailMeetingNote } from './DiscussionTopicsForm';
-import { AnchorWithIcon } from '../../buttons/buttons';
+import { AnchorWithIcon, AttachmentLink } from '../../buttons/buttons';
 import ClosedStatus from './../../messages/ClosedStatus';
 
 const FORM_ID = "form-input-discussion-action";
@@ -160,6 +160,11 @@ class DiscussionActionForm extends BaseComponent {
                             </LabelField>
                             <LabelField label="Penganggung Jawab">
                                 <p>{this.discussionTopic.person_in_charge}</p>
+                            </LabelField>
+                            <LabelField label="Attachment">
+                                {this.discussionTopic.attachment?
+                                <AttachmentLink to={"upload/topic/"+this.discussionTopic.attachment} />
+                                :null}
                             </LabelField>
 
                         </div>

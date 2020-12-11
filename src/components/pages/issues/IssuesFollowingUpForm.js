@@ -157,7 +157,7 @@ class IssuesFollowingUpForm extends BaseComponent {
                                 <LabelField label="Attachment">
                                     {this.issue.attachment?
                                     <AttachmentLink to={"upload/issue/"+this.issue.attachment} />
-                                    :"tidak ada"}
+                                    :null}
                                 </LabelField>
 
                             </div>

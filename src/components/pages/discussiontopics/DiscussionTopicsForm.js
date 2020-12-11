@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
-import { InputField, SelectField } from '../../forms/commons';
+import { InputField, SelectField, LabelField } from '../../forms/commons';
 import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
@@ -10,6 +10,7 @@ import { CommonTitle } from '../../BaseComponent';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import BaseManagementPage from './../management/BaseManagementPage';
 import ClosedStatus from '../../messages/ClosedStatus';
+import { AttachmentLink } from '../../buttons/buttons';
 
 class DiscussionTopicsForm extends BaseManagementPage {
     constructor(props) {
@@ -152,6 +153,12 @@ class DiscussionTopicsForm extends BaseManagementPage {
                         <InputField required={true} label="Keputusan" name="decision" type="textarea" />
                         <InputField required={true} label="Deadline" name="deadline_date" type="date" />
                         <InputField required={true} label="Penganggung Jawab" name="person_in_charge" />
+                        <LabelField label="Attachment">
+                            {this.discussionTopic.attachment? 
+                            <AttachmentLink to={"upload/topic/"+this.discussionTopic.attachment}/>:
+                            null
+                            }
+                        </LabelField>
                         {this.isClosed() ? null :
                             <SubmitResetButton submitText={
                                 this.getRecordId() == null ? "Create" : "Update"} withReset={this.getRecordId() == null} />
