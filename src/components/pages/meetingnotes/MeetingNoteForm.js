@@ -247,7 +247,7 @@ class MeetingNoteForm extends BaseComponent {
             }
 
             console.debug("meetingNote: ", this.meetingNote);
-            // this.storeMeetingNote();
+            this.storeMeetingNote();
 
         }
         this.addAttachmentData = (e, key) => {
