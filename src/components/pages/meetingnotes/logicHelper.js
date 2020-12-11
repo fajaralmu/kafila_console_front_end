@@ -31,6 +31,22 @@ export const enableAllInputs = (inputs) => {
         element.removeAttribute("disabled");
     }
 }
+export const getArrayIndexWithValue = (array, value) => {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] == value) {
+            return i;
+        }
+    }
+    return null;
+}
+export const mergeObject = (original, toMerge) => {
+    for (const key in toMerge) {
+        if (toMerge.hasOwnProperty(key)) {
+            const element = toMerge[key];
+            original[key] = element;
+        }
+    }
+}
 export const extractInputValues = (inputs) => {
     const values = {};
     for (let i = 0; i < inputs.length; i++) {

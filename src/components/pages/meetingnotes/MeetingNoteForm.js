@@ -15,9 +15,8 @@ import { deleteArrayValueWithKeyStartedWith, getMaxDiscussionTopicID,
     isDiscussionTopicClosed, extractInputValues, extractMeetingNoteObjectToTempData, 
     extractMeetingNoteObject,
     enableAllInputs, 
-    populateInputs} from './logicHelper';
-
-
+    populateInputs,
+    mergeObject} from './logicHelper';
 import { ButtonRemoveTopic, LinkEditAndAction, ButtonAddTopic, 
     FormUpperTag, TOPIC_PREFIX, FormTitle, 
     MeetingNoteSubmitResetField, LabelDiscussionTopicCount, 
@@ -72,14 +71,8 @@ class MeetingNoteForm extends BaseComponent {
 
         this.doRemoveDiscussionTopic = (id) => {
             const discussionTopicCount = this.state.discussionTopicCount;
-            let index = null;
-
-            for (let i = 0; i < discussionTopicCount.length; i++) {
-                if (discussionTopicCount[i] == id) {
-                    index = i;
-                    break;
-                }
-            }
+            let index = getArrayIndexWithValue(discussionTopicCount, id);
+            
             if (null == index) { return; }
             discussionTopicCount.splice(index, 1);
 
@@ -115,9 +108,10 @@ class MeetingNoteForm extends BaseComponent {
             this.saveFormInputsToTemporaryData();
             this.isSubmitting = true;
             const app = this;
+            const form = e.target;
             this.showConfirmation("Submit Data?").then(function (accepted) {
                 if (accepted) {
-                    app.fillDataAndStore(e.target);
+                    app.fillDataAndStore(form);
                 }
                 app.isSubmitting = false;
             });
@@ -126,12 +120,7 @@ class MeetingNoteForm extends BaseComponent {
         this.fillDataAndStore = (form) => {
             const rawInputs = this.form_temporary_inputs;
             const inputs = {};
-            for (const key in this.attachmentsData) {
-                if (this.attachmentsData.hasOwnProperty(key)) {
-                    const element = this.attachmentsData[key];
-                    rawInputs[key] = element;
-                }
-            }
+            mergeObject(rawInputs, this.attachmentsData);
             //sort keys
             Object.keys(rawInputs).sort().forEach(function (key) {
                 inputs[key] = rawInputs[key];
@@ -148,7 +137,8 @@ class MeetingNoteForm extends BaseComponent {
         this.addAttachmentData = (e, key) => {
             this.saveFormInputsToTemporaryData();
             const app = this;
-            getAttachmentData(e.target).then(function (data) {
+            const form = e.target;
+            getAttachmentData(form).then(function (data) {
                 app.attachmentsData[key] = data;
                 app.refresh();
             });
@@ -193,14 +183,11 @@ class MeetingNoteForm extends BaseComponent {
         this.enableInputs = () => {
             const form = document.getElementById(FORM_ID);
             if (null == form) { return; }
-
             enableAllInputs(form.getElementsByClassName(CLASS_INPUT_FIELD));
-            
             if (this.isSubmitting == false) { form.reset(); }
         }
 
         this.discussionTopicSaved = (response) => {
-            // alert("Success");
             this.setState({ showFormDiscussionTopicInEditMode: false });
             this.loadRecord();
         }
@@ -244,9 +231,8 @@ class MeetingNoteForm extends BaseComponent {
     getUserName() {
         if (this.meetingNote != null && this.meetingNote.user != null) {
             return this.meetingNote.user.display_name;
-        } else {
-            return this.getLoggedUser().display_name;
-        }
+        } 
+        return this.getLoggedUser().display_name;
     }
 
     render() {
@@ -255,14 +241,13 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         const title = this.title("Notulensi Rapat");
-
         if (this.state.recordNotFound) {
             return <div>{title}<Message className="is-danger" body="Record Not Found" /></div>
         }
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
             return <div>{title}<h3>Please Wait...</h3></div>
         }
-        
+        const discussionTopicCount = this.state.discussionTopicCount;
         return (
             <div>
                 {title}
@@ -280,8 +265,7 @@ class MeetingNoteForm extends BaseComponent {
                     </Card>
 
                     {/* ---------- discussion topics forms ----------- */}
-                    {this.state.discussionTopicCount.map((id, i) => {
-
+                    {discussionTopicCount.map((id, i) => {
                         const isClosed = isDiscussionTopicClosed(this.meetingNote, id);
                         const title = "Tema Pembahasan #" + (i + 1);// +", id:"+id;
                         const inputPrefix = TOPIC_PREFIX + id;
