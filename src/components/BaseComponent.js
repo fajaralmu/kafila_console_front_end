@@ -160,3 +160,10 @@ export default class BaseComponent extends Component {
 export const CommonTitle = (props) => {
     return <h2 style={{ textAlign: 'left', marginLeft:'10px' }}>{props.children}</h2>
 }
+
+export const  mapCommonUserStateToProps = state => {
+    return {
+        loggedUser: state.userState.loggedUser,
+        loginStatus: state.userState.loginStatus,
+    }
+}

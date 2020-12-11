@@ -3,7 +3,7 @@ import React from 'react';
 
 import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent from '../../BaseComponent';
+import BaseComponent, { mapCommonUserStateToProps } from '../../BaseComponent';
 import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
 import Message from '../../messages/Message';
 import Card from '../../container/Card';
@@ -11,16 +11,21 @@ import DiscussionTopicsService from './../../../services/DiscussionTopicsService
 import { LabelField, InputField } from './../../forms/commons';
 import { getAttachmentData } from './../../../utils/ComponentUtil';
 import DiscussionTopicPopupForm from './DiscussionTopicPopupForm';
-import { deleteArrayValueWithKeyStartedWith, getMaxDiscussionTopicID,  
-    isDiscussionTopicClosed, extractInputValues, extractMeetingNoteObjectToTempData, 
+import {
+    deleteArrayValueWithKeyStartedWith, getMaxDiscussionTopicID,
+    isDiscussionTopicClosed, extractInputValues, extractMeetingNoteObjectToTempData,
     extractMeetingNoteObject,
-    enableAllInputs, 
+    enableAllInputs,
     populateInputs,
-    mergeObject} from './logicHelper';
-import { ButtonRemoveTopic, LinkEditAndAction, ButtonAddTopic, 
-    FormUpperTag, TOPIC_PREFIX, FormTitle, 
-    MeetingNoteSubmitResetField, LabelDiscussionTopicCount, 
-    ClosedInfoTag, AttachmentInfo, DiscussionTopicCommonInputs } from './componentHelper';
+    mergeObject,
+    getArrayIndexWithValue
+} from './logicHelper';
+import {
+    ButtonRemoveTopic, LinkEditAndAction, ButtonAddTopic,
+    FormUpperTag, TOPIC_PREFIX, FormTitle,
+    MeetingNoteSubmitResetField, LabelDiscussionTopicCount,
+    ClosedInfoTag, AttachmentInfo, DiscussionTopicCommonInputs
+} from './componentHelper';
 
 const FORM_ID = "form-input-meeting-note";
 const CLASS_INPUT_FIELD = "input-form-field";
@@ -72,7 +77,7 @@ class MeetingNoteForm extends BaseComponent {
         this.doRemoveDiscussionTopic = (id) => {
             const discussionTopicCount = this.state.discussionTopicCount;
             let index = getArrayIndexWithValue(discussionTopicCount, id);
-            
+
             if (null == index) { return; }
             discussionTopicCount.splice(index, 1);
 
@@ -89,15 +94,15 @@ class MeetingNoteForm extends BaseComponent {
         }
         this.setInputsFromTemporaryData = () => {
             const form = document.getElementById(FORM_ID);
-            if (null == form) {    return; }
+            if (null == form) { return; }
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
-            populateInputs(inputs, this.form_temporary_inputs, this.getRecordId()!=null);
+            populateInputs(inputs, this.form_temporary_inputs, this.getRecordId() != null);
         }
         this.saveFormInputsToTemporaryData = () => {
             const form = document.getElementById(FORM_ID);
-            if (null == form) {    return; }
+            if (null == form) { return; }
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
-            this.form_temporary_inputs =  extractInputValues(inputs);
+            this.form_temporary_inputs = extractInputValues(inputs);
         }
 
         this.onSubmit = (e) => {
@@ -125,7 +130,7 @@ class MeetingNoteForm extends BaseComponent {
             Object.keys(rawInputs).sort().forEach(function (key) {
                 inputs[key] = rawInputs[key];
             });
-            
+
             this.meetingNote = extractMeetingNoteObject(inputs);
             if (this.getRecordId() != null) {
                 this.meetingNote.id = this.getRecordId();
@@ -177,7 +182,7 @@ class MeetingNoteForm extends BaseComponent {
                 const element = discussionTopics[i];
                 discussionTopicCount.push(element.id);
             }
-            this.form_temporary_inputs = extractMeetingNoteObjectToTempData(this.meetingNote);            
+            this.form_temporary_inputs = extractMeetingNoteObjectToTempData(this.meetingNote);
             this.setState({ discussionTopicCount: discussionTopicCount, isLoadingRecord: false });
         }
         this.enableInputs = () => {
@@ -231,7 +236,7 @@ class MeetingNoteForm extends BaseComponent {
     getUserName() {
         if (this.meetingNote != null && this.meetingNote.user != null) {
             return this.meetingNote.user.display_name;
-        } 
+        }
         return this.getLoggedUser().display_name;
     }
 
@@ -273,7 +278,7 @@ class MeetingNoteForm extends BaseComponent {
                             <Card title={title} key={"disc_topic_field_" + i}>
                                 <ClosedInfoTag closed={isClosed} />
                                 <ButtonRemoveTopic show={this.getRecordId() == null && this.state.discussionTopicCount.length > 1} id={id} removeDiscussionTopic={this.removeDiscussionTopic} />
-                                <DiscussionTopicCommonInputs inputPrefix={inputPrefix}/>
+                                <DiscussionTopicCommonInputs inputPrefix={inputPrefix} />
                                 <InputField show={this.getRecordId() == null} className="discussion-topic" label="Attachment" attributes={{ onChange: (e) => this.addAttachmentData(e, inputPrefix + "_attachment") }}
                                     name={inputPrefix + "_attachment"} type="file" note="Kosongkan jika tidak ada dokumen" />
                                 <AttachmentInfo show={this.attachmentsData[inputPrefix + "_attachment"] != null}
@@ -292,12 +297,6 @@ class MeetingNoteForm extends BaseComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-    }
-}
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
 )(MeetingNoteForm));
