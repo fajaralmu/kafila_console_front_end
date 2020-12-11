@@ -11,7 +11,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
-import { toBase64v2 } from './../../../utils/ComponentUtil';
+import { toBase64v2, getAttachmentData } from './../../../utils/ComponentUtil';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
 class IssueFormPublic extends BaseComponent {
@@ -34,21 +34,8 @@ class IssueFormPublic extends BaseComponent {
 
         this.updateAttachmentData = (e) => {
             const app = this;
-            const input = e.target;
-            const file = input.files[0];
-            const name = file.name;
-            const lastDot = name.lastIndexOf('.');
-            const fileName = name.substring(0, lastDot);
-            const ext = name.substring(lastDot + 1);
-            const size = file.size;
-            console.debug("FileName: ", fileName, "ext: ", ext, "FILE:", file);
-            toBase64v2(input).then(function(data){
-                app.attachmentData = {
-                    data:data,
-                    name:name,
-                    extension:ext,
-                    size:size
-                };
+            getAttachmentData(e.target).then(function(data){
+                app.attachmentData = data;
             }).catch(console.error);
         }
 

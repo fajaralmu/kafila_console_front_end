@@ -10,33 +10,62 @@ export const clearFields = (...ignoredIds) => {
 
     let withIgnore = ignoredIds != null;
     loop: for (let i = 0; i < inputs.length; i++) {
-        if (withIgnore){
+        if (withIgnore) {
             for (let y = 0; y < ignoredIds.length; y++) {
                 if (inputs[i].id == ignoredIds[y]) continue loop;
             }
         }
-        
+
         if (inputs[i].type == "text") { inputs[i].value = ""; }
         else if (inputs[i].type == "number") { inputs[i].value = 0; }
         else { inputs[i].value = null; }
     }
 }
 
-
-export function toBase64v2(fileInput) {
-    return new Promise(function(resolve, reject){
-        try{
+export function getAttachmentData(input) {
+    const file = input.files[0];
+    const name = file.name;
+    const lastDot = name.lastIndexOf('.');
+    const fileName = name.substring(0, lastDot);
+    const ext = name.substring(lastDot + 1);
+    const size = file.size;
+    console.debug("FileName: ", fileName, "ext: ", ext, "FILE:", file);
+    return new Promise(function (resolve, reject) {
+        try {
             const reader = new FileReader();
-            reader.readAsDataURL(fileInput.files[0]);
-            reader.onload = function() { resolve(reader.result); }
-            reader.onerror = function(error) {
+            reader.readAsDataURL(input.files[0]);
+            reader.onload = function () {
+                const attachmentData = {
+                    data:reader.result,
+                    name:name,
+                    extension:ext,
+                    size:size
+                };
+                resolve(attachmentData); 
+            }
+            reader.onerror = function (error) {
                 reject(error);
             }
-        }catch(e){
+        } catch (e) {
             reject(e);
         }
     });
-   
+}
+
+export function toBase64v2(fileInput) {
+    return new Promise(function (resolve, reject) {
+        try {
+            const reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = function () { resolve(reader.result); }
+            reader.onerror = function (error) {
+                reject(error);
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+
 }
 
 export function toBase64(file, referer, callback) {

@@ -11,7 +11,7 @@ import { SubmitResetButton } from '../../forms/commons';
 import { LabelField } from '../../forms/commons';
 import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from './../../../services/IssuesService';
-import { AnchorWithIcon } from './../../buttons/buttons';
+import { AnchorWithIcon, AttachmentLink } from './../../buttons/buttons';
 import ClosedStatus from './../../messages/ClosedStatus';
 
 const FORM_ID = "form-input-follow-up-issue";
@@ -153,6 +153,11 @@ class IssuesFollowingUpForm extends BaseComponent {
                                 </LabelField>
                                 <LabelField label="Sumber Input">
                                     <p>{this.issue.issue_input}</p>
+                                </LabelField>
+                                <LabelField label="Attachment">
+                                    {this.issue.attachment?
+                                    <AttachmentLink to={"upload/issue/"+this.issue.attachment} />
+                                    :"tidak ada"}
                                 </LabelField>
 
                             </div>
