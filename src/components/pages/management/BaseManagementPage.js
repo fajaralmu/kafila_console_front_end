@@ -19,6 +19,7 @@ export default class BaseManagementPage extends BaseAdminPage {
 
         this.successLoaded = (response) => {
             this.recordData = response;
+            this.refresh();
         }
 
         this.errorLoaded = (e) => {

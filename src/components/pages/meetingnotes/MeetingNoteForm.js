@@ -1,21 +1,19 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Route, Switch, withRouter, Redirect, Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
+import BaseComponent from '../../BaseComponent';
 import MeetingNoteSerivce from '../../../services/MeetingNoteSerivce';
 import Message from '../../messages/Message';
-import * as formComponent from '../../forms/commons';
 import Card from '../../container/Card';
-import { SubmitResetButton } from '../../forms/commons';
-import { ModalBackdrop } from './../../messages/Alert';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
-import { LabelField } from './../../forms/commons';
+import { LabelField, SubmitResetButton, InputField } from './../../forms/commons';
 import { getAttachmentData } from './../../../utils/ComponentUtil';
+import DiscussionTopicPopupForm from './DiscussionTopicPopupForm';
+import { ButtonRemoveTopic, LinkEditAndAction, ButtonAddTopic, FormUpperTag, extractTopicDiscussionIndexAndName, TOPIC_PREFIX, deleteArrayValueWithKeyStartedWith, getMaxDiscussionTopicID, isDiscussionTopicClosed, FormTitle, MeetingNoteSubmitResetField, LabelDiscussionTopicCount, ClosedInfoTag, AttachmentInfo } from './helper';
 
 const FORM_ID = "form-input-meeting-note";
-const TOPIC_PREFIX = "discussion_topic_";
 const CLASS_INPUT_FIELD = "input-form-field";
 
 class MeetingNoteForm extends BaseComponent {
@@ -39,44 +37,19 @@ class MeetingNoteForm extends BaseComponent {
             return this.props.match.params.id;
         }
 
-        this.getMaxDiscussionTopicID = () => {
-            const discussionTopicCount = this.state.discussionTopicCount;
-            let max = 0;
-            for (let i = 0; i < discussionTopicCount.length; i++) {
-                const element = discussionTopicCount[i];
-                if (element > max) {
-                    max = element;
-                }
-            }
-            return max;
-        }
-
         this.addDiscussionTopic = () => {
             this.saveFormInputsToTemporaryData();
             if (this.getRecordId() != null && null != this.meetingNote) {
                 this.setState({ showFormDiscussionTopicInEditMode: true });
                 return;
             }
-
             const discussionTopicCount = this.state.discussionTopicCount;
-            
-            discussionTopicCount.push(this.getMaxDiscussionTopicID() + 1);
+            discussionTopicCount.push(getMaxDiscussionTopicID(discussionTopicCount) + 1);
             this.setState({ discussionTopicCount: discussionTopicCount });
 
         }
 
-        this.isDiscussionTopicClosed = (id) => {
-            if (null == this.meetingNote || null == this.meetingNote.discussion_topics) {
-                return false;
-            }
-            for (let i = 0; i < this.meetingNote.discussion_topics.length; i++) {
-                const element = this.meetingNote.discussion_topics[i];
-                if (element.id == id && element.is_closed) {
-                    return true;
-                }
-            }
-            return false;
-        }
+
 
         this.removeDiscussionTopic = (id) => {
             this.saveFormInputsToTemporaryData();
@@ -90,7 +63,7 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.doRemoveDiscussionTopic = (id) => {
-            
+
             const discussionTopicCount = this.state.discussionTopicCount;
             let index = null;
 
@@ -114,20 +87,12 @@ class MeetingNoteForm extends BaseComponent {
 
         }
         this.deleteTempFormData = (id) => {
-            for (const key in this.form_temporary_inputs) {
-                if (this.form_temporary_inputs.hasOwnProperty(key)) { 
-                    if (key.startsWith(TOPIC_PREFIX+id+"_")) {
-                        delete this.form_temporary_inputs[key];
-                    }
-                }
-            }
-            for (const key in this.attachmentsData) {
-                if (this.attachmentsData.hasOwnProperty(key)) { 
-                    if (key.startsWith(TOPIC_PREFIX+id+"_")) {
-                        delete this.attachmentsData[key];
-                    }
-                }
-            }
+            deleteArrayValueWithKeyStartedWith(
+                this.form_temporary_inputs, TOPIC_PREFIX + id + "_"
+            )
+            deleteArrayValueWithKeyStartedWith(
+                this.attachmentsData, TOPIC_PREFIX + id + "_"
+            )
         }
         this.setInputsFromTemporaryData = () => {
             console.debug("setTempDiscussionTopicValues: ", this.form_temporary_inputs);
@@ -161,7 +126,7 @@ class MeetingNoteForm extends BaseComponent {
                 if (element.value == null || element.value == "") {
                     continue;
                 }
-                if (element.type == 'file') { 
+                if (element.type == 'file') {
                     //
                 } else {
                     this.form_temporary_inputs[name] = element.value;
@@ -187,27 +152,8 @@ class MeetingNoteForm extends BaseComponent {
             });
         }
 
-        this.onSubmitDiscussionTopic = (e) => {
-            e.preventDefault();
-            const form = e.target;
-
-            if (!window.confirm("Submit Data?") || null == this.meetingNote) {
-                return;
-            }
-            const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
-            const discussionTopic = {
-                note_id: this.meetingNote.id
-            };
-            for (let i = 0; i < inputs.length; i++) {
-                const element = inputs[i];
-                discussionTopic[element.name] = element.value;
-            }
-            console.debug("SUBMIT:", discussionTopic);
-            this.storeDiscussionTopic(discussionTopic);
-        }
-
         this.fillDataAndStore = (form) => {
-            const rawInputs =  this.form_temporary_inputs;
+            const rawInputs = this.form_temporary_inputs;
             for (const key in this.attachmentsData) {
                 if (this.attachmentsData.hasOwnProperty(key)) {
                     const element = this.attachmentsData[key];
@@ -216,10 +162,10 @@ class MeetingNoteForm extends BaseComponent {
             }
             const inputs = {};
             //sort keys
-            Object.keys(rawInputs).sort().forEach(function(key) {
+            Object.keys(rawInputs).sort().forEach(function (key) {
                 inputs[key] = rawInputs[key];
             });
-            console.debug("inputs: ",inputs);
+            console.debug("inputs: ", inputs);
             this.meetingNote = { discussion_topics: [] };
             let currentDiscussionTopicID = -1;
             let currentDiscussionTopicIndex = -1;
@@ -231,9 +177,9 @@ class MeetingNoteForm extends BaseComponent {
                         this.meetingNote.discussion_topics.push({});
                         currentDiscussionTopicID = indexAndName.index;
                         currentDiscussionTopicIndex++;
-                    } 
+                    }
                     if (value.isFile == true) {
-                        this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name+"_info"] = value;
+                        this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name + "_info"] = value;
                     } else {
                         this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name] = value;
                     }
@@ -253,7 +199,7 @@ class MeetingNoteForm extends BaseComponent {
         this.addAttachmentData = (e, key) => {
             this.saveFormInputsToTemporaryData();
             const app = this;
-            getAttachmentData(e.target).then(function(data){
+            getAttachmentData(e.target).then(function (data) {
                 app.attachmentsData[key] = data;
                 app.refresh();
             });
@@ -261,12 +207,12 @@ class MeetingNoteForm extends BaseComponent {
         this.removeAttachment = (key) => {
             this.saveFormInputsToTemporaryData();
             const app = this;
-            this.showConfirmation("Remove attachment?").then(function(ok){ 
-                if(!ok) return;
+            this.showConfirmation("Remove attachment?").then(function (ok) {
+                if (!ok) return;
                 try {
                     delete app.attachmentsData[key];
                     app.refresh();
-                } catch (error) { console.error(error)}
+                } catch (error) { console.error(error) }
             });
         }
         this.recordSaved = (response) => {
@@ -276,7 +222,7 @@ class MeetingNoteForm extends BaseComponent {
                     this.props.history.push("/meetingnote/" + response.meeting_note.id);
                     this.handleSuccessGetRecord(response);
                 }
-            } catch (error) { console.error(error);  }
+            } catch (error) { console.error(error); }
         }
         this.handleErrorSubmit = (error) => {
             this.showError("handleErrorSubmit: " + error);
@@ -313,42 +259,26 @@ class MeetingNoteForm extends BaseComponent {
                     }
                 }
             }
-            // console.debug("FORM INPUTS: ", this.form_temporary_inputs);
             this.setState({ discussionTopicCount: discussionTopicCount, isLoadingRecord: false });
-            
-            // console.debug("FORM INPUTS == : ", this.form_temporary_inputs);
         }
         this.enableInputs = () => {
             const form = document.getElementById(FORM_ID);
-            if (null == form) {
-                return;
-            }
+            if (null == form) { return; }
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
                 element.removeAttribute("disabled");
             }
-            if (this.isSubmitting == false) {
-                form.reset();
-            }
+            if (this.isSubmitting == false) { form.reset(); }
         }
 
         this.discussionTopicSaved = (response) => {
-            alert("Success");
+            // alert("Success");
             this.setState({ showFormDiscussionTopicInEditMode: false });
             this.loadRecord();
-
-        }
-        this.handleErrorSubmitDiscussionTopic = (e) => {
-            alert("Error Update Discussion Topic: " + e);
         }
 
         // ajax calls
-
-        this.storeDiscussionTopic = (discussionTopic) => {
-            this.commonAjax(this.discussionTopicService.store, discussionTopic,
-                this.discussionTopicSaved, this.handleErrorSubmitDiscussionTopic);
-        }
         this.storeMeetingNote = () => {
             this.commonAjax(this.meetingNoteService.store, this.meetingNote,
                 this.recordSaved, this.handleErrorSubmit);
@@ -384,13 +314,21 @@ class MeetingNoteForm extends BaseComponent {
         this.setInputsFromTemporaryData();
     }
 
+    getUserName(){
+        if (this.meetingNote != null && this.meetingNote.user != null) {
+            return this.meetingNote.user.display_name;
+        } else {
+            return this.getLoggedUser().display_name;
+        }
+    }
+
     render() {
         if (this.isLoggedUserNull()) {
             return null;
         }
 
         const title = this.title("Notulensi Rapat");
-        
+
         if (this.state.recordNotFound) {
             return <div>{title}<Message className="is-danger" body="Record Not Found" /></div>
         }
@@ -398,223 +336,62 @@ class MeetingNoteForm extends BaseComponent {
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
             return <div>{title}<h3>Please Wait...</h3></div>
         }
-        let notulis = "";
-        if (this.meetingNote != null && this.meetingNote.user != null) {
-            notulis = this.meetingNote.user.display_name;
-        } else {
-           notulis = this.getLoggedUser().display_name;
-        }
-        const formTitle = <>
-            {/* <Link to="/meetingnote">Notulensi</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp; */}
-            <Link to="/discussiontopics">Tema Pembahasan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;
-            Form
-        </>
+        
 
         return (
             <div>
                 {title}
-                {this.state.showFormDiscussionTopicInEditMode ?
-                    <FormAddDiscussionTopic onSubmit={this.onSubmitDiscussionTopic}
-                        onClose={(e) => this.setState({ showFormDiscussionTopicInEditMode: false })}
-                    /> : null
-                }
+                <DiscussionTopicPopupForm show={this.state.showFormDiscussionTopicInEditMode} 
+                    app={this.props.app} meetingNote={this.meetingNote} onSuccess={this.discussionTopicSaved}
+                    onClose={(e) => this.setState({ showFormDiscussionTopicInEditMode: false })} />
+
                 <form id={FORM_ID} onSubmit={this.onSubmit}>
-                    <Card title={formTitle}>
-                        {this.getRecordId() != null && this.meetingNote != null ?
-                            <FormUpperTag meetingNote={this.meetingNote} /> : null}
-                        
+                    <Card title={<FormTitle />}>
+                        <FormUpperTag show={this.getRecordId() != null} meetingNote={this.meetingNote} />
                         <InputField required={true} label="Tanggal" name="date" type="date" />
                         <InputField required={true} label="Tempat" name="place" />
-                        <LabelField label="Tema Pembahasan" >
-                            <span className="tag is-dark">
-                                <b>{this.state.discussionTopicCount.length}</b></span>
-                        </LabelField>
-                        <LabelField label="Notulis" >{notulis}</LabelField>
+                        <LabelDiscussionTopicCount count={this.state.discussionTopicCount.length} />
+                        <LabelField label="Notulis" >{this.getUserName()}</LabelField>
                     </Card>
 
                     {/* ---------- discussion topics forms ----------- */}
                     {this.state.discussionTopicCount.map((id, i) => {
-                        const isClosed = this.isDiscussionTopicClosed(id);
+                        const isClosed = isDiscussionTopicClosed(this.meetingNote, id);
                         const title = "Tema Pembahasan #" + (i + 1);// +", id:"+id;
                         const inputPrefix = TOPIC_PREFIX + id;
                         return (
-                            <Card title={title} key={"disc_topic_field_" + i}
-                            >
-                                {isClosed ?
-                                    <span className="tag is-primary"><i className="fas fa-check" />&nbsp;Closed</span> :
-                                    null}
-                                {this.getRecordId() == null && this.state.discussionTopicCount.length > 1 ?
-                                    <ButtonRemoveTopic id={id} removeDiscussionTopic={
-                                        this.removeDiscussionTopic} /> : null}
-
+                            <Card title={title} key={"disc_topic_field_" + i}>
+                                <ClosedInfoTag closed={isClosed} />
+                                <ButtonRemoveTopic show={this.getRecordId() == null && this.state.discussionTopicCount.length > 1} id={id} removeDiscussionTopic={this.removeDiscussionTopic} />
                                 <InputField className="discussion-topic" required={true} label="Pembahasan" name={inputPrefix + "_content"} type="textarea" />
                                 <InputField className="discussion-topic" required={true} label="Keputusan" name={inputPrefix + "_decision"} type="textarea" />
                                 <InputField className="discussion-topic" required={true} label="Deadline" name={inputPrefix + "_deadline_date"} type="date" />
                                 <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={inputPrefix + "_person_in_charge"} />
-                                <InputField className="discussion-topic" label="Attachment" attributes={{onChange: (e) => this.addAttachmentData(e, inputPrefix + "_attachment")}} name={inputPrefix + "_attachment"} type="file" note="Kosongkan jika tidak ada dokumen" />
-                                {this.attachmentsData[inputPrefix + "_attachment"] ? 
-                                <div className="tags has-addons">
-                                    <span className="tag is-info">
-                                        Attachment : {this.attachmentsData[inputPrefix + "_attachment"].name}
-                                    </span>
-                                    <span className="tag is-warning" style={{cursor:'pointer'}} onClick={(e)=>this.removeAttachment(inputPrefix + "_attachment")}>remove</span>
-                                </div>
-                                :null}
-                                {/* {this.getRecordId() != null? } */}
-                                {this.getRecordId() != null ? <LinkEditAndAction id={id} /> : null}
+                                
+                                <InputField show={this.getRecordId() == null} className="discussion-topic" label="Attachment" attributes={{ onChange: (e) => this.addAttachmentData(e, inputPrefix + "_attachment") }}
+                                    name={inputPrefix + "_attachment"} type="file" note="Kosongkan jika tidak ada dokumen" />
+                                <AttachmentInfo show={this.attachmentsData[inputPrefix + "_attachment"]!=null}
+                                    name={this.attachmentsData[inputPrefix + "_attachment"]==null?null:this.attachmentsData[inputPrefix + "_attachment"].name}
+                                    onRemoveClick={(e) => this.removeAttachment(inputPrefix + "_attachment")} />
+
+                                <LinkEditAndAction show={this.getRecordId() != null} id={id} />
                             </Card>
                         )
                     })}
                     <ButtonAddTopic addDiscussionTopic={this.addDiscussionTopic} />
-                    {this.getRecordId() == null ?
-                    <Card title="Action">
-                        <SubmitResetButton submitText={"Create"} withReset={true} />
-                    </Card>
-                        : null}
+                    <MeetingNoteSubmitResetField show={this.getRecordId() == null} />
                 </form>
             </div>
         )
     }
 }
 
-const FormAddDiscussionTopic = (props) => {
-    return (
-        <ModalBackdrop >
-            <div className="container">
-                <Card title="Tambah Tema Pembahasan"
-                    headerIconClassName="fas fa-times"
-                    headerIconOnClick={props.onClose}
-                >
-                    <form onSubmit={props.onSubmit}>
-                        <InputField className="discussion-topic" required={true} label="Pembahasan" name={"content"} type="textarea" />
-                        <InputField className="discussion-topic" required={true} label="Keputusan" name={"decision"} type="textarea" />
-                        <InputField className="discussion-topic" required={true} label="Deadline" name={"deadline_date"} type="date" />
-                        <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={"person_in_charge"} />
-                        <SubmitResetButton />
-                    </form>
-                    <div className="level">
-                        <div className="level-left">
-                        <a className="button" onClick={props.onClose}>Close</a>
-                        </div>
-                    </div>
-                    
-                </Card>
-            </div>
-        </ModalBackdrop>
-    )
-}
-
-const extractTopicDiscussionIndexAndName = (elementName) => {
-    const result = {
-        index: 0,
-        name: null,
-    }
-    let elementNameSplitKey = elementName.split(TOPIC_PREFIX);
-    let elementNameSplitIndex = elementNameSplitKey[1].split("_");
-    result.index = parseInt(elementNameSplitIndex[0]);
-    result.name = elementName.split(TOPIC_PREFIX + result.index + "_")[1];
-    return result;
-}
-
-const ButtonRemoveTopic = (props) => {
-
-    return (
-        <a className="button is-danger is-outlined" onClick={(e) => props.removeDiscussionTopic(props.id)}>
-            <span className="icon"><i className="fas fa-times" /></span>
-            <span>Remove</span>
-        </a>
-    )
-}
-
-const DiscussionTopicStatusInfo = (props) => {
-    const meetingNote = props.meetingNote;
-    if (null == meetingNote) return null;
-    const discussion_topics = meetingNote.discussion_topics;
-    if (null == discussion_topics) return null;
-    let closed = 0;
-    for (let i = 0; i < discussion_topics.length; i++) {
-        const element = discussion_topics[i];
-        if (element.is_closed) {
-            closed++;
-        }
-    }
-
-    return (
-        <table><tbody><tr >
-            <td style={{ border: 'none' }}>
-                <div className="tags has-addons are-small">
-                    <span className="tag is-light">Closed</span>
-                    <span className="tag is-info">{closed}</span>
-                </div>
-            </td><td style={{ border: 'none' }}>
-                <div className="tags has-addons are-small">
-                    <span className="tag is-light">Not Closed</span>
-                    <span className="tag is-danger">{discussion_topics.length - closed}</span>
-                </div></td>
-        </tr></tbody></table>
-    )
-}
-
-const ButtonAddTopic = (props) => {
-    return (
-        <div className="has-text-centered">
-            <a className="button is-primary is-outlined" onClick={props.addDiscussionTopic}
-                style={{ marginTop: '10px', marginBottom: '10px' }}>
-                <span className="icon">
-                    <i className="fas fa-plus"></i>
-                </span>
-                <span>{"Tambah Tema Pembahasan"}</span>
-            </a>
-        </div>
-    )
-}
-
-const LinkEditAndAction = (props) => {
-    const id = props.id;
-    return (
-        <div className="buttons has-addons">
-            <Link to={"/discussiontopics/" + id} className="button is-warning">
-                <i className="fas fa-edit" />&nbsp;Edit
-            </Link>
-            <Link to={"/discussiontopics/" + id + "/action"} className="button is-primary">
-                <i className="fas fa-location-arrow" />&nbsp;Konfirmasi
-            </Link></div>
-    )
-}
-const InputField = (props) => {
-
-    return formComponent.InputField(props);
-}
-
-const FormUpperTag = (props) => {
-    const meetingNote = props.meetingNote;
-    return (
-        <div style={{ marginBottom: '20px' }}>
-            <div className="level">
-                <div className="level-left" >
-                    <DiscussionTopicStatusInfo meetingNote={meetingNote} />
-                </div>
-                <div className="level-right">
-                    <span className="tag is-primary is-medium">{meetingNote.departement.name}</span>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-
 const mapStateToProps = state => {
-
     return {
         loggedUser: state.userState.loggedUser,
         loginStatus: state.userState.loginStatus,
     }
 }
-const mapDispatchToProps = dispatch => ({
-    //   getMeetingNotes: (request, app) => dispatch(actions.meetingNotesAction.list(request, app)),
-})
-
 export default withRouter(connect(
     mapStateToProps,
-    mapDispatchToProps
 )(MeetingNoteForm));

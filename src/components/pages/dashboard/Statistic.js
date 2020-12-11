@@ -55,6 +55,7 @@ class Statistic extends BaseComponent {
                 this.departementList = response.statistic.departements;
                 this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, this.departementList);
             }
+            this.refresh();
         }
 
         this.statisticFailedToLoad = (e) => {
@@ -113,7 +114,7 @@ class Statistic extends BaseComponent {
     }
 
     componentDidMount() {
-        if (null == this.state.statisticData) {
+        if (null == this.statisticData) {
             this.loadStatistic();
         }
     }

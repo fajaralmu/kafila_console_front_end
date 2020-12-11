@@ -20,9 +20,13 @@ import DiscussionTopicsList from '../pages/discussiontopics/DiscussionTopicsList
 import MeetingNoteList from '../pages/meetingnotes/MeetingNoteList';
 import NotFound from './../pages/errors/NotFound';
 import IssueFormPublic from './../pages/issues/IssueFormPublic';
+import { connect } from 'react-redux';
+import BaseComponent from './../BaseComponent';
 
 class Content extends Component {
-
+  constructor(props){
+    super(props)
+  }
   render() {
     return (
       <div className="content">
@@ -143,4 +147,21 @@ const Home = (props) => {
   </div>
 }
 
-export default Content;
+
+const mapStateToProps = state => {
+  //console.log(state);
+  return {
+      //user
+      loginStatus: state.userState.loginStatus,
+      loggedUser: state.userState.loggedUser,
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  
+})
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Content))

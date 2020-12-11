@@ -68,7 +68,7 @@ export default class BaseComponent extends Component {
         }
 
         this.backToLogin = () => {
-            if (!authenticated) {
+            if (!authenticated || this.props.history == null) {
                 return;
             }
             this.props.history.push("/login");

@@ -66,7 +66,7 @@ export const ButtonApplyResetFilter = (props) => {
             <div className="buttons has-addons">
             <button type="submit" className="button is-info">
                 <span className="icon">
-                    <i className="fas fa-search"></i>
+                    <i className="fas fa-play"></i>
                 </span>
                 <span>Apply Filter</span>
             </button>
@@ -84,6 +84,9 @@ export const ButtonApplyResetFilter = (props) => {
 
 
 export const InputField = (props) => {
+    if (props.show == false) {
+        return null;
+    }
 
     const className = "input input-form-field "+props.className;
     const orientation = props.orientation?props.orientation:"horizontal";
