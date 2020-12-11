@@ -92,17 +92,17 @@ class IssuesList extends BaseManagementPage
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
                                     { text: 'No' },
-                                    { text: 'id', withFilter: true },
+                                    // { text: 'id', withFilter: true },
                                     { text: 'date', withFilter: true },
                                     { text: 'place', withFilter: true },
                                     { text: 'content', withFilter: true },
                                     { text: 'issuer', withFilter: true },
                                     { text: 'email', withFilter: true },
                                     { text: 'departement', withFilter: true },
-                                    { text: 'issue_input', withFilter: true },
+                                    { text: 'issue_input', alias:'input', withFilter: true },
                                     { text: 'attachment', withFilter: true },
                                     { text: 'is_closed', alias:'Status', withFilter: true},
-                                    { text: 'closed_date', alias:'Closed', withFilter: true},
+                                    // { text: 'closed_date', alias:'Closed', withFilter: true},
                                     { text: 'action'}
                                 ]} />
                                 <tbody>
@@ -110,7 +110,7 @@ class IssuesList extends BaseManagementPage
                                 const indexBegin = (this.page - 1) * this.limit;
                                 return (<tr key={"record_"+i}>
                                     <td>{indexBegin + i + 1}</td>
-                                    <td>{item.id}</td>
+                                    {/* <td>{item.id}</td> */}
                                     <td>{item.date}</td>
                                     <td>{item.place}</td>
                                     <td>{item.content && item.content.length > 10 ? item.content.substring(0, 10) + '...' : item.content}</td>
@@ -125,9 +125,7 @@ class IssuesList extends BaseManagementPage
                                         :
                                         <span className="tag is-warning">Not Closed</span>}
                                     </td>
-                                    <td>
-                                        {item.closed_date}
-                                    </td>
+                                    {/* <td>{item.closed_date}</td> */}
                                     <td>
                                         {isAdmin?
                                         <>

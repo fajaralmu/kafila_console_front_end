@@ -1,13 +1,13 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
+import BaseComponent from '../../BaseComponent';
 import Message from '../../messages/Message';
 import * as formComponent from '../../forms/commons';
 import Card from '../../container/Card';
-import { SubmitResetButton } from '../../forms/commons';
+import { SubmitResetButton, InputField } from '../../forms/commons';
 import { LabelField } from '../../forms/commons';
 import { dateStringDayMonthYearFromText } from '../../../utils/DateUtil';
 import IssuesService from './../../../services/IssuesService';
@@ -72,10 +72,8 @@ class IssuesFollowingUpForm extends BaseComponent {
                 if (this.getRecordId() == null) {
                     document.getElementById(FORM_ID).reset();
                 }
+                this.refresh();
             } catch (error) { }
-        }
-        this.handleErrorSubmit = (error) => {
-            this.showError("handleErrorSubmit: " + error);
         }
         this.handleErrorGetRecord = (error) => {
             this.setState({ recordNotFound: true })
@@ -90,7 +88,7 @@ class IssuesFollowingUpForm extends BaseComponent {
 
         this.storeAction = (followUp) => {
             this.commonAjax(this.issueService.followUpIssue, followUp,
-                this.handleSuccessSubmit, this.handleErrorSubmit);
+                this.handleSuccessSubmit, null);
         }
         this.loadRecord = () => {
             this.commonAjax(this.issueService.view, this.getRecordId(),
@@ -117,20 +115,23 @@ class IssuesFollowingUpForm extends BaseComponent {
         if (this.state.recordNotFound) {
             return <Message className="is-danger" body="Record Not Found" />
         }
-
+        const title = this.title("Tindak Lanjut Aduan");
         if (this.state.isLoadingRecord) {
-            return <h3>Please Wait...</h3>
+            return <div>{title}<h3>Please Wait...</h3></div>
         }
 
         if (this.isLoggedUserNull()) {
             return null;
         }
+        const formTitle = <>
+            <Link to="/issues">Aduan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Detail Aduan
+        </>
         const isClosed = this.issue.is_closed;
         return (
             <div>
-                <CommonTitle>Tindak Lanjut Aduan</CommonTitle>
+                {title}
 
-                <Card title="Detail Aduan">
+                <Card title={formTitle}>
                     <ClosedStatus closed={isClosed} />
                     {this.state.showDetailIssue ?
                         <article style={{ marginBottom: '10px' }} className="is-info">
@@ -171,7 +172,7 @@ class IssuesFollowingUpForm extends BaseComponent {
                 <Card title="Formulir Tindak Lanjut">
                     {this.issue.follow_up == null ?
                         <form id={FORM_ID} onSubmit={this.onSubmit}>
-                            <InputField required={true} label="Tanggal" name="date" type="date" />
+                            <formComponent.InputField required={true} label="Tanggal" name="date" type="date" />
                             <InputField required={true} label="Keterangan" name="description" type="textarea" />
                             <SubmitResetButton submitText={"Submit"} withReset={true} />
                         </form>
@@ -191,13 +192,6 @@ class IssuesFollowingUpForm extends BaseComponent {
         )
     }
 }
-
-
-const InputField = (props) => {
-
-    return formComponent.InputField(props);
-}
-
 
 const mapStateToProps = state => {
 

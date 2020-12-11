@@ -165,11 +165,9 @@ class IssuesForm extends BaseAdminPage {
         if (this.state.recordNotFound) {
             return <Message className="is-danger" body="Record Not Found" />
         }
-
+        const title = this.title("Form Aduan");
         if (this.getRecordId() != null && this.state.isLoadingRecord) {
-            return <div>
-                <h2 style={{ textAlign: 'center' }}>Form Aduan</h2><h3>Please Wait...</h3>
-            </div>
+            return <div>{title}<h3>Please Wait...</h3></div>
         }
 
         const formTitle = <>
@@ -177,7 +175,7 @@ class IssuesForm extends BaseAdminPage {
         </>
         return (
             <div>
-                <CommonTitle>Form Aduan</CommonTitle>
+                {title}
                 <Card title={formTitle} >
                     <form onSubmit={this.onSubmit} id="form-management" >
                         <InputField label="Tanggal" name="date" type="date" required={true} />
