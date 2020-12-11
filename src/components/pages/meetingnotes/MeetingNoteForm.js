@@ -46,7 +46,7 @@ class MeetingNoteForm extends BaseComponent {
 
         this.attachmentsData = {};
         this.form_temporary_inputs = {};
-        this.meetingNote = { discussion_topics: [] };
+        this.meetingNote = null;//{ discussion_topics: [] };
         this.isSubmitting = false;
         this.getRecordId = () => {
             return this.props.match.params.id;
@@ -228,6 +228,7 @@ class MeetingNoteForm extends BaseComponent {
         if (this.getRecordId() == null && this.meetingNote != null) {
             this.meetingNote = null;
             this.form_temporary_inputs = {};
+           
             this.setState({ discussionTopicCount: [1] });
         }
         this.setInputsFromTemporaryData();
@@ -275,7 +276,7 @@ class MeetingNoteForm extends BaseComponent {
                         const title = "Tema Pembahasan #" + (i + 1);// +", id:"+id;
                         const inputPrefix = TOPIC_PREFIX + id;
                         return (
-                            <Card title={title} key={"disc_topic_field_" + i}>
+                            <Card title={title} key={"discussion_topic_field_" + i}>
                                 <ClosedInfoTag closed={isClosed} />
                                 <ButtonRemoveTopic show={this.getRecordId() == null && this.state.discussionTopicCount.length > 1} id={id} removeDiscussionTopic={this.removeDiscussionTopic} />
                                 <DiscussionTopicCommonInputs inputPrefix={inputPrefix} />
@@ -284,7 +285,6 @@ class MeetingNoteForm extends BaseComponent {
                                 <AttachmentInfo show={this.attachmentsData[inputPrefix + "_attachment"] != null}
                                     name={this.attachmentsData[inputPrefix + "_attachment"] == null ? null : this.attachmentsData[inputPrefix + "_attachment"].name}
                                     onRemoveClick={(e) => this.removeAttachment(inputPrefix + "_attachment")} />
-
                                 <LinkEditAndAction show={this.getRecordId() != null} id={id} />
                             </Card>
                         )
