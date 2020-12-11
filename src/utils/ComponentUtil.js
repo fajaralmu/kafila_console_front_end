@@ -29,13 +29,14 @@ export function getAttachmentData(input) {
     const fileName = name.substring(0, lastDot);
     const ext = name.substring(lastDot + 1);
     const size = file.size;
-    console.debug("FileName: ", fileName, "ext: ", ext, "FILE:", file);
+    // console.debug("FileName: ", fileName, "ext: ", ext, "FILE:", file);
     return new Promise(function (resolve, reject) {
         try {
             const reader = new FileReader();
             reader.readAsDataURL(input.files[0]);
             reader.onload = function () {
                 const attachmentData = {
+                    isFile:true,
                     data:reader.result,
                     name:name,
                     extension:ext,

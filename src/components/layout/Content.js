@@ -136,11 +136,10 @@ class Content extends Component {
 
 const Home = (props) => {
   document.title = "Home";
-  return <div style={{ textAlign: 'center' }}>
+  return <div className="has-text-centered">
+    <img src="kiis-stroke.png" width="200"  />
     <h2>Kafila Console</h2>
-    <span style={{ fontSize: '10em' }}>
-      <i className="fas fa-users-cog"></i>
-    </span>
+    
   </div>
 }
 

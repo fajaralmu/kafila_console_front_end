@@ -13,7 +13,9 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.clickable:hover{
+  cursor: pointer;
+}
 #main-layout{ 
   margin:0; 
 }

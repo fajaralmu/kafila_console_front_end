@@ -12,6 +12,7 @@ import { SubmitResetButton } from '../../forms/commons';
 import { ModalBackdrop } from './../../messages/Alert';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { LabelField } from './../../forms/commons';
+import { getAttachmentData } from './../../../utils/ComponentUtil';
 
 const FORM_ID = "form-input-meeting-note";
 const TOPIC_PREFIX = "discussion_topic_";
@@ -29,6 +30,7 @@ class MeetingNoteForm extends BaseComponent {
 
         this.discussionTopicService = DiscussionTopicsService.instance;
 
+        this.attachmentsData = {};
         this.form_temporary_inputs = {};
         this.meetingNote = { discussion_topics: [] };
         this.isSubmitting = false;
@@ -50,14 +52,14 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.addDiscussionTopic = () => {
-
+            this.saveFormInputsToTemporaryData();
             if (this.getRecordId() != null && null != this.meetingNote) {
                 this.setState({ showFormDiscussionTopicInEditMode: true });
                 return;
             }
 
             const discussionTopicCount = this.state.discussionTopicCount;
-            this.saveFormTemporaryInputs();
+            
             discussionTopicCount.push(this.getMaxDiscussionTopicID() + 1);
             this.setState({ discussionTopicCount: discussionTopicCount });
 
@@ -77,7 +79,7 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.removeDiscussionTopic = (id) => {
-            this.saveFormTemporaryInputs();
+            this.saveFormInputsToTemporaryData();
             const app = this;
             this.showConfirmationDanger("Remove discussion topic (" + id + ")? ")
                 .then(function (ok) {
@@ -104,12 +106,32 @@ class MeetingNoteForm extends BaseComponent {
                 return;
             }
             discussionTopicCount.splice(index, 1);
+
+            //delete temp data
+            this.deleteTempFormData(id);
             this.setState({ discussionTopicCount: discussionTopicCount });
-            this.setFormTemporaryInputs();
+            this.setInputsFromTemporaryData();
 
         }
-        this.setFormTemporaryInputs = () => {
+        this.deleteTempFormData = (id) => {
+            for (const key in this.form_temporary_inputs) {
+                if (this.form_temporary_inputs.hasOwnProperty(key)) { 
+                    if (key.startsWith(TOPIC_PREFIX+id+"_")) {
+                        delete this.form_temporary_inputs[key];
+                    }
+                }
+            }
+            for (const key in this.attachmentsData) {
+                if (this.attachmentsData.hasOwnProperty(key)) { 
+                    if (key.startsWith(TOPIC_PREFIX+id+"_")) {
+                        delete this.attachmentsData[key];
+                    }
+                }
+            }
+        }
+        this.setInputsFromTemporaryData = () => {
             console.debug("setTempDiscussionTopicValues: ", this.form_temporary_inputs);
+            // console.debug("attachmentData: ", this.attachmentsData);
             const form = document.getElementById(FORM_ID);
             if (null == form) {
                 return;
@@ -117,6 +139,7 @@ class MeetingNoteForm extends BaseComponent {
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
+                if (element.type == 'file') continue;
                 if (null != this.form_temporary_inputs[element.name]) {
                     element.value = this.form_temporary_inputs[element.name];
                 } else {
@@ -128,16 +151,21 @@ class MeetingNoteForm extends BaseComponent {
                 }
             }
         }
-        this.saveFormTemporaryInputs = () => {
+        this.saveFormInputsToTemporaryData = () => {
             this.form_temporary_inputs = {};
-            const form = document.getElementById(FORM_ID);
+            const form = document.getElementById(FORM_ID), app = this;
             const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
+                const name = element.name;
                 if (element.value == null || element.value == "") {
                     continue;
                 }
-                this.form_temporary_inputs[element.name] = element.value;
+                if (element.type == 'file') { 
+                    //
+                } else {
+                    this.form_temporary_inputs[name] = element.value;
+                }
             }
             console.debug("SAVED TEMP: ", this.form_temporary_inputs);
         }
@@ -147,7 +175,7 @@ class MeetingNoteForm extends BaseComponent {
             if (this.getRecordId() != null) {
                 return;
             }
-            this.saveFormTemporaryInputs();
+            this.saveFormInputsToTemporaryData();
             this.isSubmitting = true;
             const form = e.target;
             const app = this;
@@ -179,29 +207,38 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.fillDataAndStore = (form) => {
-            const inputs = form.getElementsByClassName(CLASS_INPUT_FIELD);
-
-            this.meetingNote = {
-                discussion_topics: []
-            };
+            const rawInputs =  this.form_temporary_inputs;
+            for (const key in this.attachmentsData) {
+                if (this.attachmentsData.hasOwnProperty(key)) {
+                    const element = this.attachmentsData[key];
+                    rawInputs[key] = element;
+                }
+            }
+            const inputs = {};
+            //sort keys
+            Object.keys(rawInputs).sort().forEach(function(key) {
+                inputs[key] = rawInputs[key];
+            });
+            console.debug("inputs: ",inputs);
+            this.meetingNote = { discussion_topics: [] };
             let currentDiscussionTopicID = -1;
             let currentDiscussionTopicIndex = -1;
-            for (let i = 0; i < inputs.length; i++) {
-                const element = inputs[i];
-                const elementName = element.name;
-                if (null == element.value || "" == element.value) {
-                    continue;
-                }
-                if (elementName.startsWith(TOPIC_PREFIX)) {
-                    const indexAndName = extractTopicDiscussionIndexAndName(elementName);
+            for (const key in inputs) {
+                const value = inputs[key];
+                if (key.startsWith(TOPIC_PREFIX)) {
+                    const indexAndName = extractTopicDiscussionIndexAndName(key);
                     if (indexAndName.index != currentDiscussionTopicID) {
                         this.meetingNote.discussion_topics.push({});
                         currentDiscussionTopicID = indexAndName.index;
                         currentDiscussionTopicIndex++;
+                    } 
+                    if (value.isFile == true) {
+                        this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name+"_info"] = value;
+                    } else {
+                        this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name] = value;
                     }
-                    this.meetingNote.discussion_topics[currentDiscussionTopicIndex][indexAndName.name] = element.value;
                 } else {
-                    this.meetingNote[elementName] = element.value;
+                    this.meetingNote[key] = value;
                 }
             }
 
@@ -210,21 +247,36 @@ class MeetingNoteForm extends BaseComponent {
             }
 
             console.debug("meetingNote: ", this.meetingNote);
-            this.storeMeetingNote();
+            // this.storeMeetingNote();
 
         }
-
+        this.addAttachmentData = (e, key) => {
+            this.saveFormInputsToTemporaryData();
+            const app = this;
+            getAttachmentData(e.target).then(function(data){
+                app.attachmentsData[key] = data;
+                app.refresh();
+            });
+        }
+        this.removeAttachment = (key) => {
+            this.saveFormInputsToTemporaryData();
+            const app = this;
+            this.showConfirmation("Remove attachment?").then(function(ok){ 
+                if(!ok) return;
+                try {
+                    delete app.attachmentsData[key];
+                    app.refresh();
+                } catch (error) { console.error(error)}
+            });
+        }
         this.recordSaved = (response) => {
-            this.showInfo("SUCCESS");
+            this.showInfo("Success");
             try {
                 if (this.getRecordId() == null) {
-                    
                     this.props.history.push("/meetingnote/" + response.meeting_note.id);
                     this.handleSuccessGetRecord(response);
                 }
-            } catch (error) {
-                console.error(error);
-             }
+            } catch (error) { console.error(error);  }
         }
         this.handleErrorSubmit = (error) => {
             this.showError("handleErrorSubmit: " + error);
@@ -282,7 +334,7 @@ class MeetingNoteForm extends BaseComponent {
         }
 
         this.discussionTopicSaved = (response) => {
-            alert("SUCCESS");
+            alert("Success");
             this.setState({ showFormDiscussionTopicInEditMode: false });
             this.loadRecord();
 
@@ -329,7 +381,7 @@ class MeetingNoteForm extends BaseComponent {
             this.form_temporary_inputs = {};
             this.setState({ discussionTopicCount: [1] });
         }
-        this.setFormTemporaryInputs();
+        this.setInputsFromTemporaryData();
     }
 
     render() {
@@ -384,6 +436,7 @@ class MeetingNoteForm extends BaseComponent {
                     {this.state.discussionTopicCount.map((id, i) => {
                         const isClosed = this.isDiscussionTopicClosed(id);
                         const title = "Tema Pembahasan #" + (i + 1);// +", id:"+id;
+                        const inputPrefix = TOPIC_PREFIX + id;
                         return (
                             <Card title={title} key={"disc_topic_field_" + i}
                             >
@@ -394,11 +447,19 @@ class MeetingNoteForm extends BaseComponent {
                                     <ButtonRemoveTopic id={id} removeDiscussionTopic={
                                         this.removeDiscussionTopic} /> : null}
 
-                                <InputField className="discussion-topic" required={true} label="Pembahasan" name={TOPIC_PREFIX + id + "_content"} type="textarea" />
-                                <InputField className="discussion-topic" required={true} label="Keputusan" name={TOPIC_PREFIX + id + "_decision"} type="textarea" />
-                                <InputField className="discussion-topic" required={true} label="Deadline" name={TOPIC_PREFIX + id + "_deadline_date"} type="date" />
-                                <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={TOPIC_PREFIX + id + "_person_in_charge"} />
-
+                                <InputField className="discussion-topic" required={true} label="Pembahasan" name={inputPrefix + "_content"} type="textarea" />
+                                <InputField className="discussion-topic" required={true} label="Keputusan" name={inputPrefix + "_decision"} type="textarea" />
+                                <InputField className="discussion-topic" required={true} label="Deadline" name={inputPrefix + "_deadline_date"} type="date" />
+                                <InputField className="discussion-topic" required={true} label="Penganggung Jawab" name={inputPrefix + "_person_in_charge"} />
+                                <InputField className="discussion-topic" label="Attachment" attributes={{onChange: (e) => this.addAttachmentData(e, inputPrefix + "_attachment")}} name={inputPrefix + "_attachment"} type="file" note="Kosongkan jika tidak ada dokumen" />
+                                {this.attachmentsData[inputPrefix + "_attachment"] ? 
+                                <div className="tags has-addons">
+                                    <span className="tag is-info">
+                                        Attachment : {this.attachmentsData[inputPrefix + "_attachment"].name}
+                                    </span>
+                                    <span className="tag is-warning" style={{cursor:'pointer'}} onClick={(e)=>this.removeAttachment(inputPrefix + "_attachment")}>remove</span>
+                                </div>
+                                :null}
                                 {this.getRecordId() != null ? <LinkEditAndAction id={id} /> : null}
                             </Card>
                         )
