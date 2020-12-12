@@ -101,6 +101,7 @@ export default class BaseComponent extends Component {
                 if(successCallback){ 
                     successCallback(response);
                 }
+                app.refresh();
             }).catch(function(e){
                 if(errorCallback){
                     errorCallback(e);
@@ -165,5 +166,6 @@ export const  mapCommonUserStateToProps = state => {
     return {
         loggedUser: state.userState.loggedUser,
         loginStatus: state.userState.loginStatus,
+        applicationData: state.applicationState.applicationData
     }
 }

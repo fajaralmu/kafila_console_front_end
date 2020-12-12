@@ -4,7 +4,7 @@ import React from 'react';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import * as actions from '../../../redux/actions/actionCreators'
 import { connect } from 'react-redux'
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
+import BaseComponent, { CommonTitle, mapCommonUserStateToProps } from '../../BaseComponent';
 import Card from '../../container/Card';
 import PieChart from './PieChart';
 import RecordHistoriesService from './../../../services/RecordHistoriesService';
@@ -44,18 +44,12 @@ class Dashboard extends BaseComponent {
         )
     }
 }
-const mapStateToProps = state => {
 
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-    }
-}
 const mapDispatchToProps = dispatch => ({
 
 })
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(Dashboard));

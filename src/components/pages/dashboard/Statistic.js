@@ -4,7 +4,7 @@ import React from 'react';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import * as actions from '../../../redux/actions/actionCreators'
 import { connect } from 'react-redux'
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
+import BaseComponent, { CommonTitle, mapCommonUserStateToProps } from '../../BaseComponent';
 import Card from '../../container/Card';
 import PieChart from './PieChart';
 import RecordHistoriesService from './../../../services/RecordHistoriesService';
@@ -55,7 +55,6 @@ class Statistic extends BaseComponent {
                 this.departementList = response.statistic.departements;
                 this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, this.departementList);
             }
-            this.refresh();
         }
 
         this.statisticFailedToLoad = (e) => {
@@ -172,19 +171,11 @@ const ErrorInfo = (props) => {
         </Message>
     )
 }
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-        applicationData: state.applicationState.applicationData
-    }
-}
 const mapDispatchToProps = dispatch => ({
     storeApplicationData: (code, data) => dispatch(actions.applicationAction.storeApplicationData(code, data)),
 })
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(Statistic));

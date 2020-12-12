@@ -67,13 +67,13 @@ class IssuesFollowingUpForm extends BaseComponent {
         this.handleSuccessSubmit = (response) => {
             this.issue.follow_up = response.followed_up_issue;
             this.issue.is_closed = true;
-            this.showInfo("SUCCESS");
+            
             try {
                 if (this.getRecordId() == null) {
                     document.getElementById(FORM_ID).reset();
                 }
-                this.refresh();
-            } catch (error) { }
+            } catch (error) { console.error(error); }
+            this.showInfo("SUCCESS");
         }
         this.handleErrorGetRecord = (error) => {
             this.setState({ recordNotFound: true })
@@ -111,7 +111,9 @@ class IssuesFollowingUpForm extends BaseComponent {
 
 
     render() {
-
+        if (this.isLoggedUserNull()) {
+            return null;
+        }        
         if (this.state.recordNotFound) {
             return <Message className="is-danger" body="Record Not Found" />
         }
@@ -120,9 +122,6 @@ class IssuesFollowingUpForm extends BaseComponent {
             return <div>{title}<h3>Please Wait...</h3></div>
         }
 
-        if (this.isLoggedUserNull()) {
-            return null;
-        }
         const formTitle = <>
             <Link to="/issues">Aduan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Detail Aduan
         </>
@@ -164,9 +163,7 @@ class IssuesFollowingUpForm extends BaseComponent {
                             </div>
                         </article>
                         :
-                        <AnchorWithIcon iconClassName="fas fa-angle-down" onClick={this.showDetailIssue}>
-                            Detail Aduan
-                    </AnchorWithIcon>
+                        <AnchorWithIcon children="Detail Aduan" iconClassName="fas fa-angle-down" onClick={this.showDetailIssue} />
                     }
                 </Card>
                 <Card title="Formulir Tindak Lanjut">

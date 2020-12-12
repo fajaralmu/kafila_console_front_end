@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
-import BaseComponent from '../../BaseComponent';
+import BaseComponent, { mapCommonUserStateToProps } from '../../BaseComponent';
 import Card from '../../container/Card';
-import { InputField, SubmitResetButton } from '../../forms/commons';
+import { InputField, SubmitResetButton, LabelField } from '../../forms/commons';
 import { issue_sources } from './IssuesForm';
 import { SelectField } from './../../forms/commons';
 import IssuesService from './../../../services/IssuesService';
@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 import { toBase64v2, getAttachmentData } from './../../../utils/ComponentUtil';
+import CaptCha from './CaptCha';
 const ADDITION = "+";
 const SUBSTRACTION = "-";
 class IssueFormPublic extends BaseComponent {
@@ -127,8 +128,8 @@ class IssueFormPublic extends BaseComponent {
                 );
             } else {
                 this.departementList = appData[DATA_KEY_DEPARTEMENTS];
+                this.refresh();
             }
-            this.refresh();
         }
 
         this.storeIssue = (issue) => {
@@ -173,7 +174,6 @@ class IssueFormPublic extends BaseComponent {
                 <Card title="Form">
                     <form onSubmit={this.onSubmit}>
                         <InputField name="date" label="tanggal" type="date" required={true} />
-
                         <InputField name="place" label="tempat" required={true} />
                         <InputField name="content" label="permasalahan" type="textarea" required={true} />
                         <InputField name="email" type="email" note="Kosongkan jika berstatus anonim" />
@@ -184,12 +184,9 @@ class IssueFormPublic extends BaseComponent {
                             return { value: item.id, text: item.name };
                         })} name="departement_id" required={true} />
                         <InputField name="attachment" attributes={{accept:'image/*', onChange:this.updateAttachmentData}} type="file" note="Kosongkan jika tidak ada dokumen" />
-                        <div className="field is-horizontal">
-                            <div className="field-label">Verifikasi</div>
-                            <div className="field-body">
-                                <CaptCha reset={this.resetCaptcha} captcha={this.captcha} />
-                            </div>
-                        </div>
+                        <LabelField label="Verifikasi">
+                            <CaptCha reset={this.resetCaptcha} captcha={this.captcha} />
+                        </LabelField>
                         <SubmitResetButton />
                     </form>
                 </Card>
@@ -197,64 +194,11 @@ class IssueFormPublic extends BaseComponent {
         )
     }
 }
-
-class CaptCha extends Component {
-    constructor(props) {
-        super(props);
-        this.canvas_id = "captcha_canvas_" + new Date().getTime();
-    }
-    getCaptchaText() {
-        const captcha = this.props.captcha;
-        const text = captcha.firstNumber + " " + captcha.operator + " " + captcha.secordNumber;
-        return text;
-    }
-    drawCanvas() {
-        const canvas = document.getElementById(this.canvas_id);
-        const context = canvas.getContext('2d');
-
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = '#000';
-        context.font = '70px Arial';
-        context.fillText(this.getCaptchaText(), 10, 50);
-    }
-    componentDidUpdate() {
-        this.drawCanvas();
-    }
-    componentDidMount() {
-        this.drawCanvas();
-    }
-    render() {
-        const captcha = this.props.captcha;
-        return (
-
-            <article style={{ width: '100%' }} className="message ">
-                <div className="message-header has-background-grey-lighter">
-                    <p className="has-text-dark">Captcha</p>
-                    <a onClick={this.props.reset} className="button"><i className="fas fa-sync" /></a>
-                </div>
-                <div className="message-body has-background-light">
-                    <canvas id={this.canvas_id} className="has-background-light" style={{ width: '100px', height: 'auto' }} />
-                    <input className="input" name="captcha_result" required />
-                </div>
-            </article>
-        );
-    }
-}
-
-
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-        applicationData: state.applicationState.applicationData
-    }
-}
 const mapDispatchToProps = dispatch => ({
     storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
 })
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(IssueFormPublic));

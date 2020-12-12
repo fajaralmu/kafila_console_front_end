@@ -75,7 +75,6 @@ class DiscussionTopicsForm extends BaseManagementPage {
         this.handleSuccessGetRecord = (response) => {
             this.recordData = response;
             this.discussionTopic = response.discussion_topic;
-            this.setState({ isLoadingRecord: false });
 
             const form = document.getElementById("form-management");
             const inputs = form.getElementsByClassName("input-form-field");
@@ -90,6 +89,8 @@ class DiscussionTopicsForm extends BaseManagementPage {
                     element.setAttribute("disabled", "disabled");
                 }
             }
+            
+            this.setState({ isLoadingRecord: false });
         }
 
         this.handleErrorGetRecord = (e) => {

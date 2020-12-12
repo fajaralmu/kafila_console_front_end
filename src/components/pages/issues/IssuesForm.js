@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import { InputField, SelectField, LabelField } from '../../forms/commons';
-import BaseComponent, { CommonTitle } from '../../BaseComponent';
+import BaseComponent, { CommonTitle, mapCommonUserStateToProps } from '../../BaseComponent';
 import MasterManagementService from '../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from '../../messages/Message';
@@ -93,20 +93,15 @@ class IssuesForm extends BaseAdminPage {
                 this.props.history.push("/issues/" + response.issue.id);
             }
         }
-        this.recordFailedToSave = (e) => {
-            console.error(e);
-            this.showError("FAILED SAVING RECORD");
-        }
 
         this.store = (issue) => {
-            this.commonAjax(
-                this.masterDataService.storeIssue, issue,
-                this.recordSaved, this.recordFailedToSave
-            )
+            this.commonAjax(this.masterDataService.storeIssue, issue,
+                this.recordSaved, null)
         }
 
         this.loadDepartements = () => {
             const appData = this.props.applicationData;
+            console.debug("appdata: ", appData);
             if (appData[DATA_KEY_DEPARTEMENTS] == null ||
                 appData[DATA_KEY_DEPARTEMENTS].length == 0) {
                 this.commonAjax(
@@ -119,8 +114,8 @@ class IssuesForm extends BaseAdminPage {
                 if (null != this.getRecordId()) {
                     this.loadRecord();
                 }
+                this.refresh();
             }
-            this.refresh();
         }
 
         this.handleSuccessGetRecord = (response) => {
@@ -214,18 +209,8 @@ class IssuesForm extends BaseAdminPage {
         )
     }
 }
-
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-        applicationData: state.applicationState.applicationData
-    }
-}
-
 const mapDispatchToProps = dispatch => ({
     storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
 })
 export default withRouter(
-    connect(mapStateToProps, mapDispatchToProps)(IssuesForm));
+    connect(mapCommonUserStateToProps, mapDispatchToProps)(IssuesForm));
