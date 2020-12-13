@@ -120,9 +120,9 @@ class IssuesList extends BaseManagementPage
                                     <td>{item.departement.name}</td>
                                     <td>{item.issue_input}</td>
                                     <td><AttachmentLink show={item.attachment!=null} to={"upload/issue/"+item.attachment} /></td>
-                                    <td><ClosedInfoTag closed = {item.is_closed==true}/></td>
+                                    <td ><ClosedInfoTag closed = {item.is_closed==true}/></td>
                                     {/* <td>{item.closed_date}</td> */}
-                                    <td>
+                                    <td style={{width:'150px', display: 'block', border:'none'}}>
                                         {isAdmin?
                                         <Fragment>
                                             <Link to={"/issues/" + item.id} className="button is-small" >

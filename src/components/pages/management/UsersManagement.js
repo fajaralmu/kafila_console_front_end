@@ -102,7 +102,7 @@ class UsersManahement extends BaseManagementPage {
                                     <td>{item.display_name}</td>
                                     <td>{item.role}</td>
                                     <td>{item.departement ? item.departement.name : '-'}</td>
-                                    <td>
+                                    <td style={{width:'150px', display: 'block', border:'none'}}>
                                         {this.buttonsModifyAndDelete(  
                                             "/management/users/"+item.id,
                                             item.id)}     

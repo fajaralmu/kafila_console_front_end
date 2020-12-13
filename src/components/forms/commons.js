@@ -34,7 +34,7 @@ export const TableHeadWithFilter = (props) => {
         <tr>
             {headers.map((header, i) => {
                 const label = header.alias ? header.alias : header.text;
-                return <th key={"TH_" + i}>{CapitalizeFirstLetter(label)}
+                return <th style={header.style} key={"TH_" + i}>{CapitalizeFirstLetter(label)}
 
                     {header.withFilter ?
                         <div className="field has-addons">

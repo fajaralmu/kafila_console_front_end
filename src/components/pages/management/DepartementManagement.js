@@ -114,7 +114,7 @@ class DeparementManagement extends BaseManagementPage {
                                             <td>{item.id}</td>
                                             <td>{item.name}</td>
                                             <td>{item.description}</td>
-                                            <td>
+                                            <td style={{width:'150px', display: 'block', border:'none'}}>
                                                 {this.buttonsModifyAndDelete(
                                                     "/management/departements/" + item.id,
                                                     item.id)}

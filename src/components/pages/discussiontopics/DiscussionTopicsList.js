@@ -138,9 +138,8 @@ class DiscussionTopicsList extends BaseManagementPage {
                                                 {item.closed_date}
                                             </td> */}
                                             <td><AttachmentLink showExtension={true} show={item.attachment!=null} to={"upload/topic/"+item.attachment}/></td>
-                                            <td><LinkEditAndAction id={item.id} />
-                                            </td>
-                                            <td>
+                                            <td style={{width:'150px', display: 'block', border:'none'}}><LinkEditAndAction id={item.id} /></td>
+                                            <td style={{border: 'none'}}>
                                                 <Link to={"/meetingnote/" + item.note_id} className="button is-light is-small">
                                                     <span className="icon">
                                                         <i className="fas fa-clipboard" />
@@ -161,14 +160,14 @@ class DiscussionTopicsList extends BaseManagementPage {
 }
 
 const LinkEditAndAction = (props) => {
-    return (<React.Fragment>
-            <Link to={"/discussiontopics/" + props.id} className="button is-small" >
+    return (<div>
+            <Link style={{display:'inline-block'}} to={"/discussiontopics/" + props.id} className="button is-small" >
                 <i className="fas fa-edit"></i>
             </Link>
-            <Link to={"/discussiontopics/" + props.id + "/action"} className="button is-primary is-small" >
+            <Link style={{display:'inline-block'}} to={"/discussiontopics/" + props.id + "/action"} className="button is-primary is-small" >
                 <i className="fas fa-location-arrow"></i>
             </Link>
-        </React.Fragment>)
+        </div>)
 }
 
 const mapDispatchToProps = dispatch => ({})
