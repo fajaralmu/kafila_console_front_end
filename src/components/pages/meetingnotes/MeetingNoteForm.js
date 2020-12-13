@@ -286,7 +286,7 @@ class MeetingNoteForm extends BaseComponent {
                                     name={this.attachmentsData[inputPrefix + "_attachment"] == null ? null : this.attachmentsData[inputPrefix + "_attachment"].name}
                                     onRemoveClick={(e) => this.removeAttachment(inputPrefix + "_attachment")} />
                                 <LinkEditAndAction show={this.getRecordId() != null} id={id} />
-                                <AttachmentLink showExtension={true} show={discussionTopic.attachment!=null} 
+                                <AttachmentLink showExtension={true} show={discussionTopic!=null&&discussionTopic.attachment!=null} 
                                     to={discussionTopic==null?null:"upload/topic/"+discussionTopic.attachment} />
                             </Card>
                         )
