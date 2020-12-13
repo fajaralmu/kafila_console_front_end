@@ -137,7 +137,7 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             {/* <td>
                                                 {item.closed_date}
                                             </td> */}
-                                            <td><AttachmentLink showExtension={true} show={item.attachment!=null} to={"upload/topic/"+item.attachment}/></td>
+                                            <td><AttachmentLink showExtension={true} show={item.attachment!=null&&item.attachment!=""} to={"upload/topic/"+item.attachment}/></td>
                                             <td style={{width:'150px', display: 'block', border:'none'}}><LinkEditAndAction id={item.id} /></td>
                                             <td style={{border: 'none'}}>
                                                 <Link to={"/meetingnote/" + item.note_id} className="button is-light is-small">
