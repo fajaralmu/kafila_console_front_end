@@ -73,11 +73,14 @@ class DiscussionTopicsForm extends BaseManagementPage {
         }
 
         this.handleSuccessGetRecord = (response) => {
+
             this.recordData = response;
             this.discussionTopic = response.discussion_topic;
-
+            
+            this.setState({ isLoadingRecord: false });
             const form = document.getElementById("form-management");
-            const inputs = form.getElementsByClassName("input-form-field");
+            if (null == form) { return; }
+            const inputs = document.getElementsByClassName("input-form-field");
             for (let i = 0; i < inputs.length; i++) {
                 const element = inputs[i];
                 element.value = this.discussionTopic[element.name];
@@ -90,10 +93,11 @@ class DiscussionTopicsForm extends BaseManagementPage {
                 }
             }
             
-            this.setState({ isLoadingRecord: false });
+           
         }
 
         this.handleErrorGetRecord = (e) => {
+            console.error(e);
             this.setState({ recordNotFound: true })
         }
 

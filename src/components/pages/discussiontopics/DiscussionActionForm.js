@@ -80,6 +80,7 @@ class DiscussionActionForm extends BaseComponent {
             this.showError("handleErrorSubmit: " + error);
         }
         this.handleErrorGetRecord = (error) => {
+            console.error(error);
             this.setState({ recordNotFound: true })
         }
 
