@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import './SideBar.css'
 import BaseMenus from './BaseMenus';
 import { MENUS } from './../../constant/Menus';
+import { mapCommonUserStateToProps } from '../BaseComponent';
 
 
 class Header extends BaseMenus {
@@ -72,7 +73,7 @@ class Header extends BaseMenus {
                             <div className="navbar-item">
                                 <div className="buttons has-addons">
 
-                                    {this.props.loginStatus ?
+                                    {this.isLoggedUserNull()==false ?
                                         <><Link className="button is-info" to="/profile">
                                             <span className="icon">
                                                 <i className="fas fa-user"></i>
@@ -134,6 +135,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default withRouter(connect(
-    mapDispatchToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(Header))
