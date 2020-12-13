@@ -91,7 +91,10 @@ export class InputField extends Component {
 
         this.setDateInput = (e) => {
             const date = new Date().toISOString().substring(0, 10);
-            document.getElementById(this.id).value = date;
+            const input = document.getElementById(this.id);
+            if (!input.getAttribute("disabled")) {
+                input.value = date;
+            }
         }
     }
 
