@@ -16,7 +16,7 @@ export const AnchorWithIcon = (props) => {
 }
 
 export const AttachmentLink = (props) => {
-    if (props.show == false) {return <p>No Attachment</p>}
+    if (props.show == false) {return <p style={{fontSize:'0.7rem'}}>No Attachment</p>}
     const link = contextPath()+ props.to;
     const getExtension = function(link) {
         const splitted = link.split(".");
