@@ -31,6 +31,11 @@ export const MENUS = [
             link: '/meetingnote/create',
             authenticated: true,
             iconClassName: 'fas fa-plus-square',
+        }, {
+            name: 'Riwayat',
+            link: '/meetingnote',
+            authenticated: true,
+            iconClassName: 'fas fa-history',
         }]
     }, {
         name: 'Aduan',

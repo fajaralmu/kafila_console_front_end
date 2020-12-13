@@ -28,16 +28,16 @@ class NavButtons extends Component {
 
         return (
             <div className="columns">
-                <div className="column buttons" style={{ marginTop: '5px', marginBottom: '5px' }}>
+                <div className="column buttons">
                     {buttonsData.map((data, i) => {
-                        const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
+                        const className = data.index == this.props.activeIndex ? "button is-small is-link" : "button is-small is-light";
                         return (
                             <a key={"nav_btn_" + i} onClick={() => { this.onClick(data.index) }} className={className}>{data.index}</a>
                         )
                     })}
                 </div>
                 <div className="column control">
-                    <input name="input-page" placeholder="page" className="input" min="1" id={"custom_page_" + this.id} type="number" />
+                    <input name="input-page" placeholder="page" className="input is-small" min="1" id={"custom_page_" + this.id} type="number" />
 
                 </div>
             </div>

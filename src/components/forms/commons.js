@@ -66,13 +66,13 @@ export const ButtonApplyResetFilter = (props) => {
     return (
         <>
             <div className="buttons has-addons">
-                <button type="submit" className="button is-info">
+                <button type="submit" className="button  is-outlined is-small">
                     <span className="icon">
                         <i className="fas fa-play"></i>
                     </span>
                     <span>Apply Filter</span>
                 </button>
-                <button type="reset" className="button is-danger">
+                <button type="reset" className="button  is-outlined is-small">
                     <span className="icon">
                         <i className="fas fa-sync"></i>
                     </span>

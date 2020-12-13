@@ -8,7 +8,6 @@ import Columns from '../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons';
 import { getDiffDaysToNow } from '../../../utils/DateUtil';
 import MeetingNoteSerivce from './../../../services/MeetingNoteSerivce';
-import { CommonTitle } from '../../BaseComponent';
 
 class MeetingNoteList extends BaseManagementPage {
     constructor(props) {
@@ -49,7 +48,7 @@ class MeetingNoteList extends BaseManagementPage {
             return;
         }
         this.loadRecords();
-        document.title = "Daftar Notulensi";
+        document.title = "Riwayat Notulensi";
     }
 
     //override baseAdminPage
@@ -70,8 +69,8 @@ class MeetingNoteList extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <CommonTitle>Daftar Notulensi</CommonTitle>
-                <Card title="Daftar Notulensi">
+                {this.title("Riwayat Notulensi")}
+                <Card title="Riwayat Notulensi">
                     <LinkToFormCreate to="meetingnote/create">Tambah Notulensi</LinkToFormCreate>
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <Columns cells={[
@@ -83,12 +82,12 @@ class MeetingNoteList extends BaseManagementPage {
                                     onButtonOrderClick={this.onButtonOrderClick}
                                     headers={[
                                         { text: 'No' },
-                                        { text: 'id', alias: "Id", withFilter: true },
+                                        // { text: 'id', alias: "Id", withFilter: true },
                                         { text: 'date', alias: "Tanggal", withFilter: true },
                                         { text: 'place', alias: "Tempat", withFilter: true },
                                         { text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'user', alias: "Notulis", withFilter: true },
-                                        { text: 'discussion_topics_count', alias:"Topik", withFilter:true},
+                                        { text: 'discussion_topics_count', alias:"Jml Topik", withFilter:true},
                                         { text: 'discussion_topics_closed_count', alias:"closed", withFilter:true},
                                         { text: 'action', },
                                     ]} />
@@ -110,20 +109,13 @@ class MeetingNoteList extends BaseManagementPage {
                                         }
                                         return (<tr key={"record-meeting-note-" + i} style={style}>
                                             <td>{indexBegin + i + 1}</td>
-                                            <td>{item.id}</td>
                                             <td>{item.date}</td>
                                             <td>{item.place}</td>
                                             <td>{item.departement ? item.departement.name : "-"}</td>
                                             <td>{item.user ? item.user.name : "-"}</td>
-                                            <td>
-                                                {item.discussion_topics_count}
-                                            </td>
-                                            <td>
-                                                {item.discussion_topics_closed_count}
-                                            </td>
-                                            <td>
-                                                <LinkEditPage id={item.id} />
-                                            </td>
+                                            <td>{item.discussion_topics_count}</td>
+                                            <td>{item.discussion_topics_closed_count}</td>
+                                            <td><LinkEditPage id={item.id} /></td>
                                         </tr>)
                                     })}
                                 </tbody>
