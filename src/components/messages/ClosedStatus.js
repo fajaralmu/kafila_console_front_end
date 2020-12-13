@@ -6,6 +6,9 @@ export default class ClosedStatus extends Component {
         super(props);
     }
     render() {
+        if (this.props.show == false) {
+            return null;
+        }
         const isClosed = this.props.closed == true;
         return (
             <div className="tags has-addons are-medium">

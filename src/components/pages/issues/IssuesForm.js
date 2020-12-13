@@ -12,6 +12,7 @@ import { applicationAction } from '../../../redux/actions/actionCreators';
 import { DATA_KEY_DEPARTEMENTS } from './../../../constant/ApplicationDataKeys';
 import { toBase64v2, getAttachmentData } from './../../../utils/ComponentUtil';
 import { AttachmentLink } from '../../buttons/buttons';
+import ClosedStatus from './../../messages/ClosedStatus';
 
 export const issue_sources = [
     'Yayasan', 'Orang Tua', 'Santri', 'Pegawai', 'Tamu',
@@ -168,10 +169,12 @@ class IssuesForm extends BaseAdminPage {
         const formTitle = <>
             <Link to="/issues">Aduan</Link>&nbsp;<i className="fas fa-angle-right"></i>&nbsp;Form
         </>
+        const isClosed =  this.getRecordId()!=null && this.record != null && this.record.is_closed;
         return (
             <div>
                 {title}
                 <Card title={formTitle} >
+                    <ClosedStatus show={this.getRecordId()!=null && this.record != null} closed={isClosed} />
                     <form onSubmit={this.onSubmit} id="form-management" >
                         <InputField label="Tanggal" name="date" type="date" required={true} />
                         <InputField label="Tempat" name="place" required={true} />
