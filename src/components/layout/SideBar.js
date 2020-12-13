@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import BaseComponent from './../BaseComponent';
+import { connect } from 'react-redux'; 
 
 import BaseMenus from './BaseMenus';
 import { MENUS } from './../../constant/Menus';
+import { mapCommonUserStateToProps } from '../BaseComponent';
 
 class SideBar extends BaseMenus {
     constructor(props) {
@@ -15,6 +15,7 @@ class SideBar extends BaseMenus {
     render() {
         return (
             <div  >
+                <ProfileAvatar show={this.isLoggedUserNull()==false} user={this.getLoggedUser()}/>
                 <aside className="menu">
                     {MENUS.map((menu, i) => {
                         const childs = this.extractChildren(menu.children);
@@ -54,14 +55,19 @@ class SideBar extends BaseMenus {
 
 }
 
-
-const mapStateToProps = state => {
-    //console.log(state);
-    return {
-        //user
-        loginStatus: state.userState.loginStatus,
-        loggedUser: state.userState.loggedUser,
+const ProfileAvatar = (props) => {
+    if (props.show == false) {
+        return null;
     }
+    const user = props.user;
+    return (
+        <div className="has-text-centered has-text-info" style={{paddingTop:'20px', paddingBottom:'20px'}}>
+            <span className="icon" style={{fontSize:'3em'}}>
+                <Link to="/profile"><i className="fas fa-user-circle" /></Link>
+            </span>
+            <h2>{user.display_name}</h2>
+        </div>
+    )
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -69,7 +75,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(SideBar))
 

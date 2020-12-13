@@ -127,23 +127,13 @@ const AppLink = (props) => {
             </span>
         </Link>
     )
-}
-
-
-const mapStateToProps = state => {
-    //console.log(state);
-    return {
-        //user
-        loginStatus: state.userState.loginStatus,
-        loggedUser: state.userState.loggedUser,
-    }
-}
+} 
 
 const mapDispatchToProps = dispatch => ({
     performLogout: (app) => dispatch(actions.accountAction.performLogout(app)),
 })
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapDispatchToProps,
     mapDispatchToProps
 )(Header))
