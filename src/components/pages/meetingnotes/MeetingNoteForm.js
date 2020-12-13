@@ -277,7 +277,7 @@ class MeetingNoteForm extends BaseComponent {
                         const inputPrefix = TOPIC_PREFIX + id;
                         return (
                             <Card title={title} key={"discussion_topic_field_" + i}>
-                                <ClosedInfoTag closed={isClosed} />
+                                <ClosedInfoTag show={this.getRecordId()!=null} closed={isClosed} />
                                 <ButtonRemoveTopic show={this.getRecordId() == null && this.state.discussionTopicCount.length > 1} id={id} removeDiscussionTopic={this.removeDiscussionTopic} />
                                 <DiscussionTopicCommonInputs inputPrefix={inputPrefix} />
                                 <InputField show={this.getRecordId() == null} className="discussion-topic" label="Attachment" attributes={{ onChange: (e) => this.addAttachmentData(e, inputPrefix + "_attachment") }}

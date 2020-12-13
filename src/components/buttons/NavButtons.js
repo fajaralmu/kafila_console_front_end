@@ -1,13 +1,14 @@
 
-import React, { Component } from 'react';
- 
-class NavButtons extends Component
-{
+import React, { Component, Fragment } from 'react';
+import { uniqueId } from './../../utils/StringUtil';
+
+class NavButtons extends Component {
     constructor(props) {
         super(props);
+        this.id = uniqueId();
 
         this.onClick = (index) => {
-            if(this.props.onClick) {
+            if (this.props.onClick) {
                 this.props.onClick(index);
             }
         }
@@ -16,21 +17,29 @@ class NavButtons extends Component
     render() {
         const buttonValues = generateButtonValues(this.props.limit, this.props.totalData, this.props.activeIndex);
         const buttonsData = [];
+        let maxIndex = 1;
         for (let i = 0; i < buttonValues.length; i++) {
             const element = buttonValues[i];
             buttonsData.push({
                 index: element,
-            })
+            });
+            maxIndex = element;
         }
 
         return (
-            <div className="buttons" style={{marginTop:'5px', marginBottom: '5px'}}>
-                {buttonsData.map((data, i)=>{
-                    const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
-                    return (
-                        <a key={"nav_btn_"+i} onClick={()=>{this.onClick(data.index)}} className={className}>{data.index}</a>
-                    )  
-                })}
+            <div className="columns">
+                <div className="column buttons" style={{ marginTop: '5px', marginBottom: '5px' }}>
+                    {buttonsData.map((data, i) => {
+                        const className = data.index == this.props.activeIndex ? "button is-link" : "button is-light";
+                        return (
+                            <a key={"nav_btn_" + i} onClick={() => { this.onClick(data.index) }} className={className}>{data.index}</a>
+                        )
+                    })}
+                </div>
+                <div className="column control">
+                    <input name="input-page" placeholder="page" className="input" min="1" id={"custom_page_" + this.id} type="number" />
+
+                </div>
             </div>
         )
     }
@@ -42,8 +51,12 @@ const generateButtonValues = (limit, totalData, currentPage) => {
     /* DISPLAYED BUTTONS */
     const displayed_buttons = [];
     const buttonCount = Math.ceil(totalData / limit);
-    const min = currentPage - 2;
-    const max = currentPage + 2;
+
+    // console.debug("current page:", currentPage);
+    const min = parseInt(currentPage) - 2;
+    const max = parseInt(currentPage) + 2;
+
+    // console.debug("min", min, "current page:", currentPage, "max", max);
     if (buttonCount > 1) {
         displayed_buttons.push(1);
     }
@@ -55,7 +68,6 @@ const generateButtonValues = (limit, totalData, currentPage) => {
     if (max < buttonCount) {
         displayed_buttons.push(buttonCount);
     }
-
     return displayed_buttons;
 }
 

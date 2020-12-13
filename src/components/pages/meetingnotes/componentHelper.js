@@ -99,10 +99,11 @@ export const LinkEditAndAction = (props) => {
     )
 }
 export const ClosedInfoTag = (props) => {
+    if (props.show == false) return null;
     if (props.closed == true) {
-        return <span className="tag is-primary"><i className="fas fa-check" />&nbsp;Closed</span>
+        return <span className="tag is-info"><i className="fas fa-check" />&nbsp;Closed</span>
     }
-    return null;
+    return <span className="tag is-warning">Not Closed</span>;
 }
 export const FormUpperTag = (props) => {
     if (props.show == false || null == props.meetingNote) { return null }

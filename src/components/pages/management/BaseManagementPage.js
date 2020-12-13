@@ -41,8 +41,19 @@ export default class BaseManagementPage extends BaseAdminPage {
             this.loadRecords();
         }
 
-        this.filter = (e) => {
-            this.page = 1;
+        this.filter = (form) => {
+            
+            const formData = new FormData(form);
+            let page = 1;
+            for(var pair of formData.entries()) {
+                if (pair[0] == 'input-page' && pair[1] != "" && pair[1] != null)
+                {
+                    page = pair[1];
+                    document.getElementsByName("input-page")[0].value = "";
+                }
+             }
+            
+            this.page = parseInt(page);
             this.loadRecords();
         }
 

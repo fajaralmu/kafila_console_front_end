@@ -1,5 +1,5 @@
-import React,{ Component } from 'react';
-import BaseComponent, { CommonTitle } from './../../BaseComponent';
+import React,{ Component, Fragment } from 'react';
+import BaseComponent, { CommonTitle, mapCommonUserStateToProps } from './../../BaseComponent';
 import { Route, Switch, withRouter, Redirect, Link } from 'react-router-dom'
 import { connect } from 'react-redux';
 import Card from '../../container/Card';
@@ -10,6 +10,7 @@ import Columns from './../../container/Columns';
 import { TableHeadWithFilter, ButtonApplyResetFilter } from './../../forms/commons';
 import IssuesService from './../../../services/IssuesService';
 import { AttachmentLink } from '../../buttons/buttons';
+import { ClosedInfoTag } from './../meetingnotes/componentHelper';
 
 class IssuesList extends BaseManagementPage
 {
@@ -118,22 +119,17 @@ class IssuesList extends BaseManagementPage
                                     <td>{item.email}</td>
                                     <td>{item.departement.name}</td>
                                     <td>{item.issue_input}</td>
-                                    <td>{item.attachment == null ? null : <AttachmentLink to={"upload/issue/"+item.attachment} />}</td>
-                                    <td>
-                                        {item.is_closed == true? 
-                                        <span className="tag is-info">Closed</span>
-                                        :
-                                        <span className="tag is-warning">Not Closed</span>}
-                                    </td>
+                                    <td><AttachmentLink show={item.attachment!=null} to={"upload/issue/"+item.attachment} /></td>
+                                    <td><ClosedInfoTag closed = {item.is_closed==true}/></td>
                                     {/* <td>{item.closed_date}</td> */}
                                     <td>
                                         {isAdmin?
-                                        <>
-                                        <Link to={"/issues/" + item.id} className="button is-small" >
-                                            <i className="fas fa-edit"></i>
-                                        </Link>
-                                        {this.buttonDeleteRecord(item.id, false)}
-                                        </>
+                                        <Fragment>
+                                            <Link to={"/issues/" + item.id} className="button is-small" >
+                                                <i className="fas fa-edit"></i>
+                                            </Link>
+                                            {this.buttonDeleteRecord(item.id, false)}
+                                        </Fragment>
                                         :null}
                                         <Link to={"/issues/" + item.id+"/followup"} className="button is-primary is-small" >
                                             <i className="fas fa-location-arrow"></i>
@@ -151,19 +147,9 @@ class IssuesList extends BaseManagementPage
     }
 }
 
-
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-    }
-}
-const mapDispatchToProps = dispatch => ({
-    //   getMeetingNotes: (request, app) => dispatch(actions.meetingNotesAction.list(request, app)),
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(IssuesList));

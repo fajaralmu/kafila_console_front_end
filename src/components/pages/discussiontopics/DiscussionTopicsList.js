@@ -9,9 +9,10 @@ import { TableHeadWithFilter, ButtonApplyResetFilter } from '../../forms/commons
 import IssuesService from '../../../services/IssuesService';
 import DiscussionTopicsService from './../../../services/DiscussionTopicsService';
 import { getDiffDaysToNow } from './../../../utils/DateUtil';
-import { CommonTitle } from '../../BaseComponent';
+import { CommonTitle, mapCommonUserStateToProps } from '../../BaseComponent';
 import { LinkToFormCreate } from './../meetingnotes/MeetingNoteList';
 import { AttachmentLink } from '../../buttons/buttons';
+import { ClosedInfoTag } from '../meetingnotes/componentHelper';
 // const title = "Daftar Tema Pembahasan";
 const title = "Daftar Topik";
         
@@ -115,7 +116,6 @@ class DiscussionTopicsList extends BaseManagementPage {
                                         const style = {};
                                         try {
                                             const diffDay = getDiffDaysToNow(new Date(deadlineDate));
-
                                             if (item.is_closed == false && diffDay <= 3 && diffDay > 0) {
                                                 style.backgroundColor = 'orange';
                                             } else if (item.is_closed == false && diffDay < 0) {
@@ -133,25 +133,15 @@ class DiscussionTopicsList extends BaseManagementPage {
                                             <td>{item.person_in_charge}</td>
                                              <td>{item.deadline_date}</td>
                                             {/* <td>{item.departement.name}</td> */}
-                                            <td>
-                                                {item.is_closed == true ?
-                                                    <span className="tag is-info">Closed</span>
-                                                    :
-                                                    <span className="tag is-warning">Not Closed</span>}
-                                            </td>
+                                            <td><ClosedInfoTag closed={item.is_closed}/></td>
                                             {/* <td>
                                                 {item.closed_date}
                                             </td> */}
-                                            <td>
-                                                {item.attachment? 
-                                                    <AttachmentLink to={"upload/topic/"+item.attachment}/>:null    
-                                                }
-                                            </td>
+                                            <td><AttachmentLink showExtension={true} show={item.attachment!=null} to={"upload/topic/"+item.attachment}/></td>
                                             <td><LinkEditAndAction id={item.id} />
                                             </td>
                                             <td>
-                                                <Link to={"/meetingnote/" + item.note_id}
-                                                    className="button is-light is-small">
+                                                <Link to={"/meetingnote/" + item.note_id} className="button is-light is-small">
                                                     <span className="icon">
                                                         <i className="fas fa-clipboard" />
                                                     </span>
@@ -171,32 +161,19 @@ class DiscussionTopicsList extends BaseManagementPage {
 }
 
 const LinkEditAndAction = (props) => {
-    return (
-        <>
+    return (<React.Fragment>
             <Link to={"/discussiontopics/" + props.id} className="button is-small" >
                 <i className="fas fa-edit"></i>
             </Link>
-
             <Link to={"/discussiontopics/" + props.id + "/action"} className="button is-primary is-small" >
                 <i className="fas fa-location-arrow"></i>
             </Link>
-        </>
-    )
+        </React.Fragment>)
 }
 
-
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus,
-    }
-}
-const mapDispatchToProps = dispatch => ({
-    //   getMeetingNotes: (request, app) => dispatch(actions.meetingNotesAction.list(request, app)),
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default withRouter(connect(
-    mapStateToProps,
+    mapCommonUserStateToProps,
     mapDispatchToProps
 )(DiscussionTopicsList));

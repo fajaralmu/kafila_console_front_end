@@ -18,12 +18,11 @@ class Login extends Component {
         }
         this.handleSubmit = (event) => {
             event.preventDefault();
-            const form = event.target;
             const data = new FormData(event.target);
-            var email = form.elements[0];
-            var password = form.elements[1];
+            var email = data.get("email")
+            var password = data.get("password");
 
-            this.props.performLogin(email.value, password.value, this.props.app);
+            this.props.performLogin(email, password, this.props.app);
         }
 
         this.showLoginInfo = ()=> {
@@ -63,7 +62,7 @@ class Login extends Component {
                             <div className="field">
                                 <label   className="label">Email</label>
                                 <div className="control has-icons-left">
-                                    <input nam="email" type="email" placeholder="e.g. user@gmail.com" className="input" required />
+                                    <input name="email" type="email" placeholder="e.g. user@gmail.com" className="input" required />
                                     <span className="icon is-small is-left">
                                         <i className="fa fa-envelope"></i>
                                     </span>
