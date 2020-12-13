@@ -104,7 +104,7 @@ class DiscussionTopicsList extends BaseManagementPage {
                                         // { text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'is_closed', alias: 'Status', withFilter: true },
                                         // { text: 'closed_date', alias: 'Closed', withFilter: true },
-                                        { text: 'attachment' },
+                                        { text: 'attachment', withFilter: true },
                                         { text: 'action' },
                                         { text: 'opsi' },
                                     ]} />

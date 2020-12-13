@@ -86,9 +86,9 @@ class IssuesForm extends BaseAdminPage {
         }
 
         this.recordSaved = (response) => {
-            this.showInfo("SUCCESS SAVING RECORD");
+            this.showInfo("Success saving record");
             this.attachmentData = null;
-            this.record = null;
+            this.record = response.issue;
             if (this.getRecordId() == null) {
                 this.handleSuccessGetRecord(response);
                 this.props.history.push("/issues/" + response.issue.id);
@@ -194,11 +194,10 @@ class IssuesForm extends BaseAdminPage {
                         })} name="departement" required={true} />
                         {this.getRecordId()!=null && this.record != null ?
                             <LabelField label="Attachment">
-                                {this.record.attachment?
-                                 <AttachmentLink to={"upload/issue/"+this.record.attachment} />
-                                :"tidak ada"}
+                                 <AttachmentLink show={this.record.attachment!=null} to={"upload/issue/"+this.record.attachment} />
                             </LabelField>
-                            :<InputField name="attachment" attributes={{accept:'image/*', onChange:this.updateAttachmentData}} type="file" note="Kosongkan jika tidak ada dokumen" />
+                            :
+                            <InputField name="attachment" attributes={{accept:'image/*', onChange:this.updateAttachmentData}} type="file" note="Kosongkan jika tidak ada dokumen" />
                         
                         }
                       

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './FormControls.css'
 import { replaceString } from '../../utils/StringUtil';
 import { AnchorWithIcon } from './../buttons/buttons';
+import { uniqueId } from './../../utils/StringUtil';
 
 export const CapitalizeFirstLetter = (rawString) => {
     if (null == rawString || rawString.length <= 1) {
@@ -87,7 +88,7 @@ export const ButtonApplyResetFilter = (props) => {
 export class InputField extends Component {
     constructor(props) {
         super(props);
-        this.id = 'input-form-field-' + this.props.name;
+        this.id = uniqueId()+'-input-form-field-' + this.props.name;
 
         this.setDateInput = (e) => {
             const date = new Date().toISOString().substring(0, 10);

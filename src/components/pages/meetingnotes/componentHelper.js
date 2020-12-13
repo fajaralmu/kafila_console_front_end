@@ -114,7 +114,7 @@ export const FormUpperTag = (props) => {
                     <DiscussionTopicStatusInfo meetingNote={meetingNote} />
                 </div>
                 <div className="level-right">
-                    <span className="tag is-primary is-medium">{meetingNote.departement.name}</span>
+                    <span className="tag is-primary is-medium">{meetingNote.departement==null?null:meetingNote.departement.name}</span>
                 </div>
             </div>
         </div>
