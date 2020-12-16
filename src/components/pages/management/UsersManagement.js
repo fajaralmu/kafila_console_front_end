@@ -89,7 +89,7 @@ class UsersManahement extends BaseManagementPage {
                                     { text: 'email', withFilter: true },
                                     { text: 'display_name', withFilter: true },
                                     { text: 'role', withFilter: true },
-                                    { text: 'departement', withFilter: true },
+                                    { label:"Bidang", text: 'departement', withFilter: true },
                                     { text: 'action', },
                                 ]} />
                                 <tbody>

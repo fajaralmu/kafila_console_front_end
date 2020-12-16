@@ -152,7 +152,7 @@ class Statistic extends BaseComponent {
                             this.loadStatistic(null)
                         }}>
                         {this.isLoggedUserAdmin() ?
-                            <SelectField name="departement" options={
+                            <SelectField label="Bidang" name="departement" options={
                                 departementOptions} /> : null}
                         <LabelField label="updated_at" value={new Date(this.statisticData.date).toString()} />
                         <SubmitResetButton submitButtonClassName="no" submitIconClassName="fas fa-sync" submitText="Reload" />

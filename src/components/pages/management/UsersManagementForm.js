@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import Card from '../../container/Card';
 import { Route, Switch, withRouter, Link } from 'react-router-dom'
 import { InputField, SelectField } from '../../forms/commons';
-import BaseComponent, { CommonTitle } from './../../BaseComponent';
+import BaseComponent, { CommonTitle, mapCommonUserStateToProps } from './../../BaseComponent';
 import MasterManagementService from './../../../services/MasterDataService';
 import { connect } from 'react-redux';
 import Message from './../../messages/Message';
 import { SubmitResetButton } from './../../forms/commons';
+import { DATA_KEY_DEPARTEMENTS } from '../../../constant/ApplicationDataKeys';
+import { applicationAction } from '../../../redux/actions/actionCreators';
 
 class UserManagementForm extends BaseComponent {
     constructor(props) {
@@ -56,7 +58,9 @@ class UserManagementForm extends BaseComponent {
         }
 
         this.departementListLoaded = (response) => {
+            this.props.storeApplicationData(DATA_KEY_DEPARTEMENTS, response.result_list);
             this.setState({ departementList: response.result_list });
+            
             if (null != this.getRecordId()) {
                 this.loadRecord();
             }
@@ -82,11 +86,21 @@ class UserManagementForm extends BaseComponent {
         }
 
         this.loadDepartements = () => {
-            this.commonAjax(
-                this.masterDataService.departementList, {},
-                this.departementListLoaded,
-                (error) => { }
-            );
+            const appData = this.props.applicationData;
+            if (appData[DATA_KEY_DEPARTEMENTS] == null ||
+                appData[DATA_KEY_DEPARTEMENTS].length == 0) {
+
+                this.commonAjax(
+                    this.masterDataService.departementList, {},
+                    this.departementListLoaded,
+                    this.departementListNotLoaded
+                );
+            } else {
+                this.setState({departementList : appData[DATA_KEY_DEPARTEMENTS]});
+                if (null != this.getRecordId()) {
+                    this.loadRecord();
+                }
+            }
         }
 
         this.handleSuccessGetRecord = (response) => {
@@ -148,7 +162,7 @@ class UserManagementForm extends BaseComponent {
                         <InputField label="Display Name" name="display_name" required={true} />
                         {/* <InputField label="Role" name="role" required={true} /> */}
                         <InputField label="Password" name="password" note="Kosongkan password apabila tidak ingin diubah" />
-                        <SelectField label="Departement" options={this.state.departementList.map(dep => {
+                        <SelectField label="Bidang" options={this.state.departementList.map(dep => {
                             return {
                                 value: dep.id,
                                 text: dep.name
@@ -163,13 +177,9 @@ class UserManagementForm extends BaseComponent {
         )
     }
 }
-
-const mapStateToProps = state => {
-
-    return {
-        loggedUser: state.userState.loggedUser,
-        loginStatus: state.userState.loginStatus
-    }
-}
+ 
+const mapDispatchToProps = dispatch => ({
+    storeApplicationData: (code, data) => dispatch(applicationAction.storeApplicationData(code, data)),
+})
 export default withRouter(
-    connect(mapStateToProps)(UserManagementForm));
+    connect(mapCommonUserStateToProps,mapDispatchToProps )(UserManagementForm));
