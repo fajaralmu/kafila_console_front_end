@@ -85,7 +85,7 @@ class MeetingNoteList extends BaseManagementPage {
                                         // { text: 'id', alias: "Id", withFilter: true },
                                         { text: 'date', alias: "Tanggal", withFilter: true },
                                         { text: 'place', alias: "Tempat", withFilter: true },
-                                        { text: 'departement', alias: "Bidang", withFilter: true },
+                                        { show:this.isLoggedUserAdmin(), text: 'departement', alias: "Bidang", withFilter: true },
                                         { text: 'user', alias: "Notulis", withFilter: true },
                                         { text: 'discussion_topics_count', alias:"Jml Topik", withFilter:true},
                                         { text: 'discussion_topics_closed_count', alias:"closed", withFilter:true},
@@ -111,7 +111,7 @@ class MeetingNoteList extends BaseManagementPage {
                                             <td>{indexBegin + i + 1}</td>
                                             <td>{item.date}</td>
                                             <td>{item.place}</td>
-                                            <td>{item.departement ? item.departement.name : "-"}</td>
+                                            {this.isLoggedUserAdmin()? <td>{item.departement ? item.departement.name : "-"}</td> : null}
                                             <td>{item.user ? item.user.name : "-"}</td>
                                             <td>{item.discussion_topics_count}</td>
                                             <td>{item.discussion_topics_closed_count}</td>

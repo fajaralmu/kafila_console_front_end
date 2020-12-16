@@ -27,6 +27,7 @@ export const performLoginMiddleware = store => next => action => {
             store.dispatch(newAction);
         })
         .catch(err => {
+            console.error("Error login: ",err);
             let newAction = Object.assign({}, action, { payload: {loginStatus: false }});
             delete newAction.meta;
             store.dispatch(newAction);

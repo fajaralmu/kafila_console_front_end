@@ -42,17 +42,21 @@ export default class BaseManagementPage extends BaseAdminPage {
         }
 
         this.filter = (form) => {
-            
             const formData = new FormData(form);
-            let page = 1;
+            let page = 1, limit = this.limit;
             for(var pair of formData.entries()) {
-                if (pair[0] == 'input-page' && pair[1] != "" && pair[1] != null)
-                {
+                if (pair[1] == "" || pair[1] == null) {
+                    continue;
+                }
+                if (pair[0] == 'input-page') {
                     page = pair[1];
-                    document.getElementsByName("input-page")[0].value = "";
+                    document.getElementsByName(pair[0])[0].value = "";
+                } else if (pair[0] == 'input-record-count') {  
+                    limit = pair[1];
+                    document.getElementsByName(pair[0])[0].value = "";
                 }
              }
-            
+            this.limit = limit;
             this.page = parseInt(page);
             this.loadRecords();
         }

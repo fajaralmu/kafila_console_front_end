@@ -35,9 +35,7 @@ class App extends Component {
     this.alertOnCancelCallback = null;
 
     this.loadings = 0;
-
-
-
+    
     this.setMenuCode = (code) => {
       this.setState({ menuCode: code });
     }
@@ -66,7 +64,7 @@ class App extends Component {
     }
 
     this.endLoading = () => {
-      console.log("END LOADING");
+      // console.log("END LOADING");
       this.decrementLoadings();
       if (this.loadings == 0) {
         this.setState({ loading: false, loadingPercentage: 0 });

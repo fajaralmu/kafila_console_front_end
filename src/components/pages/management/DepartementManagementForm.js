@@ -138,7 +138,7 @@ class DepartementManagementForm extends BaseComponent {
         </>
         return (
             <div>
-               <CommonTitle>Departements Management</CommonTitle>
+               {this.title("Manajemen Bidang")}
                 <Card title={formTitle} >
                     <form onSubmit={this.onSubmit} id="form-management" >
                         <InputField label="Nama" name="name" required={true} />

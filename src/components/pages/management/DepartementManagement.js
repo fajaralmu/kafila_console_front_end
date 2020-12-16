@@ -88,8 +88,8 @@ class DeparementManagement extends BaseManagementPage {
             recordData.result_list;
         return (
             <div>
-                <CommonTitle>Departements Management</CommonTitle>
-                <Card title="Departement">
+                {this.title("Manajemen Bidang")}
+                <Card title="Bidang">
                     {this.linkToFormCreate("/management/departements/create", "Tambah Data")}
                     <form id="list-form" onSubmit={(e) => { e.preventDefault(); this.filter(e.target) }}>
                         <Columns cells={[
@@ -101,7 +101,7 @@ class DeparementManagement extends BaseManagementPage {
                                     onButtonOrderClick={this.onButtonOrderClick}
                                     headers={[
                                         { text: 'No' },
-                                        { text: 'id', withFilter: true },
+                                        // { text: 'id', withFilter: true },
                                         { text: 'name', withFilter: true },
                                         { text: 'description', withFilter: true },
                                         { text: 'action' }
@@ -111,7 +111,7 @@ class DeparementManagement extends BaseManagementPage {
                                         const indexBegin = (this.page - 1) * this.limit;
                                         return (<tr key={"record_" + i}>
                                             <td>{indexBegin + i + 1}</td>
-                                            <td>{item.id}</td>
+                                            {/* <td>{item.id}</td> */}
                                             <td>{item.name}</td>
                                             <td>{item.description}</td>
                                             <td style={{width:'150px', display: 'block', border:'none'}}>

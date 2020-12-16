@@ -85,7 +85,7 @@ class UsersManahement extends BaseManagementPage {
                                 onButtonOrderClick={this.onButtonOrderClick}
                                 headers={[
                                     { text: 'No' },
-                                    { text: 'id', withFilter: true },
+                                    // { text: 'id', withFilter: true },
                                     { text: 'email', withFilter: true },
                                     { text: 'display_name', withFilter: true },
                                     { text: 'role', withFilter: true },
@@ -97,7 +97,7 @@ class UsersManahement extends BaseManagementPage {
                                 const indexBegin = (this.page - 1) * this.limit;
                                 return (<tr key={"record-user-"+i}>
                                     <td>{indexBegin + i + 1}</td>
-                                    <td>{item.id}</td>
+                                    {/* <td>{item.id}</td> */}
                                     <td>{item.email}</td>
                                     <td>{item.display_name}</td>
                                     <td>{item.role}</td>

@@ -35,10 +35,15 @@ class NavButtons extends Component {
                             <a key={"nav_btn_" + i} onClick={() => { this.onClick(data.index) }} className={className}>{data.index}</a>
                         )
                     })}
+                    <p className="tags has-addons">
+                        <span className="tag is-link">Record Per Page</span>
+                        <span className="tag is-light">{this.props.limit}</span>
+                    </p>
                 </div>
                 <div className="column control">
-                    <input name="input-page" placeholder="page" className="input is-small" min="1" id={"custom_page_" + this.id} type="number" />
-
+                    <input name="input-page" placeholder="go to page" className="input is-small" min="1" id={"custom_page_" + this.id} type="number" />
+                    <input name="input-record-count" placeholder="display per page" className="input is-small" min="1" id={"custom_page_" + this.id} type="number" />
+                    
                 </div>
             </div>
         )

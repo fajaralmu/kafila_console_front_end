@@ -34,6 +34,9 @@ export const TableHeadWithFilter = (props) => {
         <tr>
             {headers.map((header, i) => {
                 const label = header.alias ? header.alias : header.text;
+                if (header.show == false) {
+                    return null;
+                }
                 return <th style={header.style} key={"TH_" + i}>{CapitalizeFirstLetter(label)}
 
                     {header.withFilter ?
